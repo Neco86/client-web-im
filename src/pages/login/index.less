@@ -1,0 +1,30 @@
+.loginWrapper{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 100px;
+  .loginBox{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 400px;
+    padding: 20px 80px 50px;
+    background: #fff;
+    color: #000;
+    border-radius: 5px;
+    box-shadow: 0 11px 20px 0 rgba(0,0,0,.3);
+    :global{
+      .ant-form-item,.ant-btn{
+        width: 220px;
+      }
+    }
+    .logo{
+      width: 110px;
+      height: 110px;
+      margin-bottom: 20px;
+    }
+    .register{
+      margin-top: 20px;
+    }
+  }
+}

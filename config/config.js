@@ -91,6 +91,11 @@ export default {
           path: '/',
           component: './Welcome',
         },
+        {
+          name: 'login',
+          path: '/login',
+          component: './login',
+        },
       ],
     },
   ],
