@@ -1,0 +1,35 @@
+.registerWrapper{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 100px;
+  .registerBox{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 600px;
+    padding: 20px 80px 50px;
+    background: #fff;
+    color: #000;
+    border-radius: 5px;
+    box-shadow: 0 11px 20px 0 rgba(0,0,0,.3);
+    :global{
+      .ant-form-item, .registerBtn{
+        width: 300px;
+        &:nth-child(4){
+          width: 160px;
+          float: left;
+          margin-right: 10px;
+        }
+      }
+    }
+    .clear{
+      clear: both;
+    }
+    .logo{
+      width: 110px;
+      height: 110px;
+      margin-bottom: 20px;
+    }
+  }
+}
