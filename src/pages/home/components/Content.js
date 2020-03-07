@@ -1,12 +1,14 @@
 import React from 'react';
+import ContentChat from './ContentChat';
+import ContentList from './ContentList';
 
 const Content = ({ currentMenu }) => {
   return (
     <div>
       {
         currentMenu === 'chat'
-          ? '聊天content'
-          : '通讯录content'
+          ? <ContentChat />
+          : <ContentList />
       }
     </div>
   )

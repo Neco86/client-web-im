@@ -1,12 +1,14 @@
 import React from 'react';
+import SiderChat from './SiderChat';
+import SiderList from './SiderList';
 
 const Sider = ({ currentMenu }) => {
   return (
     <div>
       {
         currentMenu === 'chat'
-          ? '聊天sider'
-          : '通讯里sider'
+          ? <SiderChat />
+          : <SiderList />
       }
     </div>
   )
