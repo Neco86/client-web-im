@@ -87,9 +87,9 @@ export default {
       component: '../layouts',
       routes: [
         {
-          name: 'welcome',
+          name: 'home',
           path: '/',
-          component: './Welcome',
+          component: './home',
         },
         {
           name: 'login',

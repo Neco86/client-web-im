@@ -1,0 +1,23 @@
+.headerWrapper{
+  display: flex;
+  flex-direction: row;
+  .middle{
+    flex:auto;
+    text-align: center;
+  }
+  :global{
+    .ant-input-search{
+      width: 160px;
+      border-radius: 24px;
+    }
+    .ant-btn-circle{
+      color: gray;
+      margin: auto 16px;
+      position: relative;
+      top: 2px;
+    }
+    .ant-menu-item,.ant-menu-item:hover{
+      border-bottom: none;
+    }
+  }
+}
