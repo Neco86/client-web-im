@@ -7,7 +7,7 @@
   }
   :global{
     .ant-input-search{
-      width: 160px;
+      width: 210px;
       border-radius: 24px;
     }
     .ant-btn-circle{
@@ -19,5 +19,57 @@
     .ant-menu-item,.ant-menu-item:hover{
       border-bottom: none;
     }
+  }
+}
+.siderChatWrapper{
+  position: relative;
+  :global{
+    .ant-card-body{
+      height: 56px;
+    }
+    .anticon-close{
+      position: absolute;
+      font-size: 12px;
+      left: 2px;
+      top: 23px;
+      &:hover{
+        color: #1890ff;
+      }
+    }
+    .ant-avatar{
+      position: absolute;
+      left: 16px;
+    }
+    .ant-badge{
+      position: absolute;
+      right: 8px;
+      top: 30px;
+    }
+  }
+  .nikeName{
+    position: absolute;
+    left: 60px;
+    font-weight: bold;
+    top: 8px;
+    width: 154px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+  }
+  .latestChat{
+    position: absolute;
+    left: 60px;
+    top: 30px;
+    width: 170px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+  }
+  .latestTime{
+    position: absolute;
+    right: 8px;
+    top: 8px;
   }
 }
