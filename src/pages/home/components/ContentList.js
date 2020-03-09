@@ -1,11 +1,20 @@
 import React from 'react';
+import { Empty } from 'antd';
+import { connect } from 'dva';
+import styles from './index.less';
 
-const ContentList = () => {
+const ContentList = ({ activeFriend }) => {
   return (
-    <div>
-      ContentList
+    <div className={styles.contentListWrapper}>
+      {
+        activeFriend
+          ? `contentList ${activeFriend}`
+          : <Empty description='' />
+      }
     </div>
   )
 }
 
-export default ContentList;
+export default connect(({ home }) => ({
+  activeFriend: home.activeFriend
+}))(ContentList);

@@ -53,6 +53,81 @@ const HomeModel = {
       },
     ],
     activeChat: 0,
+    friendsList: [
+      {
+        title: '群组',
+        order: '1',
+        friendGroup: [
+          {
+            groupName: '群聊',
+            count: '12',
+            order: '1',
+            friends: [
+              {
+                avatar: '',
+                name: '群聊1',
+                desc: '公告:群聊1',
+                order: '1'
+              }
+            ]
+          },
+        ]
+      },
+      {
+        title: '好友',
+        order: '2',
+        friendGroup: [
+          {
+            groupName: '分组1',
+            count: '1/2',
+            order: '1',
+            friends: [
+              {
+                avatar: '',
+                name: '好友1',
+                desc: '[在线]xxx',
+                order: '1'
+              },
+              {
+                avatar: '',
+                name: '好友2',
+                desc: '[在线]xxx',
+                order: '2'
+              },
+            ]
+          },
+          {
+            groupName: '分组2',
+            count: '1/1',
+            order: '2',
+            friends: [
+              {
+                avatar: '',
+                name: '好友1',
+                desc: '[在线]xxx',
+                order: '1'
+              },
+            ]
+          },
+          {
+            groupName: '分组3',
+            count: '11/12',
+            order: '3',
+            friends: []
+          },
+          {
+            groupName: '分组4',
+            count: '13/23',
+            order: '4',
+            friends: []
+          },
+        ]
+      },
+    ],
+    // 展开列表
+    activeList: [],
+    // 选中
+    activeFriend: 0,
   },
   effects: {
   },
@@ -71,6 +146,22 @@ const HomeModel = {
       const newChats = state.chats.filter(item => item.order !== payload)
       const newActiveChat = payload === state.activeChat ? 0 : state.activeChat;
       return { ...state, chats: newChats, activeChat: newActiveChat };
+    },
+    openList(state, { payload }) {
+      let activeList = JSON.parse(JSON.stringify(state.activeList));
+      if (activeList.includes(payload)) {
+        activeList = state.activeList.filter(item => item !== payload)
+      } else {
+        activeList.push(payload)
+      }
+      return { ...state, activeList };
+    },
+    changeActiveFriend(state, { payload: { order1, order2, order3 } }) {
+      // order1 群组/好友
+      // order2 分组
+      // order3 具体哪一个
+      const activeFriend = `${order1} ${order2} ${order3}`
+      return { ...state, activeFriend };
     }
   }
 }
