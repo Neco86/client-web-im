@@ -69,7 +69,7 @@ const HomeModel = {
     },
     closeChat(state, { payload }) {
       const newChats = state.chats.filter(item => item.order !== payload)
-      return { ...state, chats: newChats, activeChat: payload };
+      return { ...state, chats: newChats };
     }
   }
 }

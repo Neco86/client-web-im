@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Avatar, Badge } from 'antd';
 import { CloseOutlined } from '@ant-design/icons'
 import { connect } from 'dva';
@@ -25,6 +25,7 @@ const SiderChat = (
     });
     return false
   }
+  const [hoverChat, setHoverChat] = useState(0);
   return (
     <div className={styles.siderChatWrapper}>
       {
@@ -34,8 +35,12 @@ const SiderChat = (
             key={item.order}
             onClick={changeChat(item.order)}
             bodyStyle={{ backgroundColor: activeChat === item.order ? '#F0F0F0' : '' }}
+            onMouseEnter={() => { setHoverChat(item.order) }}
+            onMouseLeave={() => { setHoverChat(0) }}
           >
-            <CloseOutlined onClick={onCloseClick(item.order)} />
+            {
+              hoverChat === item.order && <CloseOutlined onClick={onCloseClick(item.order)} />
+            }
             <Avatar src={item.avatar} />
             <div className={styles.nikeName}>
               {item.nikeName}
