@@ -65,6 +65,7 @@ const SiderList = (
                         bordered={false}
                         size='small'
                         onMouseEnter={() => { setHoverGroup(0) }}
+                        onMouseLeave={() => { setHoverGroup(`${item1.order} ${item.order}`) }}
                         onClick={onCardClick(item1.order, item.order, friend.order)}
                         key={friend.order}
                         bodyStyle={{
