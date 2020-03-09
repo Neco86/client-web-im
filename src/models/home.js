@@ -51,6 +51,38 @@ const HomeModel = {
         unread: 0,
         order: '6',
       },
+      {
+        nikeName: 'nikeName7',
+        avatar: defaultAvatar,
+        latestChat: 'Message7',
+        latestTime: '14:20',
+        unread: 0,
+        order: '7',
+      },
+      {
+        nikeName: 'nikeName8',
+        avatar: defaultAvatar,
+        latestChat: 'Message8',
+        latestTime: '14:20',
+        unread: 0,
+        order: '8',
+      },
+      {
+        nikeName: 'nikeName9',
+        avatar: defaultAvatar,
+        latestChat: 'Message9',
+        latestTime: '14:20',
+        unread: 0,
+        order: '9',
+      },
+      {
+        nikeName: 'nikeName10',
+        avatar: defaultAvatar,
+        latestChat: 'Message10',
+        latestTime: '14:20',
+        unread: 0,
+        order: '10',
+      },
     ],
     activeChat: 0,
     friendsList: [
@@ -113,13 +145,39 @@ const HomeModel = {
             groupName: '分组3',
             count: '11/12',
             order: '3',
-            friends: []
+            friends: [
+              {
+                avatar: '',
+                name: '好友1',
+                desc: '[在线]xxx',
+                order: '1'
+              },
+              {
+                avatar: '',
+                name: '好友2',
+                desc: '[在线]xxx',
+                order: '2'
+              },
+            ]
           },
           {
             groupName: '分组4',
             count: '13/23',
             order: '4',
-            friends: []
+            friends: [
+              {
+                avatar: '',
+                name: '好友1',
+                desc: '[在线]xxx',
+                order: '1'
+              },
+              {
+                avatar: '',
+                name: '好友2',
+                desc: '[在线]xxx',
+                order: '2'
+              },
+            ]
           },
         ]
       },

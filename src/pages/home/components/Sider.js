@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import SiderChat from './SiderChat';
 import SiderList from './SiderList';
 
 const Sider = ({ currentMenu }) => {
   return (
-    <div>
+    <Fragment>
       {
         currentMenu === 'chat'
           ? <SiderChat />
           : <SiderList />
       }
-    </div>
+    </Fragment>
   )
 }
 
