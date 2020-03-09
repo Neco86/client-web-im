@@ -52,7 +52,7 @@ const HomeModel = {
         order: '6',
       },
     ],
-    activeChat: '1',
+    activeChat: 0,
   },
   effects: {
   },
@@ -69,7 +69,8 @@ const HomeModel = {
     },
     closeChat(state, { payload }) {
       const newChats = state.chats.filter(item => item.order !== payload)
-      return { ...state, chats: newChats };
+      const newActiveChat = payload === state.activeChat ? 0 : state.activeChat;
+      return { ...state, chats: newChats, activeChat: newActiveChat };
     }
   }
 }
