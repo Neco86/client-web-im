@@ -96,7 +96,7 @@ const HomeModel = {
             order: '1',
             friends: [
               {
-                avatar: '',
+                avatar: defaultAvatar,
                 name: '群聊1',
                 desc: '公告:群聊1',
                 order: '1'
@@ -115,13 +115,13 @@ const HomeModel = {
             order: '1',
             friends: [
               {
-                avatar: '',
+                avatar: defaultAvatar,
                 name: '好友1',
                 desc: '[在线]xxx',
                 order: '1'
               },
               {
-                avatar: '',
+                avatar: defaultAvatar,
                 name: '好友2',
                 desc: '[在线]xxx',
                 order: '2'
@@ -134,7 +134,7 @@ const HomeModel = {
             order: '2',
             friends: [
               {
-                avatar: '',
+                avatar: defaultAvatar,
                 name: '好友1',
                 desc: '[在线]xxx',
                 order: '1'
@@ -147,13 +147,13 @@ const HomeModel = {
             order: '3',
             friends: [
               {
-                avatar: '',
+                avatar: defaultAvatar,
                 name: '好友1',
                 desc: '[在线]xxx',
                 order: '1'
               },
               {
-                avatar: '',
+                avatar: defaultAvatar,
                 name: '好友2',
                 desc: '[在线]xxx',
                 order: '2'
@@ -166,13 +166,13 @@ const HomeModel = {
             order: '4',
             friends: [
               {
-                avatar: '',
+                avatar: defaultAvatar,
                 name: '好友1',
                 desc: '[在线]xxx',
                 order: '1'
               },
               {
-                avatar: '',
+                avatar: defaultAvatar,
                 name: '好友2',
                 desc: '[在线]xxx',
                 order: '2'

@@ -78,7 +78,7 @@ const SiderList = (
                                 : ''
                           }}
                         >
-                          <Avatar />
+                          <Avatar src={friend.avatar} />
                           <div className={styles.nikeName}>
                             {friend.name}
                           </div>
