@@ -3,7 +3,7 @@ import { Menu, Input, Button, Avatar, Badge } from 'antd';
 import { MessageOutlined, UserOutlined, PlusOutlined } from '@ant-design/icons';
 import styles from './index.less';
 
-const Header = ({ onMenuClick }) => {
+const Header = ({ onMenuClick, currentMenu }) => {
   const statusColor = 'rgb(60,216,33)';
   return (
     <div className={styles.headerWrapper}>
@@ -18,7 +18,7 @@ const Header = ({ onMenuClick }) => {
       <div className={styles.middle}>
         <Menu
           mode="horizontal"
-          defaultSelectedKeys={['chat']}
+          selectedKeys={[currentMenu]}
           style={{
             lineHeight: '64px',
             display: 'inline-block',

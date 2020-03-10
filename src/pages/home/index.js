@@ -10,7 +10,7 @@ const Home = () => {
   return (
     <div className={styles.homeWrapper}>
       <div className={styles.header}>
-        <Header onMenuClick={({ key }) => setCurrentMenu(key)} />
+        <Header onMenuClick={({ key }) => setCurrentMenu(key)} currentMenu={currentMenu} />
       </div>
       <div className={styles.body}>
         <div className={styles.sider}>
