@@ -3,12 +3,13 @@ import { Empty } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
 
-const ContentChat = ({ activeChat }) => {
+const ContentChat = ({ activeChat, chats }) => {
+  const currentChat = chats.filter(item => item.key === activeChat)[0];
   return (
     <div className={styles.contentChatWrapper}>
       {
         activeChat
-          ? `contentChat ${activeChat}`
+          ? `contentChat ${currentChat.nikeName} ${currentChat.type === '1' ? 'chat' : 'group chat'}`
           : <Empty description='' />
       }
     </div>
@@ -16,5 +17,6 @@ const ContentChat = ({ activeChat }) => {
 }
 
 export default connect(({ home }) => ({
-  activeChat: home.activeChat
+  activeChat: home.activeChat,
+  chats: home.chats,
 }))(ContentChat);
