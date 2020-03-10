@@ -10,10 +10,10 @@ const Login = () => {
         <Form>
           <Form.Item
             name="username"
-            rules={[{ required: true, message: '用户名不能为空!' }]}
+            rules={[{ required: true, message: '邮箱不能为空!' }]}
           >
             <Input
-              placeholder='请输入用户名'
+              placeholder='请输入邮箱'
               allowClear
             />
           </Form.Item>
