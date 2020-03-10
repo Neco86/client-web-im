@@ -1,9 +1,8 @@
 import React from 'react';
-import { Form, Input, Select, Button } from 'antd';
+import { Form, Input, Button } from 'antd';
 import styles from './index.less';
 
 const Register = () => {
-  const mailSuffix = ['qq', 'gmail', '163', 'yahoo', '126'];
   return (
     <div className={styles.registerWrapper}>
       <div className={styles.registerBox}>
@@ -33,17 +32,6 @@ const Register = () => {
           >
             <Input
               placeholder='邮箱账号'
-              addonAfter={
-                <Select defaultValue={`@${mailSuffix[0]}.com`} style={{ width: 110 }}>
-                  {
-                    mailSuffix
-                      .map(option => (
-                        <Select.Option value={`@${option}.com`} key={option}>
-                          {`@${option}.com`}
-                        </Select.Option>))
-                  }
-                </Select>
-              }
               allowClear
             />
           </Form.Item>
