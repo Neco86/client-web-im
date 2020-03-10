@@ -10,7 +10,7 @@ const HomeModel = {
         latestChat: 'Message1',
         latestTime: '14:20',
         unread: 0,
-        order: '1',
+        key: '1',
       },
       {
         nikeName: 'nikeName2',
@@ -18,14 +18,14 @@ const HomeModel = {
         latestChat: 'Message2',
         latestTime: '14:20',
         unread: 1,
-        order: '2',
+        key: '2',
       }, {
         nikeName: 'nikeName3',
         avatar: defaultAvatar,
         latestChat: 'Message3',
         latestTime: '14:20',
         unread: 2,
-        order: '3',
+        key: '3',
       },
       {
         nikeName: 'nikeName4',
@@ -33,7 +33,7 @@ const HomeModel = {
         latestChat: 'Message4',
         latestTime: '14:20',
         unread: 3,
-        order: '4',
+        key: '4',
       },
       {
         nikeName: 'nikeName5',
@@ -41,7 +41,7 @@ const HomeModel = {
         latestChat: 'Message5',
         latestTime: '14:20',
         unread: 0,
-        order: '5',
+        key: '5',
       },
       {
         nikeName: 'nikeName6',
@@ -49,7 +49,7 @@ const HomeModel = {
         latestChat: 'Message6',
         latestTime: '14:20',
         unread: 0,
-        order: '6',
+        key: '6',
       },
       {
         nikeName: 'nikeName7',
@@ -57,7 +57,7 @@ const HomeModel = {
         latestChat: 'Message7',
         latestTime: '14:20',
         unread: 0,
-        order: '7',
+        key: '7',
       },
       {
         nikeName: 'nikeName8',
@@ -65,7 +65,7 @@ const HomeModel = {
         latestChat: 'Message8',
         latestTime: '14:20',
         unread: 0,
-        order: '8',
+        key: '8',
       },
       {
         nikeName: 'nikeName9',
@@ -73,7 +73,7 @@ const HomeModel = {
         latestChat: 'Message9',
         latestTime: '14:20',
         unread: 0,
-        order: '9',
+        key: '9',
       },
       {
         nikeName: 'nikeName10',
@@ -81,25 +81,25 @@ const HomeModel = {
         latestChat: 'Message10',
         latestTime: '14:20',
         unread: 0,
-        order: '10',
+        key: '10',
       },
     ],
     activeChat: 0,
     friendsList: [
       {
         title: '群组',
-        order: '1',
+        key: '1',
         friendGroup: [
           {
             groupName: '群聊',
             count: '12',
-            order: '1',
+            key: '1',
             friends: [
               {
                 avatar: defaultAvatar,
                 name: '群聊1',
                 desc: '公告:群聊1',
-                order: '1'
+                key: '1'
               }
             ]
           },
@@ -107,75 +107,75 @@ const HomeModel = {
       },
       {
         title: '好友',
-        order: '2',
+        key: '2',
         friendGroup: [
           {
             groupName: '分组1',
             count: '1/2',
-            order: '1',
+            key: '1',
             friends: [
               {
                 avatar: defaultAvatar,
                 name: '好友1',
                 desc: '[在线]xxx',
-                order: '1'
+                key: '1'
               },
               {
                 avatar: defaultAvatar,
                 name: '好友2',
                 desc: '[在线]xxx',
-                order: '2'
+                key: '2'
               },
             ]
           },
           {
             groupName: '分组2',
             count: '1/1',
-            order: '2',
+            key: '2',
             friends: [
               {
                 avatar: defaultAvatar,
                 name: '好友1',
                 desc: '[在线]xxx',
-                order: '1'
+                key: '1'
               },
             ]
           },
           {
             groupName: '分组3',
             count: '11/12',
-            order: '3',
+            key: '3',
             friends: [
               {
                 avatar: defaultAvatar,
                 name: '好友1',
                 desc: '[在线]xxx',
-                order: '1'
+                key: '1'
               },
               {
                 avatar: defaultAvatar,
                 name: '好友2',
                 desc: '[在线]xxx',
-                order: '2'
+                key: '2'
               },
             ]
           },
           {
             groupName: '分组4',
             count: '13/23',
-            order: '4',
+            key: '4',
             friends: [
               {
                 avatar: defaultAvatar,
                 name: '好友1',
                 desc: '[在线]xxx',
-                order: '1'
+                key: '1'
               },
               {
                 avatar: defaultAvatar,
                 name: '好友2',
                 desc: '[在线]xxx',
-                order: '2'
+                key: '2'
               },
             ]
           },
@@ -193,7 +193,7 @@ const HomeModel = {
     changeChat(state, { payload }) {
       const newChats = JSON.parse(JSON.stringify(state.chats));
       newChats.map(item => {
-        if (item.order === payload) {
+        if (item.key === payload) {
           item.unread = 0
         }
         return item
@@ -201,7 +201,7 @@ const HomeModel = {
       return { ...state, chats: newChats, activeChat: payload };
     },
     closeChat(state, { payload }) {
-      const newChats = state.chats.filter(item => item.order !== payload)
+      const newChats = state.chats.filter(item => item.key !== payload)
       const newActiveChat = payload === state.activeChat ? 0 : state.activeChat;
       return { ...state, chats: newChats, activeChat: newActiveChat };
     },
@@ -214,11 +214,11 @@ const HomeModel = {
       }
       return { ...state, activeList };
     },
-    changeActiveFriend(state, { payload: { order1, order2, order3 } }) {
-      // order1 群组/好友
-      // order2 分组
-      // order3 具体哪一个
-      const activeFriend = `${order1} ${order2} ${order3}`
+    changeActiveFriend(state, { payload: { key1, key2, key3 } }) {
+      // key1 群组/好友
+      // key2 分组
+      // key3 具体哪一个
+      const activeFriend = `${key1} ${key2} ${key3}`
       return { ...state, activeFriend };
     }
   }

@@ -10,18 +10,18 @@ const SiderChat = (
     chats,
     activeChat,
   }) => {
-  const changeChat = order => () => {
+  const changeChat = key => () => {
     dispatch({
       type: 'home/changeChat',
-      payload: order,
+      payload: key,
     });
   }
-  const onCloseClick = order => e => {
+  const onCloseClick = key => e => {
     e.stopPropagation();
     e.preventDefault();
     dispatch({
       type: 'home/closeChat',
-      payload: order,
+      payload: key,
     });
     return false
   }
@@ -32,14 +32,14 @@ const SiderChat = (
         chats.map(item => (
           <Card
             size='small'
-            key={item.order}
-            onClick={changeChat(item.order)}
-            bodyStyle={{ backgroundColor: activeChat === item.order ? '#F0F0F0' : '' }}
-            onMouseEnter={() => { setHoverChat(item.order) }}
+            key={item.key}
+            onClick={changeChat(item.key)}
+            bodyStyle={{ backgroundColor: activeChat === item.key ? '#F0F0F0' : '' }}
+            onMouseEnter={() => { setHoverChat(item.key) }}
             onMouseLeave={() => { setHoverChat(0) }}
           >
             {
-              hoverChat === item.order && <CloseOutlined onClick={onCloseClick(item.order)} />
+              hoverChat === item.key && <CloseOutlined onClick={onCloseClick(item.key)} />
             }
             <Avatar src={item.avatar} />
             <div className={styles.nikeName}>
