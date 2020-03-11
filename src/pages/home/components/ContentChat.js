@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import styles from './index.less';
 
 const ContentChat = ({ activeChat, chats }) => {
+  // activeChat 为聊天key的string
   const currentChat = chats.filter(item => item.key === activeChat)[0];
   return (
     <div className={styles.contentChatWrapper}>

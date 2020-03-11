@@ -110,6 +110,12 @@ const HomeModel = {
                 name: '群聊1',
                 desc: '公告:群聊1',
                 key: '1'
+              },
+              {
+                avatar: defaultAvatar,
+                name: '群聊2',
+                desc: '公告:群聊2',
+                key: '2'
               }
             ]
           },

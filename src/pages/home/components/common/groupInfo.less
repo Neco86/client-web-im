@@ -1,0 +1,41 @@
+.groupInfoWrapper{
+  .groupInfo{
+    line-height: 40px;
+    display: inline-block;
+    text-align: left;
+    margin-top: 16px;
+    width: 220px;
+    >div{
+      position: relative;
+      display: flex;
+      border-bottom: .2px solid #eee;
+      &:nth-child(5){
+        border-bottom: none;
+      }
+      >span{
+        display: inline-block;
+        &:nth-child(1){
+          flex: 1;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          word-break: break-all;
+        }
+        &:nth-child(2){
+          line-height: 40px;
+          position: relative;
+          top: 2px;            
+        }
+      } 
+    }
+    .editNickName{
+      position: relative;
+      input{
+        width: fit-content;
+      }
+    }
+    .showInfo{
+      margin-left: 11px;
+    }
+  }
+}

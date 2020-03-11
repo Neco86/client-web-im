@@ -1,0 +1,46 @@
+.infoWrapper{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  .setting{
+    position: absolute;
+    top: 8px;
+    right: 14px;
+    color: grey;
+    font-size: 12px;
+    cursor: pointer;
+    &:hover{
+      color: #1890ff;
+    }
+  }
+  .baseInfo{
+    height: 160px;
+    background-image: url('/info_bg.jpeg');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    text-align: center;
+    .avatar{
+      display: inline-block;
+      border-radius: 50%;
+      border: 1px solid #FFF;
+      box-shadow: 0 6px 15px 0 rgba(0, 0, 0, 0.3);
+      margin: 20px 0 10px;
+    }
+    .nickName{
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .jumpToChat{
+      font-size: 16px;
+      cursor: pointer;
+      display: inline-block;
+      &:hover{
+        color: #1890ff;
+      }
+    }
+  }
+  .otherInfo{
+    text-align: center;
+  }   
+}
