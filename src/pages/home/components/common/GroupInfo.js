@@ -19,7 +19,7 @@ const GroupInfo = ({ info, setInfo }) => {
                 defaultValue={info.name}
                 onBlur={e => {
                   setGroupEditable(false);
-                  setInfo({ ...info, name: e.target.value })
+                  setInfo({ ...info, name: e.target.value || info.name })
                 }}
                 autoFocus
               />
