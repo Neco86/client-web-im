@@ -101,22 +101,35 @@ const HomeModel = {
         key: '1',
         friendGroup: [
           {
-            groupName: '群聊',
+            groupName: '群聊分组1',
             count: '12',
             key: '1',
             friends: [
               {
                 avatar: defaultAvatar,
                 name: '群聊1',
-                desc: '公告:群聊1',
+                desc: '公告:群聊1-1',
                 key: '1'
               },
               {
                 avatar: defaultAvatar,
                 name: '群聊2',
-                desc: '公告:群聊2',
+                desc: '公告:群聊1-2',
                 key: '2'
               }
+            ]
+          },
+          {
+            groupName: '群聊分组2',
+            count: '1',
+            key: '2',
+            friends: [
+              {
+                avatar: defaultAvatar,
+                name: '群聊1',
+                desc: '公告:群聊2-1',
+                key: '1'
+              },
             ]
           },
         ]
