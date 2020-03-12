@@ -88,7 +88,7 @@ const useInfo = keys => {
 
 const ContentList = ({ activeFriend }) => {
   // activeFriend 为三个key拼接的string 空格分隔
-  // key1: 1 群聊 2 好友
+  // key1: 2 群聊 1 好友
   // key2: 分组 key
   // key3: 具体哪个群/好友 key
   const keys = typeof (activeFriend) === 'string' ? activeFriend.split(' ') : [];
@@ -98,7 +98,7 @@ const ContentList = ({ activeFriend }) => {
       {
         activeFriend
           ? <Info
-            // type 1 群聊 2 个人
+            // type 2 群聊 1 个人
             type={keys[0]}
             // 展示信息
             info={info}
