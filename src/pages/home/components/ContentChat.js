@@ -13,8 +13,8 @@ const ContentChat = ({ activeChat, chats }) => {
         activeChat
           ? <Chat
             // type 2普通聊天 1群聊天
-            type={currentChat.chat}
-            key={activeChat}
+            type={currentChat.type}
+            chatKey={activeChat}
           />
           : <Empty description='' />
       }
