@@ -1,83 +1,83 @@
-.selfInfoWrapper{
-  .selfInfo{
-    width: 220px;
+.selfInfoWrapper {
+  .selfInfo {
     display: inline-block;
-    .card{
+    width: 220px;
+    .card {
+      position: relative;
       display: inline-block;
       width: 30px;
       height: 50px;
       // border: 1px solid green;
       margin: 10px 10px 0;
-      position: relative;
-      .sex{
-        display: inline-block;
+      .sex {
         position: absolute;
-        height: 24px;
-        width: 24px;
         top: 4px;
+        display: inline-block;
+        width: 24px;
+        height: 24px;
         background-repeat: no-repeat;
         background-size: 100%;
       }
-      .man{
+      .man {
         background-image: url('/man.png');
       }
-      .woman{
+      .woman {
         background-image: url('/woman.png');
       }
-      .desc{
+      .desc {
         position: relative;
         top: 26px;
-        font-size: 12px;
         font-weight: bold;
+        font-size: 12px;
       }
-      .age{
+      .age {
         position: absolute;
+        color: transparent;
         font-size: 20px;
         // font-weight: bold;
-        background-image: linear-gradient(135deg,red,blue);
-        background-clip:text;
-        color: transparent;
+        background-image: linear-gradient(135deg, red, blue);
+        background-clip: text;
       }
     }
-    .bottomInfo{
-      line-height: 40px;
+    .bottomInfo {
       display: inline-block;
-      text-align: left;
       width: 100%;
-      >div{
+      line-height: 40px;
+      text-align: left;
+      > div {
         position: relative;
         display: flex;
-        >span{
+        > span {
           display: inline-block;
-          &:nth-child(1){
+          &:nth-child(1) {
             flex: 1;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
             word-break: break-all;
           }
-          &:nth-child(2){
-            line-height: 40px; 
+          &:nth-child(2) {
             position: relative;
-            top: 2px;           
+            top: 2px;
+            line-height: 40px;
           }
-        } 
+        }
       }
     }
-    .editNickName{
+    .editNickName {
       position: relative;
-      input{
+      input {
         width: fit-content;
       }
     }
-    .showInfo{
+    .showInfo {
       margin-left: 11px;
     }
-    .divider{
+    .divider {
       width: 100%;
       height: 1px;
+      margin: 6px 0 4px;
       background-color: #eee;
-      margin:6px 0 4px;
     }
   }
 }

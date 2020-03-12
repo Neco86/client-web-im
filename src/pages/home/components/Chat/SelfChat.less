@@ -1,92 +1,99 @@
-.selfChatWrapper{
-  height: 100%;
+.selfChatWrapper {
   display: flex;
   flex-direction: column;
-  .header{
+  height: 100%;
+  .header {
     height: 40px;
     padding: 10px;
     // border: 1px solid red;
-    .nickName{
+    .nickName {
       float: left;
       font-weight: bold;
     }
-    .addChatGroup{
+    .addChatGroup {
       float: right;
-      font-size: 16px;
       font-weight: bold;
+      font-size: 16px;
     }
   }
-  .content{
+  .content {
     flex: 1;
     padding: 0 10px 10px;
-    border-bottom: 1px solid #eee;
     overflow: auto;
+    border-bottom: 1px solid #eee;
     // width: 300px;
-    .msg{
+    .msg {
       margin: 0 10px;
       padding: 4px 8px;
-      border-radius: 4px;
+      color: #000;
       word-break: break-all;
+      border-radius: 4px;
     }
-    .peerChatMsg{
-      line-height: 20px;
-      margin: 12px 0;
+    .peerChatMsg {
+      position: relative;
       display: flex;
       flex-direction: row;
-      position: relative;
-      .msg{
+      margin: 12px 0;
+      line-height: 20px;
+      .msg {
         background-color: #f0f0f0;
       }
       .msg::before {
+        position: absolute;
+        top: 8px;
+        left: 24px;
         display: inline-block;
         border: 5px solid transparent;
         border-right-color: #f0f0f0;
-        content: "";
-        position: absolute;
-        left: 24px;
-        top: 8px;
+        content: '';
       }
     }
-    .myChatMsg{
-      line-height: 20px;
-      margin: 12px 0;
+    .myChatMsg {
+      position: relative;
       display: flex;
       flex-direction: row-reverse;
-      position: relative;
-      .msg{
-        background-color: #D3F1FE;
+      margin: 12px 0;
+      line-height: 20px;
+      .msg {
+        background-color: #d3f1fe;
       }
       .msg::after {
+        position: absolute;
+        top: 8px;
+        right: 24px;
         display: inline-block;
         border: 5px solid transparent;
-        border-left-color: #D3F1FE;
-        content: "";
-        position: absolute;
-        right: 24px;
-        top: 8px;
+        border-left-color: #d3f1fe;
+        content: '';
       }
     }
   }
-  .bottom{
-    height: 150px;
+  .bottom {
     display: flex;
     flex-direction: column;
-    .tools{
+    height: 150px;
+    .tools {
+      position: relative;
       height: 40px;
       padding: 10px;
-      span{
-        font-size: 18px;
+      span {
         display: inline-block;
         width: 30px;
+        font-size: 18px;
+        cursor: pointer;
+        &:hover {
+          color: #1890ff;
+        }
       }
     }
-    .inputArea{
+    .inputArea {
       flex: 1;
-      textarea{
+      textarea {
         height: 100%;
-        resize: none;
+        color: #000;
         border: none;
         box-shadow: none;
+        resize: none;
       }
     }
   }

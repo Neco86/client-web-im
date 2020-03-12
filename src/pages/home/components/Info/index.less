@@ -1,46 +1,46 @@
-.infoWrapper{
-  height: 100%;
+.infoWrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
-  position: relative;
-  .setting{
+  height: 100%;
+  .setting {
     position: absolute;
     top: 8px;
     right: 14px;
     color: grey;
     font-size: 12px;
     cursor: pointer;
-    &:hover{
+    &:hover {
       color: #1890ff;
     }
   }
-  .baseInfo{
+  .baseInfo {
     height: 160px;
+    text-align: center;
     background-image: url('/info_bg.jpeg');
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    text-align: center;
-    .avatar{
+    .avatar {
       display: inline-block;
-      border-radius: 50%;
-      border: 1px solid #FFF;
-      box-shadow: 0 6px 15px 0 rgba(0, 0, 0, 0.3);
       margin: 20px 0 10px;
+      border: 1px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 6px 15px 0 rgba(0, 0, 0, 0.3);
     }
-    .nickName{
+    .nickName {
       font-weight: bold;
       font-size: 16px;
     }
-    .jumpToChat{
+    .jumpToChat {
+      display: inline-block;
       font-size: 16px;
       cursor: pointer;
-      display: inline-block;
-      &:hover{
+      &:hover {
         color: #1890ff;
       }
     }
   }
-  .otherInfo{
+  .otherInfo {
     text-align: center;
-  }   
+  }
 }
