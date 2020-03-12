@@ -2,7 +2,7 @@ import React from 'react';
 import { Avatar } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
 import GroupInfo from './GroupInfo';
-import styles from './info.less';
+import styles from './index.less';
 import SelfInfo from './SelfInfo';
 
 const Info = ({ type, info, setInfo }) => {

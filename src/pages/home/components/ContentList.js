@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Empty } from 'antd';
 import { connect } from 'dva';
 import { defaultAvatar } from '@/utils/utils';
-import Info from './common/Info';
+import Info from './Info';
 import styles from './index.less';
 
 const useInfo = keys => {
