@@ -5,6 +5,7 @@ import GroupInfo from './GroupInfo';
 import styles from './index.less';
 import SelfInfo from './SelfInfo';
 
+// type 1群聊 2私聊
 const Info = ({ type, info, setInfo }) => {
   return (
     <div className={styles.infoWrapper}>

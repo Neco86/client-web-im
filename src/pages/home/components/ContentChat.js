@@ -1,6 +1,7 @@
 import React from 'react';
 import { Empty } from 'antd';
 import { connect } from 'dva';
+import Chat from './Chat';
 import styles from './index.less';
 
 const ContentChat = ({ activeChat, chats }) => {
@@ -10,7 +11,11 @@ const ContentChat = ({ activeChat, chats }) => {
     <div className={styles.contentChatWrapper}>
       {
         activeChat
-          ? `contentChat ${currentChat.nikeName} ${currentChat.type === '1' ? 'chat' : 'group chat'}`
+          ? <Chat
+            // type 2普通聊天 1群聊天
+            type={currentChat.chat}
+            key={activeChat}
+          />
           : <Empty description='' />
       }
     </div>

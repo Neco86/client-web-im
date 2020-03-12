@@ -11,7 +11,7 @@ const HomeModel = {
         latestTime: '14:20',
         unread: 0,
         key: '1',
-        type: '1', // type 1普通聊天 2群聊天
+        type: '2', // type 2普通聊天 1群聊天
       },
       {
         nikeName: 'nikeName2',
@@ -20,7 +20,7 @@ const HomeModel = {
         latestTime: '14:20',
         unread: 1,
         key: '2',
-        type: '1',
+        type: '2',
       }, {
         nikeName: 'groupName3',
         avatar: defaultAvatar,
@@ -28,7 +28,7 @@ const HomeModel = {
         latestTime: '14:20',
         unread: 2,
         key: '3',
-        type: '2',
+        type: '1',
       },
       {
         nikeName: 'groupName4',
@@ -37,7 +37,7 @@ const HomeModel = {
         latestTime: '14:20',
         unread: 0,
         key: '4',
-        type: '2',
+        type: '1',
       },
       {
         nikeName: 'nikeName5',
@@ -46,7 +46,7 @@ const HomeModel = {
         latestTime: '14:20',
         unread: 0,
         key: '5',
-        type: '1',
+        type: '2',
       },
       {
         nikeName: 'nikeName6',
@@ -55,7 +55,7 @@ const HomeModel = {
         latestTime: '14:20',
         unread: 0,
         key: '6',
-        type: '1',
+        type: '2',
       },
       {
         nikeName: 'nikeName7',
@@ -64,7 +64,7 @@ const HomeModel = {
         latestTime: '14:20',
         unread: 0,
         key: '7',
-        type: '1',
+        type: '2',
       },
       {
         nikeName: 'nikeName8',
@@ -73,7 +73,7 @@ const HomeModel = {
         latestTime: '14:20',
         unread: 0,
         key: '8',
-        type: '1',
+        type: '2',
       },
       {
         nikeName: 'nikeName9',
@@ -82,7 +82,7 @@ const HomeModel = {
         latestTime: '14:20',
         unread: 0,
         key: '9',
-        type: '1',
+        type: '2',
       },
       {
         nikeName: 'nikeName10',
@@ -91,7 +91,7 @@ const HomeModel = {
         latestTime: '14:20',
         unread: 0,
         key: '10',
-        type: '1',
+        type: '2',
       },
     ],
     activeChat: 0,
