@@ -163,6 +163,7 @@ const GroupChat = ({ chatKey }) => {
   const [chatInfo, setChatInfo] = useGroupChat(chatKey);
   const [emojiBox, setEmojiBox] = useState(false);
   const inputEl = useRef(null);
+  const [searchVisible, setSearchVisible] = useState(false);
 
   const [input, setInput] = useState('');
   // 监控按键
@@ -308,7 +309,12 @@ const GroupChat = ({ chatKey }) => {
         </div>
         <div className={styles.groupMember}>
           <div className={styles.title}>
-            成员 {chatInfo.account} <SearchOutlined />
+            {searchVisible ? <Input autoFocus /> : <>成员 {chatInfo.account}</>}
+            <SearchOutlined
+              onClick={() => {
+                setSearchVisible(!searchVisible);
+              }}
+            />
           </div>
           <div className={styles.members}>
             {chatInfo.members.map(item => (

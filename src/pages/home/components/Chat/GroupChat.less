@@ -148,10 +148,12 @@
       display: flex;
       flex: 1;
       flex-direction: column;
-      padding: 10px;
-      padding-bottom: 0;
+      padding: 0 10px;
       overflow: hidden;
       .title {
+        height: 42px;
+        padding: 10px 0;
+        overflow: hidden;
         font-weight: bold;
         :global {
           .anticon-search {
@@ -160,6 +162,11 @@
             &:hover {
               color: #1890ff;
             }
+          }
+          .ant-input {
+            position: relative;
+            top: -6px;
+            width: 135px;
           }
         }
       }
