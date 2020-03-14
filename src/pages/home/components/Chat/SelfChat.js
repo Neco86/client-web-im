@@ -1,10 +1,10 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, useRef, Fragment } from 'react';
 import {
   UsergroupAddOutlined,
   SmileOutlined,
   FolderOutlined,
   PhoneOutlined,
-  CameraOutlined,
+  VideoCameraOutlined,
 } from '@ant-design/icons';
 import { defaultAvatar } from '@/utils/utils';
 import { Avatar, Input } from 'antd';
@@ -65,6 +65,7 @@ const useSelfChat = chatKey => {
 const SelfChat = ({ chatKey }) => {
   const [chatInfo, setChatInfo] = useSelfChat(chatKey);
   const [emojiBox, setEmojiBox] = useState(false);
+  const inputEl = useRef(null);
 
   const [input, setInput] = useState('');
   // 监控按键
@@ -117,6 +118,7 @@ const SelfChat = ({ chatKey }) => {
   const handleEmojiClick = name => {
     setEmojiBox(false);
     setInput(`${input}${emoji.get(name)}`);
+    inputEl.current.focus();
   };
 
   return (
@@ -136,7 +138,18 @@ const SelfChat = ({ chatKey }) => {
                   <div>
                     <Avatar src={chatInfo.avatar} size="small" />
                   </div>
-                  <div className={styles.msg}>{chat.msg}</div>
+                  <div className={styles.msg}>
+                    {chat.msg.split('\n').map((msg, index) =>
+                      index === 0 ? (
+                        msg
+                      ) : (
+                        <Fragment key={+index}>
+                          <br />
+                          {msg}
+                        </Fragment>
+                      ),
+                    )}
+                  </div>
                 </div>
               );
             case '2': // 我的消息
@@ -169,7 +182,7 @@ const SelfChat = ({ chatKey }) => {
           <SmileOutlined onClick={() => setEmojiBox(!emojiBox)} />
           <FolderOutlined />
           <PhoneOutlined />
-          <CameraOutlined />
+          <VideoCameraOutlined />
           {emojiBox && <Emoji handleEmojiClick={handleEmojiClick} />}
         </div>
         <div className={styles.inputArea}>
@@ -180,6 +193,7 @@ const SelfChat = ({ chatKey }) => {
               setInput(e.target.value);
             }}
             id="chatInput"
+            ref={inputEl}
           />
         </div>
       </div>

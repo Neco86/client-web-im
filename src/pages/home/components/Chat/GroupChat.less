@@ -1,0 +1,190 @@
+.groupChatWrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  .left {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: 100%;
+    .header {
+      height: 40px;
+      padding: 10px;
+      .nickName {
+        float: left;
+        font-weight: bold;
+      }
+      .tools {
+        float: right;
+        font-weight: bold;
+        font-size: 16px;
+        :global {
+          .anticon {
+            width: 24px;
+          }
+        }
+      }
+    }
+    .content {
+      flex: 1;
+      padding: 0 10px 10px;
+      overflow: auto;
+      border-bottom: 1px solid #eee;
+      // width: 300px;
+      .msg {
+        position: relative;
+        top: 20px;
+        margin: 0 10px;
+        padding: 4px 8px;
+        color: #000;
+        word-break: break-all;
+        border-radius: 4px;
+      }
+      .peerChatMsg {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        margin: 26px 0;
+        line-height: 20px;
+        .msg {
+          background-color: #f0f0f0;
+          border-top-left-radius: 0;
+        }
+        .msg::before {
+          position: absolute;
+          top: 0;
+          left: -10px;
+          display: inline-block;
+          border: 5px solid transparent;
+          border-top-color: #f0f0f0;
+          border-right-color: #f0f0f0;
+          content: '';
+        }
+        .nickName {
+          position: absolute;
+          left: 34px;
+          font-size: 14px;
+        }
+      }
+      .myChatMsg {
+        position: relative;
+        display: flex;
+        flex-direction: row-reverse;
+        margin: 26px 0;
+        line-height: 20px;
+        .msg {
+          background-color: #d3f1fe;
+          border-top-right-radius: 0;
+        }
+        .msg::after {
+          position: absolute;
+          top: 0;
+          right: -10px;
+          display: inline-block;
+          border: 5px solid transparent;
+          border-top-color: #d3f1fe;
+          border-left-color: #d3f1fe;
+          content: '';
+        }
+        .nickName {
+          position: absolute;
+          right: 34px;
+          font-size: 14px;
+        }
+      }
+    }
+    .bottom {
+      display: flex;
+      flex-direction: column;
+      height: 150px;
+      .tools {
+        position: relative;
+        height: 40px;
+        padding: 10px;
+        span {
+          display: inline-block;
+          width: 30px;
+          font-size: 18px;
+          cursor: pointer;
+          &:hover {
+            color: #1890ff;
+          }
+        }
+      }
+      .inputArea {
+        flex: 1;
+        textarea {
+          height: 100%;
+          color: #000;
+          border: none;
+          box-shadow: none;
+          resize: none;
+        }
+      }
+    }
+  }
+  .right {
+    display: flex;
+    flex-direction: column;
+    width: 180px;
+    height: 100%;
+    background-color: #f3f5f8;
+    .note {
+      display: flex;
+      flex-direction: column;
+      height: 130px;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      .title {
+        font-weight: bold;
+      }
+      .noteContent {
+        flex: 1;
+        overflow: auto;
+      }
+    }
+    .groupMember {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 10px;
+      padding-bottom: 0;
+      overflow: hidden;
+      .title {
+        font-weight: bold;
+        :global {
+          .anticon-search {
+            float: right;
+            line-height: 22px;
+            &:hover {
+              color: #1890ff;
+            }
+          }
+        }
+      }
+      .members {
+        flex: 1;
+        overflow: auto;
+        .member {
+          display: flex;
+          flex-direction: row;
+          height: 30px;
+          .avatar {
+            margin-right: 4px;
+          }
+          .nickName {
+            flex: 1;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            word-break: break-all;
+          }
+          .permit {
+            margin-left: 4px;
+          }
+        }
+      }
+    }
+  }
+}
