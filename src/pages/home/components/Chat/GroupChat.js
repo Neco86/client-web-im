@@ -183,19 +183,21 @@ const GroupChat = ({ chatKey }) => {
       }
       // 发送信息
       if (keyCode === 13) {
-        const history = JSON.parse(JSON.stringify(chatInfo.history));
-        history.push({
-          type: '2',
-          msg: input,
-          key: chatInfo.myKey,
-          time: String(Date.now()),
-        });
-        setChatInfo({ ...chatInfo, history });
-        const contentEle = document.getElementById('content');
-        if (contentEle.scrollHeight > contentEle.clientHeight) {
-          contentEle.scrollTop = contentEle.scrollHeight;
+        if (input) {
+          const history = JSON.parse(JSON.stringify(chatInfo.history));
+          history.push({
+            type: '2',
+            msg: input,
+            key: chatInfo.myKey,
+            time: String(Date.now()),
+          });
+          setChatInfo({ ...chatInfo, history });
+          const contentEle = document.getElementById('content');
+          if (contentEle.scrollHeight > contentEle.clientHeight) {
+            contentEle.scrollTop = contentEle.scrollHeight;
+          }
+          setInput('');
         }
-        setInput('');
         e.preventDefault();
         return false;
       }
