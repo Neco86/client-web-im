@@ -70,7 +70,7 @@ const SelfChat = ({ chatKey }) => {
   const [input, setInput] = useState('');
   // 监控按键
   useEffect(() => {
-    document.onkeydown = e => {
+    document.getElementById('chatInput').onkeydown = e => {
       const keyCode = e.keyCode || e.which || e.charCode;
       const ctrlKey = e.ctrlKey || e.metaKey;
       // 换行
