@@ -91,6 +91,11 @@ export default {
           path: '/register',
           component: './register',
         },
+        {
+          name: 'login',
+          path: '/login',
+          component: './login',
+        },
       ],
     },
   ],

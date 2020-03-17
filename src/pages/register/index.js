@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Row, Col, Button, message } from 'antd';
+import md5 from 'md5';
 import router from 'umi/router';
 import { getCaptcha, register } from '@/service/register';
 import { SUCCESS_CODE } from '@/utils/const';
@@ -8,7 +9,9 @@ import styles from './index.less';
 const Register = () => {
   const { Item } = Form;
   const [form] = Form.useForm();
+  // 获取验证按钮是否禁用
   const [btnDisabled, setBtnDisabled] = useState(0);
+  // 获取验证码
   const handleGetCaptcha = () => {
     form.validateFields(['email']).then(values => {
       (async () => {
@@ -23,19 +26,32 @@ const Register = () => {
       setBtnDisabled(30);
     });
   };
+  const [timer, setTimer] = useState(null);
+  // 获取验证码倒计时
   useEffect(() => {
     if (btnDisabled) {
-      setTimeout(() => {
-        setBtnDisabled(btnDisabled - 1);
-      }, 1000);
+      setTimer(
+        setTimeout(() => {
+          setBtnDisabled(btnDisabled - 1);
+        }, 1000),
+      );
     }
   }, [btnDisabled]);
+  // 完成注册
   const onFinish = values => {
     (async () => {
-      const result = await register(values);
+      const { nickname, password, email, captcha } = values;
+      const req = {
+        nickname,
+        password: md5(password),
+        email,
+        captcha,
+      };
+      const result = await register(req);
       const { code, msg } = result;
       if (code === SUCCESS_CODE) {
         message.success(`${msg} 即将跳转到登陆页面!`);
+        clearTimeout(timer);
         setTimeout(() => {
           router.push('/login');
         }, 1000);
@@ -124,17 +140,18 @@ const Register = () => {
           </Row>
           <Row gutter={8}>
             <Button type="primary" className={styles.registerBtn} htmlType="submit">
-              注册
+              完成注册
             </Button>
           </Row>
           <Row gutter={8}>
             <Button
               className={styles.loginBtn}
               onClick={() => {
+                clearTimeout(timer);
                 router.push('/login');
               }}
             >
-              登陆
+              前去登陆
             </Button>
           </Row>
         </Form>
