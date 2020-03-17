@@ -1,11 +1,7 @@
 import React from 'react';
 
 function BasicLayout(props) {
-  return (
-    <div>
-      {props.children}
-    </div>
-  );
+  return <React.Fragment>{props.children}</React.Fragment>;
 }
 
 export default BasicLayout;
