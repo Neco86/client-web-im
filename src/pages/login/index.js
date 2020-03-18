@@ -42,7 +42,12 @@ const Login = () => {
               <span className={styles.remember}>自动登陆</span>
             </Col>
             <Col span={12}>
-              <a href="#" className={styles.forgotPassword}>
+              <a
+                className={styles.forgotPassword}
+                onClick={() => {
+                  router.push('/reset');
+                }}
+              >
                 忘记密码
               </a>
             </Col>

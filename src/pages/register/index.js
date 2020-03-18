@@ -50,11 +50,9 @@ const Register = () => {
       const result = await register(req);
       const { code, msg } = result;
       if (code === SUCCESS_CODE) {
-        message.success(`${msg} 即将跳转到登陆页面!`);
+        message.success(msg);
         clearTimeout(timer);
-        setTimeout(() => {
-          router.push('/login');
-        }, 1000);
+        router.push('/login');
       } else {
         message.error(msg);
       }

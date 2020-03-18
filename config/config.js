@@ -87,14 +87,19 @@ export default {
       component: '../layouts',
       routes: [
         {
-          name: 'register',
+          name: '注册',
           path: '/register',
           component: './register',
         },
         {
-          name: 'login',
+          name: '登录',
           path: '/login',
           component: './login',
+        },
+        {
+          name: '忘记密码',
+          path: '/reset',
+          component: './reset',
         },
       ],
     },
