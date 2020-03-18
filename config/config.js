@@ -101,6 +101,11 @@ export default {
           path: '/reset',
           component: './reset',
         },
+        {
+          name: '主页',
+          path: '/',
+          component: './home',
+        },
       ],
     },
   ],

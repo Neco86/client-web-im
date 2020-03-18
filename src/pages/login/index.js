@@ -1,13 +1,38 @@
 import React from 'react';
-import { Form, Input, Row, Button, Col, Checkbox } from 'antd';
+import { Form, Input, Row, Button, Col, Checkbox, message } from 'antd';
 import router from 'umi/router';
+import md5 from 'md5';
+import { login } from '@/service/login';
+import { SUCCESS_CODE, TOKEN_NAME } from '@/utils/const';
 import styles from './index.less';
 
 const Login = () => {
   const { Item } = Form;
   // 立即登陆
   const onFinish = values => {
-    console.log(values);
+    (async () => {
+      const { password, email, remember } = values;
+      const req = {
+        email,
+        password: md5(password),
+      };
+      const result = await login(req);
+      const { code, msg, token } = result;
+      if (code === SUCCESS_CODE) {
+        // message.success(msg);
+        // 处理自动登录
+        if (remember) {
+          // token 存localStorage
+          localStorage.setItem(TOKEN_NAME, token);
+        } else {
+          // token 存sessionStorage
+          sessionStorage.setItem(TOKEN_NAME, token);
+        }
+        router.push('/');
+      } else {
+        message.error(msg);
+      }
+    })();
   };
   return (
     <div className={styles.loginWrapper}>
