@@ -30,7 +30,7 @@ const Login = () => {
         }
         router.push('/');
       } else {
-        message.error(msg);
+        message.error(msg || '暂时无法登录,请稍后再试');
       }
     })();
   };

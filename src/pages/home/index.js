@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { TOKEN_NAME } from '@/utils/const';
 import { message } from 'antd';
 import io from 'socket.io-client';
+import { connect } from 'dva';
 import router from 'umi/router';
+import Header from './components/Header';
+import Sider from './components/Sider';
+import Content from './components/Content';
 import styles from './index.less';
 
 // 连接socket
@@ -27,9 +31,27 @@ function useSocket() {
   return socket;
 }
 
-const Home = () => {
-  useSocket();
-  return <div className={styles.homeWrapper}>welcome</div>;
+const Home = ({ dispatch }) => {
+  const socket = useSocket();
+  dispatch({
+    type: 'global/setSocket',
+    socket,
+  });
+  return (
+    <div className={styles.homeWrapper}>
+      <div className={styles.header}>
+        <Header />
+      </div>
+      <div className={styles.body}>
+        <div className={styles.sider}>
+          <Sider />
+        </div>
+        <div className={styles.content}>
+          <Content />
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export default Home;
+export default connect()(Home);
