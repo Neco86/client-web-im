@@ -1,0 +1,72 @@
+.headerWrapper {
+  display: flex;
+  flex-direction: row;
+  padding: 0 20px;
+  .left {
+    display: flex;
+    flex-direction: row;
+    width: 246px;
+    .search {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      justify-content: center;
+      margin-right: 14px;
+      .input {
+        border: none;
+        border-radius: 20px;
+        box-shadow: none;
+      }
+    }
+    .addBtn {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      .btn {
+        padding: 4px;
+        color: rgba(0, 0, 0, 0.45);
+        font-weight: lighter;
+        font-size: 14px;
+        background-color: #fff;
+        border-radius: 50%;
+        transition: all 0.3s;
+        &:hover {
+          color: rgba(0, 0, 0, 0.65);
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .middle {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    :global {
+      .ant-menu-item,
+      .ant-menu-item:hover {
+        border-bottom: none;
+      }
+      .ant-menu {
+        background-color: #edf0f1;
+      }
+    }
+    .menuBtn {
+      font-size: 24px;
+    }
+  }
+  .right {
+    width: 26px;
+    :global {
+      .ant-badge-dot {
+        width: 10px;
+        height: 10px;
+        cursor: pointer;
+      }
+      .ant-avatar {
+        cursor: pointer;
+      }
+    }
+  }
+}
