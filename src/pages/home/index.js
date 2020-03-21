@@ -21,10 +21,21 @@ function useSocket() {
       socket.on('init', ({ nickname }) => {
         message.success(`Welcome ${nickname}!`);
       });
-      // token过期
-      socket.on('disconnect', () => {
-        message.error('用户令牌失效,请重新登录!');
-        router.push('/login');
+      // 断开连接
+      socket.on('disconnect', reason => {
+        switch (reason) {
+          // token过期, 服务器主动断开
+          case 'transport close':
+            message.error('用户令牌失效,请重新登录!');
+            router.push('/login');
+            break;
+          // 用户选择离线, 客户端主动断开
+          case 'io client disconnect':
+            message.success('离线成功!');
+            break;
+          default:
+            break;
+        }
       });
     }
   }, [socket]);

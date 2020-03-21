@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
-import { Avatar, Badge, Menu, Dropdown, message } from 'antd';
+import { Avatar, Badge, Menu, Dropdown } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 import { USER_STATUS, USER_STATUS_COLOR, DEFAULT_AVATAR } from '@/utils/const';
-import router from 'umi/router';
 
 const MenuItem = ({ current, status, name }) => (
   <>
@@ -41,14 +40,17 @@ const User = ({ socket }) => {
     });
   }, []);
   const changeStatus = ({ key }) => {
+    if (socket.disconnected) {
+      socket.connect();
+      socket.emit('init');
+    }
     socket.emit('setUserInfo', { status: key });
     socket.on('setUserInfo', ({ status: s }) => {
       setStatus(s);
+      if (s === USER_STATUS.OFFLINE) {
+        socket.disconnect();
+      }
     });
-    if (key === USER_STATUS.OFFLINE) {
-      message.success('离线成功!');
-      router.push('/login');
-    }
   };
   const statusMenu = (
     <Menu onClick={changeStatus}>
