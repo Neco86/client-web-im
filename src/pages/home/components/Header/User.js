@@ -48,6 +48,7 @@ const User = ({ socket }) => {
     socket.on('setUserInfo', ({ status: s }) => {
       setStatus(s);
       if (s === USER_STATUS.OFFLINE) {
+        socket.successReason = '离线成功!';
         socket.disconnect();
       }
     });
