@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Input, Avatar, Badge, Menu } from 'antd';
+import { Input, Menu } from 'antd';
 import { PlusOutlined, CommentOutlined, UserOutlined } from '@ant-design/icons';
-import { USER_STATUS, USER_STATUS_COLOR } from '@/utils/const';
 import styles from './index.less';
+import User from './User';
 
 const Header = ({ dispatch, menuKey }) => {
   const changeMenu = ({ key }) => {
@@ -12,7 +12,6 @@ const Header = ({ dispatch, menuKey }) => {
       menuKey: key,
     });
   };
-  const status = USER_STATUS.ONLINE;
   return (
     <div className={styles.headerWrapper}>
       <div className={styles.left}>
@@ -34,15 +33,12 @@ const Header = ({ dispatch, menuKey }) => {
         </Menu>
       </div>
       <div className={styles.right}>
-        <Badge dot offset={[-2, 22]} style={{ backgroundColor: `${USER_STATUS_COLOR[status]}` }}>
-          <Avatar size="small" />
-        </Badge>
+        <User />
       </div>
     </div>
   );
 };
 
 export default connect(({ global }) => ({
-  socket: global.socket,
   menuKey: global.menuKey,
 }))(Header);
