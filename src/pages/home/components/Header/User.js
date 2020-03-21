@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { Avatar, Badge, Menu, Dropdown } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
@@ -27,17 +27,9 @@ const MenuItem = ({ current, status, name }) => (
     {name}
   </>
 );
-const User = ({ socket }) => {
-  const [status, setStatus] = useState(USER_STATUS.OFFLINE);
-  const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
+const User = ({ socket, avatar, status }) => {
   useEffect(() => {
     socket.emit('getUserInfo', ['status', 'avatar']);
-    socket.on('getUserInfo', ({ status: s, avatar: a }) => {
-      setStatus(s);
-      if (a) {
-        setAvatar(a);
-      }
-    });
   }, []);
   const changeStatus = ({ key }) => {
     if (socket.disconnected) {
@@ -45,13 +37,6 @@ const User = ({ socket }) => {
       socket.emit('init');
     }
     socket.emit('setUserInfo', { status: key });
-    socket.on('setUserInfo', ({ status: s }) => {
-      setStatus(s);
-      if (s === USER_STATUS.OFFLINE) {
-        socket.successReason = '离线成功!';
-        socket.disconnect();
-      }
-    });
   };
   const statusMenu = (
     <Menu onClick={changeStatus}>
@@ -69,13 +54,15 @@ const User = ({ socket }) => {
   return (
     <>
       <Dropdown overlay={statusMenu} placement="bottomLeft" trigger="click">
-        <Badge dot offset={[12, 44]} style={{ backgroundColor: `${USER_STATUS_COLOR[status]}` }} />
+        <Badge dot style={{ backgroundColor: `${USER_STATUS_COLOR[status]}` }} />
       </Dropdown>
-      <Avatar size="small" src={avatar} />
+      <Avatar size="small" src={avatar || DEFAULT_AVATAR} />
     </>
   );
 };
 
-export default connect(({ global }) => ({
+export default connect(({ global, userInfo }) => ({
   socket: global.socket,
+  avatar: userInfo.avatar,
+  status: userInfo.status,
 }))(User);

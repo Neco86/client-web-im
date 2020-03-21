@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TOKEN_NAME } from '@/utils/const';
+import { TOKEN_NAME, USER_STATUS } from '@/utils/const';
 import { message } from 'antd';
 import io from 'socket.io-client';
 import { connect } from 'dva';
@@ -10,7 +10,7 @@ import Content from './components/Content';
 import styles from './index.less';
 
 // 连接socket
-function useSocket() {
+function useSocket(dispatch) {
   const token = sessionStorage.getItem(TOKEN_NAME) || localStorage.getItem(TOKEN_NAME);
   const [socket] = useState(io(`http://127.0.0.1:7001?token=${token}`));
   useEffect(() => {
@@ -20,6 +20,28 @@ function useSocket() {
       // 初始化
       socket.on('init', ({ nickname }) => {
         message.success(`Welcome ${nickname}!`);
+        dispatch({
+          type: 'userInfo/setUserInfo',
+          payload: { nickname },
+        });
+      });
+      // 获取用户信息
+      socket.on('getUserInfo', payload => {
+        dispatch({
+          type: 'userInfo/setUserInfo',
+          payload,
+        });
+      });
+      // 更改用户信息
+      socket.on('setUserInfo', payload => {
+        if (payload.status === USER_STATUS.OFFLINE) {
+          socket.successReason = '离线成功!';
+          socket.disconnect();
+        }
+        dispatch({
+          type: 'userInfo/setUserInfo',
+          payload,
+        });
       });
       // 断开连接
       socket.on('disconnect', () => {
@@ -37,7 +59,7 @@ function useSocket() {
 }
 
 const Home = ({ dispatch }) => {
-  const socket = useSocket();
+  const socket = useSocket(dispatch);
   dispatch({
     type: 'global/setSocket',
     socket,
