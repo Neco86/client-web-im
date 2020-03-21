@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
 import { Avatar, Badge, Menu, Dropdown } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
+import UserModal from '@/components/UserModal';
 import { USER_STATUS, USER_STATUS_COLOR, DEFAULT_AVATAR } from '@/utils/const';
 
 const MenuItem = ({ current, status, name }) => (
@@ -32,12 +33,13 @@ const User = ({ socket, avatar, status }) => {
     socket.emit('getUserInfo', ['status', 'avatar']);
   }, []);
   const changeStatus = ({ key }) => {
-    if (socket.disconnected) {
+    if (socket.disconnected && key !== USER_STATUS.OFFLINE) {
       socket.connect();
       socket.emit('init');
     }
     socket.emit('setUserInfo', { status: key });
   };
+  const [userModal, setUserModal] = useState(false);
   const statusMenu = (
     <Menu onClick={changeStatus}>
       <Menu.Item key={USER_STATUS.ONLINE}>
@@ -56,7 +58,20 @@ const User = ({ socket, avatar, status }) => {
       <Dropdown overlay={statusMenu} placement="bottomLeft" trigger="click">
         <Badge dot style={{ backgroundColor: `${USER_STATUS_COLOR[status]}` }} />
       </Dropdown>
-      <Avatar size="small" src={avatar || DEFAULT_AVATAR} />
+      <Avatar
+        size="small"
+        src={avatar || DEFAULT_AVATAR}
+        onClick={() => {
+          setUserModal(true);
+        }}
+      />
+      <UserModal
+        visible={userModal}
+        onCancel={() => {
+          setUserModal(false);
+        }}
+        self
+      />
     </>
   );
 };
