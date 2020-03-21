@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Avatar } from 'antd';
+import React, { useState, useEffect, useRef } from 'react';
+import { Modal, Avatar, message } from 'antd';
 import { CameraOutlined } from '@ant-design/icons';
 import { connect } from 'dva';
 import { DEFAULT_AVATAR } from '@/utils/const';
@@ -7,9 +7,19 @@ import './UserModal.less';
 
 const UserModal = ({ visible, onCancel, self, socket, avatar }) => {
   const [avatarMask, setAvatarMask] = useState(false);
+  const uploadAvatarInput = useRef({ current: { files: [] } });
   useEffect(() => {
     socket.emit('getUserInfo', ['avatar']);
   }, []);
+  const changeAvatar = e => {
+    const file = e.target.files[0];
+    const type = file.type.split('/')[1];
+    if (['jpg', 'png'].includes(type)) {
+      socket.emit('setAvatar', { file, type });
+    } else {
+      message.error('文件类型不支持!');
+    }
+  };
   return (
     <Modal
       visible={visible}
@@ -34,8 +44,18 @@ const UserModal = ({ visible, onCancel, self, socket, avatar }) => {
           onMouseLeave={() => {
             setAvatarMask(false);
           }}
+          onClick={() => {
+            uploadAvatarInput.current.click();
+          }}
         />
       )}
+      <input
+        ref={uploadAvatarInput}
+        type="file"
+        accept="image/gif, image/jpg, image/png"
+        style={{ display: 'none' }}
+        onChange={changeAvatar}
+      />
     </Modal>
   );
 };
