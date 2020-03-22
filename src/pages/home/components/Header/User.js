@@ -70,7 +70,6 @@ const User = ({ socket, avatar, status }) => {
         onCancel={() => {
           setUserModal(false);
         }}
-        self
       />
     </>
   );

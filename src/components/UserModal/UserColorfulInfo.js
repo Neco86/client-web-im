@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Select, Input } from 'antd';
 import { ManOutlined, WomanOutlined, QuestionOutlined } from '@ant-design/icons';
 import { SEX, AGE_COLOR } from '@/utils/const';
 
-const UserColorfulInfo = ({ editable, setValues, sex, age }) => {
+const UserColorfulInfo = ({ editable, setValues, sex: s, age: a }) => {
   const { Option } = Select;
+  const [sex, setSex] = useState(s);
+  const [age, setAge] = useState(a);
   return (
     <div
       className="userColorfulInfo"
@@ -25,6 +27,7 @@ const UserColorfulInfo = ({ editable, setValues, sex, age }) => {
                 placeholder="性别"
                 size="small"
                 onChange={v => {
+                  setSex(v);
                   setValues({ sex: v });
                 }}
               >
@@ -53,7 +56,8 @@ const UserColorfulInfo = ({ editable, setValues, sex, age }) => {
                 placeholder="年龄"
                 type="number"
                 onChange={e => {
-                  setValues({ age: e.target.value });
+                  setAge(e.target.value);
+                  setValues({ age: String(e.target.value) });
                 }}
               />
             ) : (

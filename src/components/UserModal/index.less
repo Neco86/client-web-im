@@ -1,14 +1,17 @@
 :global {
   .userModal {
+    // 个人设置背景图
     .ant-modal-content {
       height: 480px;
       background-image: url('/info_bg.jpeg');
       background-repeat: no-repeat;
       background-size: 100% 180px;
     }
+    // 模态框关闭放在左边
     .ant-modal-close {
       left: 0;
     }
+    // 编辑按钮
     .edit {
       position: absolute;
       top: 0;
@@ -23,6 +26,7 @@
         color: #1890ff;
       }
     }
+    // 头像
     .ant-avatar {
       position: absolute;
       top: -16px;
@@ -36,17 +40,20 @@
       box-shadow: 0 11px 20px 0 rgba(0, 0, 0, 0.3);
       transform: translateX(-50%);
     }
+    // 昵称
     .nickName {
       margin-top: 48px;
       font-weight: bold;
       font-size: 20px;
       text-align: center;
     }
+    // 签名
     .sign {
       width: 272px;
       height: 22px;
       margin: 8px 0;
       text-align: center;
+      // 修改签名按钮
       .anticon {
         margin-left: 10px;
         cursor: pointer;
@@ -54,16 +61,19 @@
           color: #1890ff;
         }
       }
+      // 修改签名Input
       .ant-input {
         width: 100%;
         height: 100%;
         text-align: center;
       }
     }
+    // 跳转email
     .tools {
       margin-bottom: 8px;
       font-size: 20px;
       text-align: center;
+      // 邮箱图标
       .anticon {
         margin: 0 8px;
         cursor: pointer;
@@ -72,14 +82,17 @@
         }
       }
     }
+    // 彩色用户信息
     .userColorfulInfo {
       margin-bottom: 16px;
       text-align: center;
+      // 信息
       .card {
         display: inline-block;
         width: 73px;
         margin: 8px;
         text-align: center;
+        // 图标
         .icon {
           display: inline-block;
           width: 36px;
@@ -100,10 +113,12 @@
             color: #aba9ab;
           }
         }
+        // 编辑信息
         .sub {
           width: 73px;
           height: 24px;
           overflow: hidden;
+          // 下拉选性别
           .ant-select-selector {
             width: 73px;
             height: 22px;
@@ -111,6 +126,7 @@
               height: 22px;
             }
           }
+          // 输入年龄
           .ant-input {
             width: 73px;
             height: 22px;
@@ -119,21 +135,17 @@
         }
       }
     }
+    // 下方详细信息
     .userDetailInfo {
+      // 左侧label
       .ant-descriptions-item-label {
         width: 50px;
       }
+      // 编辑昵称
       .ant-descriptions-item-content {
         input {
           height: 22px;
         }
-      }
-      .anticon-form {
-        margin-left: 10px;
-      }
-      .ant-select {
-        width: 171px;
-        height: 22px;
       }
     }
   }

@@ -3,7 +3,7 @@ import { Avatar } from 'antd';
 import { CameraOutlined } from '@ant-design/icons';
 import { DEFAULT_AVATAR } from '@/utils/const';
 
-const UserAvatar = ({ avatar, changeAvatar, self }) => {
+const UserAvatar = ({ avatar, changeAvatar }) => {
   const [avatarMask, setAvatarMask] = useState(false);
   const uploadAvatarInput = useRef({ current: { files: [] } });
   return (
@@ -14,7 +14,7 @@ const UserAvatar = ({ avatar, changeAvatar, self }) => {
         }}
         src={avatar || DEFAULT_AVATAR}
       />
-      {avatarMask && self && (
+      {avatarMask && (
         <Avatar
           icon={<CameraOutlined />}
           style={{ cursor: 'pointer' }}
