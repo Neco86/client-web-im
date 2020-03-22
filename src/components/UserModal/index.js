@@ -8,9 +8,13 @@ import UserSign from './UserSign';
 import UserTools from './UserTools';
 import './index.less';
 
-const UserModal = ({ visible, onCancel, socket, userInfo }) => {
-  const self = true;
-  const info = userInfo;
+const UserModal = ({ visible, onCancel, socket, userInfo, self }) => {
+  let info = {};
+  if (self) {
+    info = userInfo;
+  } else {
+    console.log('TODO: 好友信息');
+  }
   useEffect(() => {
     socket.emit('getUserInfo', ['avatar', 'nickname', 'sign', 'sex', 'age', 'email']);
   }, []);
