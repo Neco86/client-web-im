@@ -5,6 +5,11 @@ const UserInfoModel = {
   state: {
     avatar: DEFAULT_AVATAR,
     status: USER_STATUS.OFFLINE,
+    nickname: '',
+    sign: '',
+    sex: '',
+    age: '',
+    email: '',
   },
   reducers: {
     setUserInfo(state, { payload }) {
