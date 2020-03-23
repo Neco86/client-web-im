@@ -43,6 +43,13 @@ function useSocket(dispatch) {
           payload,
         });
       });
+      // 查询好友/群聊
+      socket.on('searchInfo', payload => {
+        dispatch({
+          type: 'searchInfo/setSearchInfo',
+          payload,
+        });
+      });
       // 断开连接
       socket.on('disconnect', () => {
         if (socket.successReason) {

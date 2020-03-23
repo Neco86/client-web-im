@@ -21,6 +21,18 @@ const SEX = {
 
 const AGE_COLOR = 'linear-gradient(135deg, red, blue)';
 
+const ADD_TYPE = {
+  ADD_FRIEND: 'addFriend',
+  CREATE_GROUP: 'createGroup',
+};
+
+// 搜索结果类型
+const SEARCH_TYPE = {
+  STRANGER: '1',
+  FRIEND: '2',
+  SELF: '3',
+};
+
 module.exports = {
   SUCCESS_CODE,
   ERROR_CODE,
@@ -30,4 +42,6 @@ module.exports = {
   DEFAULT_AVATAR,
   SEX,
   AGE_COLOR,
+  ADD_TYPE,
+  SEARCH_TYPE,
 };

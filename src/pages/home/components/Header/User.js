@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
 import { Avatar, Badge, Menu, Dropdown } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
-import UserModal from '@/components/UserModal/index';
+import UserModal from '@/components/UserModal';
 import { USER_STATUS, USER_STATUS_COLOR, DEFAULT_AVATAR } from '@/utils/const';
 
 const MenuItem = ({ current, status, name }) => (

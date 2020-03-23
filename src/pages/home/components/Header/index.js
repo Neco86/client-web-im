@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Input, Menu } from 'antd';
-import { PlusOutlined, CommentOutlined, UserOutlined } from '@ant-design/icons';
+import { CommentOutlined, UserOutlined } from '@ant-design/icons';
 import styles from './index.less';
 import User from './User';
+import Add from './Add';
 
 const Header = ({ dispatch, menuKey }) => {
   const changeMenu = ({ key }) => {
@@ -19,7 +20,7 @@ const Header = ({ dispatch, menuKey }) => {
           <Input.Search className={styles.input} />
         </div>
         <div className={styles.addBtn}>
-          <PlusOutlined className={styles.btn} />
+          <Add />
         </div>
       </div>
       <div className={styles.middle}>
