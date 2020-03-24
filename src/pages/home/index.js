@@ -50,7 +50,7 @@ function useSocket(dispatch) {
           payload,
         });
       });
-      // 添加好友
+      // 申请添加好友结果
       socket.on('addFriend', ({ account, friendType, msg }) => {
         message.success(msg);
         dispatch({
@@ -83,9 +83,11 @@ function useSocket(dispatch) {
         }
         // console.log(payload);
       });
-      // 获取分组
+      // 获取好友分组
       socket.emit('getMyGroup', FRIEND_TYPE.FRIEND);
+      // 获取群聊分组
       socket.emit('getMyGroup', FRIEND_TYPE.GROUP);
+      // 设置分组
       socket.on('getMyGroup', ({ friendType, groups }) => {
         dispatch({
           type: 'userGroups/setUserGroups',

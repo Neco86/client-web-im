@@ -16,10 +16,6 @@ const AddModal = ({
   friendGroups,
   groupGroups,
 }) => {
-  // TODO: test数据
-  // visible = true;
-  // type = ADD_TYPE.ADD_FRIEND;
-
   const [searchValue, setSearchValue] = useState('');
   const [addModal, setAddModal] = useState(false);
   const [addInfo, setAddInfo] = useState({});
