@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { TOKEN_NAME, USER_STATUS } from '@/utils/const';
-import { message } from 'antd';
+import { TOKEN_NAME, USER_STATUS, FRIEND_TYPE, DEFAULT_AVATAR } from '@/utils/const';
+import { message, notification, Avatar } from 'antd';
 import io from 'socket.io-client';
 import { connect } from 'dva';
 import router from 'umi/router';
@@ -48,6 +48,48 @@ function useSocket(dispatch) {
         dispatch({
           type: 'searchInfo/setSearchInfo',
           payload,
+        });
+      });
+      // 添加好友
+      socket.on('addFriend', ({ account, friendType, msg }) => {
+        message.success(msg);
+        dispatch({
+          type: 'searchInfo/setAddFriendResult',
+          payload: { account, friendType },
+        });
+      });
+      // 申请加好友
+      socket.on('applyFriend', ({ email, nickname, avatar, reason, type }) => {
+        if (type === FRIEND_TYPE.FRIEND) {
+          notification.open({
+            message: (
+              <>
+                <Avatar src={avatar || DEFAULT_AVATAR} /> {nickname} ({email})
+              </>
+            ),
+            description: (
+              <>
+                申请成为好友
+                {reason && <div style={{ margin: '8px 0' }}>验证消息: {reason}</div>}
+              </>
+            ),
+            onClick: () => {
+              console.log('Notification Clicked!');
+            },
+          });
+        }
+        if (type === FRIEND_TYPE.GROUP) {
+          console.log('群组消息');
+        }
+        // console.log(payload);
+      });
+      // 获取分组
+      socket.emit('getMyGroup', FRIEND_TYPE.FRIEND);
+      socket.emit('getMyGroup', FRIEND_TYPE.GROUP);
+      socket.on('getMyGroup', ({ friendType, groups }) => {
+        dispatch({
+          type: 'userGroups/setUserGroups',
+          payload: { friendType, groups },
         });
       });
       // 断开连接

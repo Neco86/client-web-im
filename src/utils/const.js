@@ -31,6 +31,20 @@ const SEARCH_TYPE = {
   STRANGER: '1',
   FRIEND: '2',
   SELF: '3',
+  APPLYING: '4',
+};
+
+// 好友类型
+const FRIEND_TYPE = {
+  GROUP: '1',
+  FRIEND: '2',
+};
+
+// msgType 聊天信息类型
+const MSG_TYPE = {
+  COMMON_CHAT: '1',
+  FILE: '2',
+  APPLY_FRIEND: '3',
 };
 
 module.exports = {
@@ -44,4 +58,6 @@ module.exports = {
   AGE_COLOR,
   ADD_TYPE,
   SEARCH_TYPE,
+  FRIEND_TYPE,
+  MSG_TYPE,
 };
