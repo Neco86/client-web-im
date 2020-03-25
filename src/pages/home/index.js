@@ -27,6 +27,9 @@ function useSocket(dispatch) {
       });
       // 获取用户信息
       socket.on('getUserInfo', payload => {
+        if (payload.status === USER_STATUS.ONLINE) {
+          socket.emit('online');
+        }
         dispatch({
           type: 'userInfo/setUserInfo',
           payload,
@@ -74,12 +77,12 @@ function useSocket(dispatch) {
               </>
             ),
             onClick: () => {
-              console.log('Notification Clicked!');
+              console.log('TODO: 申请加好友!');
             },
           });
         }
         if (type === FRIEND_TYPE.GROUP) {
-          console.log('群组消息');
+          console.log('TODO: 申请加群组消息');
         }
         // console.log(payload);
       });
@@ -108,7 +111,7 @@ function useSocket(dispatch) {
           ),
           description: '好友上线了',
           onClick: () => {
-            console.log('Notification Clicked!');
+            console.log('TODO: 好友上线!');
           },
         });
       });

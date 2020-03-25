@@ -33,11 +33,26 @@ const User = ({ socket, avatar, status }) => {
     socket.emit('getUserInfo', ['status', 'avatar']);
   }, []);
   const changeStatus = ({ key }) => {
-    if (socket.disconnected && key !== USER_STATUS.OFFLINE) {
-      socket.connect();
-      socket.emit('init');
+    if (status !== key) {
+      // 在线 => 隐身/离线
+      if (status === USER_STATUS.ONLINE) {
+        socket.emit('offline');
+      }
+      // 离线 => 隐身/在线
+      if (status === USER_STATUS.OFFLINE) {
+        socket.connect();
+        socket.emit('init');
+        if (key === USER_STATUS.ONLINE) {
+          socket.emit('online');
+        }
+      }
+      // 隐身 => 在线
+      if (status === USER_STATUS.HIDE && key === USER_STATUS.ONLINE) {
+        socket.emit('online');
+      }
+
+      socket.emit('setUserInfo', { status: key });
     }
-    socket.emit('setUserInfo', { status: key });
   };
   const [userModal, setUserModal] = useState(false);
   const statusMenu = (
