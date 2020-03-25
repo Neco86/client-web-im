@@ -63,9 +63,9 @@ const Apply = ({
         <Col span={20}>
           <Select
             style={{ width: '100%' }}
-            value={applyInfo.group}
+            value={applyInfo.groupKey}
             onChange={v => {
-              setApplyInfo({ ...applyInfo, group: v });
+              setApplyInfo({ ...applyInfo, groupKey: v });
             }}
           >
             {(friendType === FRIEND_TYPE.FRIEND &&
