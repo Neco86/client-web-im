@@ -17,7 +17,7 @@ const Apply = ({
       account,
       friendType,
       reason: '',
-      group:
+      groupKey:
         (friendType === FRIEND_TYPE.FRIEND && friendGroups[0] && friendGroups[0].key) ||
         (friendType === FRIEND_TYPE.GROUP && groupGroups[0] && groupGroups[0].key),
       remarkName: '',
