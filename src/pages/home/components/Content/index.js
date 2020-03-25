@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
+import ChatInfo from './ChatInfo';
+import UserInfo from './UserInfo';
 
-const Content = () => <div>Content</div>;
+const Content = ({ menuKey }) => <>{menuKey === '1' ? <ChatInfo /> : <UserInfo />}</>;
 
 export default connect(({ global }) => ({
-  socket: global.socket,
+  menuKey: global.menuKey,
 }))(Content);

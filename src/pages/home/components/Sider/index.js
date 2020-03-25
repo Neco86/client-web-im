@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
+import ChatList from './ChatList';
+import AddressBook from './AddressBook';
 
-const Sider = () => <div>Sider</div>;
+const Sider = ({ menuKey }) => <>{menuKey === '1' ? <ChatList /> : <AddressBook />}</>;
 
 export default connect(({ global }) => ({
-  socket: global.socket,
+  menuKey: global.menuKey,
 }))(Sider);
