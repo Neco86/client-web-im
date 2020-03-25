@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, message } from 'antd';
+import { Modal, message, Button } from 'antd';
 import { connect } from 'dva';
+import { USER_STATUS } from '@/utils/const';
+import router from 'umi/router';
 import UserAvatar from './UserAvatar';
 import UserColorfulInfo from './UserColorfulInfo';
 import UserDetailInfo from './UserDetailInfo';
@@ -86,6 +88,16 @@ const UserModal = ({ visible, onCancel, socket, userInfo }) => {
           setValues({ ...values, ...v });
         }}
       />
+      <Button
+        className="exit"
+        type="danger"
+        onClick={() => {
+          socket.emit('setUserInfo', { status: USER_STATUS.OFFLINE });
+          router.push('/login');
+        }}
+      >
+        退出登录
+      </Button>
     </Modal>
   );
 };
