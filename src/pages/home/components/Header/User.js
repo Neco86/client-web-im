@@ -34,8 +34,8 @@ const User = ({ socket, avatar, status }) => {
   }, []);
   const changeStatus = ({ key }) => {
     if (status !== key) {
-      // 在线 => 隐身/离线
-      if (status === USER_STATUS.ONLINE) {
+      // 在线 => 隐身
+      if (status === USER_STATUS.ONLINE && key === USER_STATUS.HIDE) {
         socket.emit('offline');
       }
       // 离线 => 隐身/在线
