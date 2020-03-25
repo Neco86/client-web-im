@@ -94,6 +94,31 @@ function useSocket(dispatch) {
           payload: { friendType, groups },
         });
       });
+      // 好友上线通知
+      socket.on('online', ({ email, nickname, avatar, groupKey }) => {
+        dispatch({
+          type: 'userGroups/setOnline',
+          payload: { email, groupKey },
+        });
+        notification.open({
+          message: (
+            <>
+              <Avatar src={avatar || DEFAULT_AVATAR} /> {nickname} ({email})
+            </>
+          ),
+          description: '好友上线了',
+          onClick: () => {
+            console.log('Notification Clicked!');
+          },
+        });
+      });
+      // 好友离线
+      socket.on('offline', ({ email, groupKey }) => {
+        dispatch({
+          type: 'userGroups/setOffline',
+          payload: { email, groupKey },
+        });
+      });
       // 断开连接
       socket.on('disconnect', () => {
         if (socket.successReason) {
