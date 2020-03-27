@@ -4,12 +4,9 @@ import { FormOutlined } from '@ant-design/icons';
 import UserColorfulInfo from './UserColorfulInfo';
 import styles from './index.less';
 
-const FriendInfo = ({ info, friendGroups, group }) => {
-  const changeRemarkName = (email, remarkName) => {
-    console.log('TODO: changeRemarkName', email, remarkName);
-  };
-  const changeGroup = (email, newGroup) => {
-    console.log('TODO: changeGroup', email, newGroup);
+const FriendInfo = ({ info, friendGroups, group, socket }) => {
+  const changeInfo = (email, value, type) => {
+    socket.emit('changeFriendInfo', { email, value, type });
   };
   const { Option } = Select;
   const [remarkNameEditable, setRemarkNameEditable] = useState(false);
@@ -29,7 +26,7 @@ const FriendInfo = ({ info, friendGroups, group }) => {
               className={styles.remarkNameInput}
               defaultValue={info.remarkName}
               onBlur={e => {
-                changeRemarkName(info.email, e.target.value);
+                changeInfo(info.email, e.target.value, 'remarkName');
                 setRemarkNameEditable(false);
               }}
               autoFocus
@@ -51,7 +48,7 @@ const FriendInfo = ({ info, friendGroups, group }) => {
             bordered={false}
             className={styles.groupSelect}
             onChange={value => {
-              changeGroup(info.email, value);
+              changeInfo(info.email, value, 'groupKey');
             }}
           >
             {friendGroups.map(friendGroup => (

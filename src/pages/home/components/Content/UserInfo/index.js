@@ -20,7 +20,7 @@ const getInfo = (type, group, key, friendGroups, groupGroups) => {
   }
   return false;
 };
-const UserInfo = ({ activeMenu, friendGroups, groupGroups }) => {
+const UserInfo = ({ activeMenu, friendGroups, groupGroups, socket }) => {
   const [type, group, key] = activeMenu;
   const info = getInfo(type, group, key, friendGroups, groupGroups);
   return (
@@ -30,10 +30,10 @@ const UserInfo = ({ activeMenu, friendGroups, groupGroups }) => {
           <BasicInfo info={info} type={type} />
           <div className={styles.info}>
             {activeMenu[0] === FRIEND_TYPE.GROUP && (
-              <GroupInfo info={info} groupGroups={groupGroups} group={group} />
+              <GroupInfo info={info} groupGroups={groupGroups} group={group} socket={socket} />
             )}
             {activeMenu[0] === FRIEND_TYPE.FRIEND && (
-              <FriendInfo info={info} friendGroups={friendGroups} group={group} />
+              <FriendInfo info={info} friendGroups={friendGroups} group={group} socket={socket} />
             )}
           </div>
         </div>

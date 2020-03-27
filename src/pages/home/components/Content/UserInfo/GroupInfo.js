@@ -4,7 +4,7 @@ import { FormOutlined } from '@ant-design/icons';
 import { GROUP_PERMIT } from '@/utils/const';
 import styles from './index.less';
 
-const GroupInfo = ({ info, groupGroups, group }) => {
+const GroupInfo = ({ info, groupGroups, group, socket }) => {
   const { nickname, remarkName, note, memberName, count, permit, chatKey } = info;
   const { Option } = Select;
   const changePermit = [GROUP_PERMIT.OWNER, GROUP_PERMIT.MANAGER].includes(permit);
@@ -13,7 +13,7 @@ const GroupInfo = ({ info, groupGroups, group }) => {
   const [remarkNameEditable, setRemarkNameEditable] = useState(false);
   const [memberNameEditable, setMemberNameEditable] = useState(false);
   const changeInfo = (changedChatKey, value, type) => {
-    console.log('TODO: 更改数据', changedChatKey, value, type);
+    socket.emit('changeGroupInfo', { changedChatKey, value, type });
   };
   return (
     <div className={styles.groupInfoWrapper}>
@@ -65,7 +65,7 @@ const GroupInfo = ({ info, groupGroups, group }) => {
             size="small"
             bordered={false}
             onChange={value => {
-              changeInfo(chatKey, value, 'group');
+              changeInfo(chatKey, value, 'groupKey');
             }}
           >
             {groupGroups.map(groupGroup => (

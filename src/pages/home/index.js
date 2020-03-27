@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TOKEN_NAME, USER_STATUS, FRIEND_TYPE, DEFAULT_AVATAR } from '@/utils/const';
+import { TOKEN_NAME, USER_STATUS, FRIEND_TYPE, DEFAULT_AVATAR, SUCCESS_CODE } from '@/utils/const';
 import { message, notification, Avatar } from 'antd';
 import io from 'socket.io-client';
 import { connect } from 'dva';
@@ -121,6 +121,32 @@ function useSocket(dispatch) {
           type: 'userGroups/setOffline',
           payload: { email, groupKey },
         });
+      });
+      // 更改好友信息
+      socket.on('changeFriendInfo', ({ email, value, type }) => {
+        message.success('更改成功!');
+        socket.emit('getMyGroup', FRIEND_TYPE.FRIEND);
+        if (type === 'groupKey') {
+          dispatch({
+            type: 'addressBook/setActiveMenu',
+            activeMenu: [FRIEND_TYPE.FRIEND, value, email],
+          });
+        }
+      });
+      // 更改群组信息
+      socket.on('changeGroupInfo', ({ code, changedChatKey, value, type, msg }) => {
+        if (code === SUCCESS_CODE) {
+          message.success('更改成功!');
+          socket.emit('getMyGroup', FRIEND_TYPE.GROUP);
+          if (type === 'groupKey') {
+            dispatch({
+              type: 'addressBook/setActiveMenu',
+              activeMenu: [FRIEND_TYPE.GROUP, value, changedChatKey],
+            });
+          }
+        } else {
+          message.error(msg);
+        }
       });
       // 断开连接
       socket.on('disconnect', () => {
