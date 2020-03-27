@@ -1,19 +1,31 @@
 import React from 'react';
 import { Avatar, Popover, Button } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
-import { FRIEND_TYPE, DEFAULT_AVATAR } from '@/utils/const';
+import { FRIEND_TYPE, DEFAULT_AVATAR, GROUP_PERMIT } from '@/utils/const';
 import styles from './index.less';
 
-const content = (type, email) => (
+const content = (type, email, permit) => (
   <div>
+    {type === FRIEND_TYPE.GROUP && permit === GROUP_PERMIT.OWNER && (
+      <Button
+        className="contentButton"
+        onClick={() => {
+          console.log('TODO: 转移群主', type, email);
+        }}
+      >
+        转移群主
+      </Button>
+    )}
     <Button
       type="danger"
-      className="exit"
+      className="contentButton"
       onClick={() => {
         console.log('TODO: 退出群聊/删除好友', type, email);
       }}
     >
-      {type === FRIEND_TYPE.GROUP ? '退出群聊' : '删除好友'}
+      {type === FRIEND_TYPE.FRIEND && '删除好友'}
+      {type === FRIEND_TYPE.GROUP && permit === GROUP_PERMIT.OWNER && '解散群聊'}
+      {type === FRIEND_TYPE.GROUP && permit !== GROUP_PERMIT.OWNER && '退出群聊'}
     </Button>
   </div>
 );
@@ -34,7 +46,7 @@ const BasicInfo = ({ info, type }) => (
       }}
     />
     <Popover
-      content={content(type, info.email || info.chatKey)}
+      content={content(type, info.email || info.chatKey, info.permit)}
       title="设置"
       trigger="click"
       placement="leftTop"

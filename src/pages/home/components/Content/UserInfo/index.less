@@ -54,8 +54,9 @@
         .ant-popover-title {
           text-align: center;
         }
-        .exit {
+        .contentButton {
           width: 100%;
+          margin-bottom: 10px;
         }
       }
     }
@@ -151,6 +152,44 @@
           }
         }
         .remarkNameInput {
+          height: 22px;
+        }
+      }
+      .groupInfoWrapper {
+        width: 220px;
+        margin-top: 8px;
+        :global {
+          .ant-descriptions-item {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            overflow: hidden;
+            .ant-descriptions-item-label {
+              width: 50px;
+              text-align: right;
+            }
+            .ant-descriptions-item-content {
+              flex: 1;
+              padding: 0 7px;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              word-break: break-all;
+            }
+            .ant-select-selector {
+              position: relative;
+              left: -7px;
+            }
+          }
+        }
+        .editItem {
+          margin-left: 4px;
+          cursor: pointer;
+          &:hover {
+            color: #1890ff;
+          }
+        }
+        .editInput {
           height: 22px;
         }
       }
