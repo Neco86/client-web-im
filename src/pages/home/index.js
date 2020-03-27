@@ -62,30 +62,50 @@ function useSocket(dispatch) {
         });
       });
       // 申请加好友
-      socket.on('applyFriend', ({ email, nickname, avatar, reason, type }) => {
-        if (type === FRIEND_TYPE.FRIEND) {
-          notification.open({
-            message: (
-              <>
-                <Avatar src={avatar || DEFAULT_AVATAR} /> {nickname} ({email})
-              </>
-            ),
-            description: (
-              <>
-                申请成为好友
-                {reason && <div style={{ margin: '8px 0' }}>验证消息: {reason}</div>}
-              </>
-            ),
-            onClick: () => {
-              console.log('TODO: 申请加好友!');
-            },
-          });
-        }
-        if (type === FRIEND_TYPE.GROUP) {
-          console.log('TODO: 申请加群组消息');
-        }
-        // console.log(payload);
-      });
+      socket.on(
+        'applyFriend',
+        ({ email, nickname, avatar, reason, type, chatKey, groupAvatar, groupName }) => {
+          if (type === FRIEND_TYPE.FRIEND) {
+            notification.open({
+              message: (
+                <>
+                  <Avatar src={avatar || DEFAULT_AVATAR} /> {nickname} ({email})
+                </>
+              ),
+              description: (
+                <>
+                  申请成为好友
+                  {reason && <div style={{ margin: '8px 0' }}>验证消息: {reason}</div>}
+                </>
+              ),
+              onClick: () => {
+                console.log('TODO: 申请加好友!');
+              },
+            });
+          }
+          if (type === FRIEND_TYPE.GROUP) {
+            notification.open({
+              message: (
+                <>
+                  <Avatar src={avatar || DEFAULT_AVATAR} /> {nickname} ({email})
+                </>
+              ),
+              description: (
+                <>
+                  申请加入群组: <Avatar src={groupAvatar || DEFAULT_AVATAR} size="small" />{' '}
+                  {groupName} ({chatKey})
+                  <br />
+                  {reason && <div style={{ margin: '8px 0' }}>验证消息: {reason}</div>}
+                </>
+              ),
+              onClick: () => {
+                console.log('TODO: 申请加群组!');
+              },
+            });
+          }
+          // console.log(payload);
+        },
+      );
       // 获取好友分组
       socket.emit('getMyGroup', FRIEND_TYPE.FRIEND);
       // 获取群聊分组
