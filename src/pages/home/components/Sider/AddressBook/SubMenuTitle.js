@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Dropdown, Menu, message, Modal, Input } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
-import { FRIEND_TYPE } from '@/utils/const';
+import { FRIEND_TYPE, EDIT_GROUP } from '@/utils/const';
 
 const SubMenuTitle = ({ name, number, titleKey: [friendType, groupKey], group, socket }) => {
   const [editVisible, setEditVisible] = useState(false);
@@ -10,12 +10,12 @@ const SubMenuTitle = ({ name, number, titleKey: [friendType, groupKey], group, s
   const onMenuClick = ({ key, domEvent: e }) => {
     switch (key) {
       // 添加分组
-      case '1':
+      case EDIT_GROUP.ADD:
         setInputValue('');
-        setModal('1');
+        setModal(EDIT_GROUP.ADD);
         break;
       // 删除该组
-      case '2':
+      case EDIT_GROUP.DELETE:
         if (
           group.filter(g => g.key === groupKey)[0][
             friendType === FRIEND_TYPE.FRIEND ? 'friends' : 'groups'
@@ -24,13 +24,13 @@ const SubMenuTitle = ({ name, number, titleKey: [friendType, groupKey], group, s
           message.error('当前分组不是空的,无法删除!');
         } else {
           setInputValue(group.filter(g => g.key === groupKey)[0].groupName);
-          setModal('2');
+          setModal(EDIT_GROUP.DELETE);
         }
         break;
       // 重命名该组
-      case '3':
+      case EDIT_GROUP.RENAME:
         setInputValue(group.filter(g => g.key === groupKey)[0].groupName);
-        setModal('3');
+        setModal(EDIT_GROUP.RENAME);
         break;
       default:
         break;
@@ -41,40 +41,18 @@ const SubMenuTitle = ({ name, number, titleKey: [friendType, groupKey], group, s
   };
   const menu = (
     <Menu onClick={onMenuClick}>
-      <Menu.Item key="1">添加分组</Menu.Item>
-      <Menu.Item key="2">删除该组</Menu.Item>
-      <Menu.Item key="3">重命名该组</Menu.Item>
+      <Menu.Item key={EDIT_GROUP.ADD}>添加分组</Menu.Item>
+      <Menu.Item key={EDIT_GROUP.DELETE}>删除该组</Menu.Item>
+      <Menu.Item key={EDIT_GROUP.RENAME}>重命名该组</Menu.Item>
     </Menu>
   );
   const onOk = () => {
-    switch (modal) {
-      case '1':
-        socket.emit('editGroup', {
-          type: friendType,
-          value: inputValue,
-          key: groupKey,
-          method: 'add',
-        });
-        break;
-      case '2':
-        socket.emit('editGroup', {
-          type: friendType,
-          value: inputValue,
-          key: groupKey,
-          method: 'delete',
-        });
-        break;
-      case '3':
-        socket.emit('editGroup', {
-          type: friendType,
-          value: inputValue,
-          key: groupKey,
-          method: 'rename',
-        });
-        break;
-      default:
-        break;
-    }
+    socket.emit('editGroup', {
+      type: friendType,
+      value: inputValue,
+      key: groupKey,
+      method: modal,
+    });
     setModal(false);
     setInputValue('');
   };
@@ -114,15 +92,15 @@ const SubMenuTitle = ({ name, number, titleKey: [friendType, groupKey], group, s
         wrapClassName="subMenuTitleModal"
         maskClosable={false}
         title={
-          (modal === '1' && '添加分组') ||
-          (modal === '2' && '删除分组') ||
-          (modal === '3' && '重命名分组')
+          (modal === EDIT_GROUP.ADD && '添加分组') ||
+          (modal === EDIT_GROUP.DELETE && '删除分组') ||
+          (modal === EDIT_GROUP.RENAME && '重命名分组')
         }
         okText="确认"
         cancelText="取消"
         onOk={onOk}
       >
-        {modal === '1' && (
+        {modal === EDIT_GROUP.ADD && (
           <Input
             placeholder="分组名"
             value={inputValue}
@@ -132,8 +110,8 @@ const SubMenuTitle = ({ name, number, titleKey: [friendType, groupKey], group, s
             autoFocus
           />
         )}
-        {modal === '2' && `确认删除分组[${inputValue}]?`}
-        {modal === '3' && (
+        {modal === EDIT_GROUP.DELETE && `确认删除分组[${inputValue}]?`}
+        {modal === EDIT_GROUP.RENAME && (
           <Input value={inputValue} onChange={e => setInputValue(e.target.value)} autoFocus />
         )}
       </Modal>

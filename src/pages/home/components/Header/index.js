@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Input, Menu } from 'antd';
 import { CommentOutlined, UserOutlined } from '@ant-design/icons';
+import { MENU_KEY } from '@/utils/const';
 import styles from './index.less';
 import User from './User';
 import Add from './Add';
@@ -25,10 +26,10 @@ const Header = ({ dispatch, menuKey }) => {
       </div>
       <div className={styles.middle}>
         <Menu mode="horizontal" selectedKeys={[menuKey]} onClick={changeMenu}>
-          <Menu.Item key="1">
+          <Menu.Item key={MENU_KEY.CHAT_INFO}>
             <CommentOutlined className={styles.menuBtn} />
           </Menu.Item>
-          <Menu.Item key="2">
+          <Menu.Item key={MENU_KEY.USER_INFO}>
             <UserOutlined className={styles.menuBtn} />
           </Menu.Item>
         </Menu>

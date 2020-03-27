@@ -55,6 +55,26 @@ const GROUP_PERMIT = {
   BANNED: '4',
 };
 
+// menu
+const MENU_KEY = {
+  CHAT_INFO: 'chatInfo',
+  USER_INFO: 'userInfo',
+};
+
+// 编辑分组
+const EDIT_GROUP = {
+  ADD: 'add',
+  DELETE: 'delete',
+  RENAME: 'rename',
+};
+
+const EDIT_FRIEND = {
+  AUTH_GROUP: 'authGroup',
+  DELETE_FRIEND: 'deleteFriend',
+  DELETE_GROUP: 'deleteGroup',
+  EXIT_GROUP: 'exitGroup',
+};
+
 module.exports = {
   SUCCESS_CODE,
   ERROR_CODE,
@@ -69,4 +89,7 @@ module.exports = {
   FRIEND_TYPE,
   MSG_TYPE,
   GROUP_PERMIT,
+  MENU_KEY,
+  EDIT_GROUP,
+  EDIT_FRIEND,
 };

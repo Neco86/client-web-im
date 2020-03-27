@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Avatar, Popover, Button, message, Modal, Select } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
-import { FRIEND_TYPE, DEFAULT_AVATAR, GROUP_PERMIT } from '@/utils/const';
+import { FRIEND_TYPE, DEFAULT_AVATAR, GROUP_PERMIT, EDIT_FRIEND } from '@/utils/const';
 import UserAvatar from '@/components/UserModal/UserAvatar';
 import styles from './index.less';
 
@@ -9,7 +9,7 @@ const BasicInfo = ({ info, type, socket }) => {
   const [modal, setModal] = useState(false);
   const [value, setValue] = useState([]);
   useEffect(() => {
-    if (modal === '1') {
+    if (modal === EDIT_FRIEND.AUTH_GROUP) {
       console.log('TODO: 获取群组成员');
       // socket.emit('getGroupMember');
     }
@@ -31,7 +31,7 @@ const BasicInfo = ({ info, type, socket }) => {
         <Button
           className="contentButton"
           onClick={() => {
-            setModal('1');
+            setModal(EDIT_FRIEND.AUTH_GROUP);
             setValue([name, email]);
           }}
         >
@@ -43,9 +43,13 @@ const BasicInfo = ({ info, type, socket }) => {
         className="contentButton"
         onClick={() => {
           const modalType =
-            (friendType === FRIEND_TYPE.FRIEND && '2') ||
-            (friendType === FRIEND_TYPE.GROUP && permit === GROUP_PERMIT.OWNER && '3') ||
-            (friendType === FRIEND_TYPE.GROUP && permit !== GROUP_PERMIT.OWNER && '4');
+            (friendType === FRIEND_TYPE.FRIEND && EDIT_FRIEND.DELETE_FRIEND) ||
+            (friendType === FRIEND_TYPE.GROUP &&
+              permit === GROUP_PERMIT.OWNER &&
+              EDIT_FRIEND.DELETE_GROUP) ||
+            (friendType === FRIEND_TYPE.GROUP &&
+              permit !== GROUP_PERMIT.OWNER &&
+              EDIT_FRIEND.EXIT_GROUP);
           setModal(modalType);
           setValue([name, email]);
         }}
@@ -58,16 +62,16 @@ const BasicInfo = ({ info, type, socket }) => {
   );
   const onOk = () => {
     switch (modal) {
-      case '1':
+      case EDIT_FRIEND.AUTH_GROUP:
         console.log('TODO: 转移群主', '群成员', value[1]);
         break;
-      case '2':
+      case EDIT_FRIEND.DELETE_FRIEND:
         console.log('TODO: 删除好友', value[1]);
         break;
-      case '3':
+      case EDIT_FRIEND.DELETE_GROUP:
         console.log('TODO: 解散群聊', value[1]);
         break;
-      case '4':
+      case EDIT_FRIEND.EXIT_GROUP:
         console.log('TODO: 退出群聊', value[1]);
         break;
       default:
@@ -125,33 +129,33 @@ const BasicInfo = ({ info, type, socket }) => {
         wrapClassName="basicInfoEditModal"
         maskClosable={false}
         title={
-          (modal === '1' && '转移群主') ||
-          (modal === '2' && '删除好友') ||
-          (modal === '3' && '解散群聊') ||
-          (modal === '4' && '退出群聊')
+          (modal === EDIT_FRIEND.AUTH_GROUP && '转移群主') ||
+          (modal === EDIT_FRIEND.DELETE_FRIEND && '删除好友') ||
+          (modal === EDIT_FRIEND.DELETE_GROUP && '解散群聊') ||
+          (modal === EDIT_FRIEND.EXIT_GROUP && '退出群聊')
         }
         okText="确认"
         cancelText="取消"
         onOk={onOk}
       >
-        {modal === '1' && '新群主:'}
-        {modal === '1' && (
-          <Select style={{ width: '100%' }} defaultValue="1">
-            <Select.Option key="1">成员1</Select.Option>
-            <Select.Option key="2">成员2</Select.Option>
+        {modal === EDIT_FRIEND.AUTH_GROUP && '新群主:'}
+        {modal === EDIT_FRIEND.AUTH_GROUP && (
+          <Select style={{ width: '100%' }} defaultValue="member1">
+            <Select.Option key="member1">成员1</Select.Option>
+            <Select.Option key="member2">成员2</Select.Option>
           </Select>
         )}
-        {modal === '2' && (
+        {modal === EDIT_FRIEND.DELETE_FRIEND && (
           <>
             确认删除好友 <br /> {`${value[0]} (${value[1]})`} ?
           </>
         )}
-        {modal === '3' && (
+        {modal === EDIT_FRIEND.DELETE_GROUP && (
           <>
             确认解散群聊 <br /> {`${value[0]} (${value[1]})`} ?
           </>
         )}
-        {modal === '4' && (
+        {modal === EDIT_FRIEND.EXIT_GROUP && (
           <>
             确认退出群聊 <br /> {`${value[0]} (${value[1]})`} ?
           </>

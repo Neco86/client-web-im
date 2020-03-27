@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { TOKEN_NAME, USER_STATUS, FRIEND_TYPE, DEFAULT_AVATAR, SUCCESS_CODE } from '@/utils/const';
+import {
+  TOKEN_NAME,
+  USER_STATUS,
+  FRIEND_TYPE,
+  DEFAULT_AVATAR,
+  SUCCESS_CODE,
+  EDIT_GROUP,
+} from '@/utils/const';
 import { message, notification, Avatar } from 'antd';
 import io from 'socket.io-client';
 import { connect } from 'dva';
@@ -182,13 +189,13 @@ function useSocket(dispatch) {
       // 添加/删除/重命名分组
       socket.on('editGroup', ({ type, value, method }) => {
         switch (method) {
-          case 'add':
+          case EDIT_GROUP.ADD:
             message.success(`添加分组[${value}]成功`);
             break;
-          case 'delete':
+          case EDIT_GROUP.DELETE:
             message.success(`删除分组[${value}]成功`);
             break;
-          case 'rename':
+          case EDIT_GROUP.RENAME:
             message.success(`重命名分组成功`);
             break;
           default:
