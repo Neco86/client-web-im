@@ -27,7 +27,7 @@ const UserInfo = ({ activeMenu, friendGroups, groupGroups, socket }) => {
     <div className={styles.userInfoWrapper}>
       {info ? (
         <div className={styles.infoWrapper}>
-          <BasicInfo info={info} type={type} />
+          <BasicInfo info={info} type={type} socket={socket} />
           <div className={styles.info}>
             {activeMenu[0] === FRIEND_TYPE.GROUP && (
               <GroupInfo info={info} groupGroups={groupGroups} group={group} socket={socket} />

@@ -148,6 +148,17 @@ function useSocket(dispatch) {
           message.error(msg);
         }
       });
+      // 更改群组头像
+      socket.on('setGroupAvatar', ({ code, chatKey, avatar, msg }) => {
+        if (code === SUCCESS_CODE) {
+          dispatch({
+            type: 'userGroups/setGroupAvatar',
+            payload: { chatKey, avatar },
+          });
+        } else {
+          message.error(msg);
+        }
+      });
       // 断开连接
       socket.on('disconnect', () => {
         if (socket.successReason) {

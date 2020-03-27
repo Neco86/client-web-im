@@ -24,13 +24,32 @@ const userGroupsModel = {
         ...state,
       };
     },
+    setGroupAvatar(state, { payload: { chatKey, avatar } }) {
+      let newGroupGroups = [];
+      newGroupGroups = state.groupGroups.map(group => {
+        const { key, groupName, groups } = group;
+        const newGroupFriends = [];
+        groups.forEach(friend => {
+          if (friend.chatKey === chatKey) {
+            newGroupFriends.push({ ...friend, avatar });
+          } else {
+            newGroupFriends.push({ ...friend });
+          }
+        });
+        return { key, groupName, groups: newGroupFriends };
+      });
+      return {
+        ...state,
+        groupGroups: newGroupGroups,
+      };
+    },
     setOnline(state, { payload: { email: onlineEmail, groupKey } }) {
       let newFriendGroups = [];
       newFriendGroups = state.friendGroups.map(group => {
         if (String(group.key) === String(groupKey)) {
-          const { key, email, groupName, type, friends } = group;
+          const { key, groupName, friends } = group;
           const newGroupFriends = [];
-          const newGroup = { key, email, groupName, type, friends: newGroupFriends };
+          const newGroup = { key, groupName, friends: newGroupFriends };
           newGroupFriends.push(
             ...friends.map(member =>
               member.email === onlineEmail ? { ...member, online: true } : member,
@@ -49,9 +68,9 @@ const userGroupsModel = {
       let newFriendGroups = [];
       newFriendGroups = state.friendGroups.map(group => {
         if (String(group.key) === String(groupKey)) {
-          const { key, email, groupName, type, friends } = group;
+          const { key, groupName, friends } = group;
           const newGroupFriends = [];
-          const newGroup = { key, email, groupName, type, friends: newGroupFriends };
+          const newGroup = { key, groupName, friends: newGroupFriends };
           newGroupFriends.push(
             ...friends.map(member =>
               member.email === onlineEmail ? { ...member, online: false } : member,
