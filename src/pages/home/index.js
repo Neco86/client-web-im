@@ -159,6 +159,23 @@ function useSocket(dispatch) {
           message.error(msg);
         }
       });
+      // 添加/删除/重命名分组
+      socket.on('editGroup', ({ type, value, method }) => {
+        switch (method) {
+          case 'add':
+            message.success(`添加分组[${value}]成功`);
+            break;
+          case 'delete':
+            message.success(`删除分组[${value}]成功`);
+            break;
+          case 'rename':
+            message.success(`重命名分组成功`);
+            break;
+          default:
+            break;
+        }
+        socket.emit('getMyGroup', type);
+      });
       // 断开连接
       socket.on('disconnect', () => {
         if (socket.successReason) {

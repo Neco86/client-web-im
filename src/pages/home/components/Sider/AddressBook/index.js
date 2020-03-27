@@ -7,7 +7,7 @@ import FriendCard from './FriendCard';
 import GroupCard from './GroupCard';
 import styles from './index.less';
 
-const AddressBook = ({ friendGroups, groupGroups, activeMenu, dispatch }) => {
+const AddressBook = ({ friendGroups, groupGroups, activeMenu, dispatch, socket }) => {
   const { SubMenu } = Menu;
   const setActiveMenu = (type, group, key) => {
     dispatch({
@@ -29,7 +29,15 @@ const AddressBook = ({ friendGroups, groupGroups, activeMenu, dispatch }) => {
           {groupGroups.map(groupGroup => (
             <SubMenu
               key={groupGroup.key}
-              title={<SubMenuTitle name={groupGroup.groupName} number={groupGroup.groups.length} />}
+              title={
+                <SubMenuTitle
+                  name={groupGroup.groupName}
+                  number={groupGroup.groups.length}
+                  titleKey={[FRIEND_TYPE.GROUP, groupGroup.key]}
+                  group={groupGroups}
+                  socket={socket}
+                />
+              }
             >
               {groupGroup.groups.map(group => (
                 <Menu.Item
@@ -59,6 +67,9 @@ const AddressBook = ({ friendGroups, groupGroups, activeMenu, dispatch }) => {
                   number={`${friendGroup.friends.filter(friend => friend.online).length}/${
                     friendGroup.friends.length
                   }`}
+                  titleKey={[FRIEND_TYPE.FRIEND, friendGroup.key]}
+                  group={friendGroups}
+                  socket={socket}
                 />
               }
             >
