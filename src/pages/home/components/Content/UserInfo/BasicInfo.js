@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Avatar, Popover, Button, message, Modal, Select } from 'antd';
+import React, { useState } from 'react';
+import { Avatar, Popover, Button, message, Modal } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
 import { FRIEND_TYPE, DEFAULT_AVATAR, GROUP_PERMIT, EDIT_FRIEND } from '@/utils/const';
 import UserAvatar from '@/components/UserModal/UserAvatar';
@@ -8,12 +8,6 @@ import styles from './index.less';
 const BasicInfo = ({ info, type, socket }) => {
   const [modal, setModal] = useState(false);
   const [value, setValue] = useState([]);
-  useEffect(() => {
-    if (modal === EDIT_FRIEND.AUTH_GROUP) {
-      console.log('TODO: 获取群组成员');
-      // socket.emit('getGroupMember');
-    }
-  }, [modal]);
   const changeAvatar = e => {
     const file = e.target.files[0];
     if (file) {
@@ -27,17 +21,6 @@ const BasicInfo = ({ info, type, socket }) => {
   };
   const content = (friendType, email, permit, name) => (
     <div>
-      {friendType === FRIEND_TYPE.GROUP && permit === GROUP_PERMIT.OWNER && (
-        <Button
-          className="contentButton"
-          onClick={() => {
-            setModal(EDIT_FRIEND.AUTH_GROUP);
-            setValue([name, email]);
-          }}
-        >
-          转移群主
-        </Button>
-      )}
       <Button
         type="danger"
         className="contentButton"
@@ -62,17 +45,14 @@ const BasicInfo = ({ info, type, socket }) => {
   );
   const onOk = () => {
     switch (modal) {
-      case EDIT_FRIEND.AUTH_GROUP:
-        console.log('TODO: 转移群主', '群成员', value[1]);
-        break;
       case EDIT_FRIEND.DELETE_FRIEND:
-        console.log('TODO: 删除好友', value[1]);
+        console.log('TODO: 处理删除好友email:', value[1]);
         break;
       case EDIT_FRIEND.DELETE_GROUP:
-        console.log('TODO: 解散群聊', value[1]);
+        console.log('TODO: 解散群聊chatKey:', value[1]);
         break;
       case EDIT_FRIEND.EXIT_GROUP:
-        console.log('TODO: 退出群聊', value[1]);
+        console.log('TODO: 退出群聊chatKey:', value[1]);
         break;
       default:
         break;
@@ -129,7 +109,6 @@ const BasicInfo = ({ info, type, socket }) => {
         wrapClassName="basicInfoEditModal"
         maskClosable={false}
         title={
-          (modal === EDIT_FRIEND.AUTH_GROUP && '转移群主') ||
           (modal === EDIT_FRIEND.DELETE_FRIEND && '删除好友') ||
           (modal === EDIT_FRIEND.DELETE_GROUP && '解散群聊') ||
           (modal === EDIT_FRIEND.EXIT_GROUP && '退出群聊')
@@ -138,13 +117,6 @@ const BasicInfo = ({ info, type, socket }) => {
         cancelText="取消"
         onOk={onOk}
       >
-        {modal === EDIT_FRIEND.AUTH_GROUP && '新群主:'}
-        {modal === EDIT_FRIEND.AUTH_GROUP && (
-          <Select style={{ width: '100%' }} defaultValue="member1">
-            <Select.Option key="member1">成员1</Select.Option>
-            <Select.Option key="member2">成员2</Select.Option>
-          </Select>
-        )}
         {modal === EDIT_FRIEND.DELETE_FRIEND && (
           <>
             确认删除好友 <br /> {`${value[0]} (${value[1]})`} ?

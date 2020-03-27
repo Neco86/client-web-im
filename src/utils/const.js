@@ -69,7 +69,6 @@ const EDIT_GROUP = {
 };
 
 const EDIT_FRIEND = {
-  AUTH_GROUP: 'authGroup',
   DELETE_FRIEND: 'deleteFriend',
   DELETE_GROUP: 'deleteGroup',
   EXIT_GROUP: 'exitGroup',

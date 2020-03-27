@@ -86,7 +86,7 @@ function useSocket(dispatch) {
                 </>
               ),
               onClick: () => {
-                console.log('TODO: 申请加好友!');
+                console.log('TODO: 处理弹出的申请加好友!');
               },
             });
           }
@@ -106,7 +106,7 @@ function useSocket(dispatch) {
                 </>
               ),
               onClick: () => {
-                console.log('TODO: 申请加群组!');
+                console.log('TODO: 处理弹出的申请加群组!');
               },
             });
           }
@@ -138,7 +138,7 @@ function useSocket(dispatch) {
           ),
           description: '好友上线了',
           onClick: () => {
-            console.log('TODO: 好友上线!');
+            console.log('TODO: 处理弹出的好友上线!');
           },
         });
       });
