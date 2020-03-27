@@ -9,6 +9,7 @@
   }
   .groupsWrapper {
     flex: 1;
+    overflow-x: hidden;
     overflow-y: auto;
     .title {
       position: sticky;
@@ -48,6 +49,17 @@
             margin: 0;
             padding: 0 !important;
           }
+        }
+      }
+      .subMenuTitle {
+        display: flex;
+        flex-direction: row;
+        .name {
+          flex: 1;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          word-break: break-all;
         }
       }
     }

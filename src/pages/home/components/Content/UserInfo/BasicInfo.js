@@ -1,36 +1,19 @@
-import React from 'react';
-import { Avatar, Popover, Button, message } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Avatar, Popover, Button, message, Modal, Select } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
 import { FRIEND_TYPE, DEFAULT_AVATAR, GROUP_PERMIT } from '@/utils/const';
 import UserAvatar from '@/components/UserModal/UserAvatar';
 import styles from './index.less';
 
-const content = (type, email, permit) => (
-  <div>
-    {type === FRIEND_TYPE.GROUP && permit === GROUP_PERMIT.OWNER && (
-      <Button
-        className="contentButton"
-        onClick={() => {
-          console.log('TODO: 转移群主', type, email);
-        }}
-      >
-        转移群主
-      </Button>
-    )}
-    <Button
-      type="danger"
-      className="contentButton"
-      onClick={() => {
-        console.log('TODO: 退出群聊/删除好友', type, email);
-      }}
-    >
-      {type === FRIEND_TYPE.FRIEND && '删除好友'}
-      {type === FRIEND_TYPE.GROUP && permit === GROUP_PERMIT.OWNER && '解散群聊'}
-      {type === FRIEND_TYPE.GROUP && permit !== GROUP_PERMIT.OWNER && '退出群聊'}
-    </Button>
-  </div>
-);
 const BasicInfo = ({ info, type, socket }) => {
+  const [modal, setModal] = useState(false);
+  const [value, setValue] = useState([]);
+  useEffect(() => {
+    if (modal === '1') {
+      console.log('TODO: 获取群组成员');
+      // socket.emit('getGroupMember');
+    }
+  }, [modal]);
   const changeAvatar = e => {
     const file = e.target.files[0];
     if (file) {
@@ -41,6 +24,57 @@ const BasicInfo = ({ info, type, socket }) => {
         message.error('文件类型不支持!');
       }
     }
+  };
+  const content = (friendType, email, permit, name) => (
+    <div>
+      {friendType === FRIEND_TYPE.GROUP && permit === GROUP_PERMIT.OWNER && (
+        <Button
+          className="contentButton"
+          onClick={() => {
+            setModal('1');
+            setValue([name, email]);
+          }}
+        >
+          转移群主
+        </Button>
+      )}
+      <Button
+        type="danger"
+        className="contentButton"
+        onClick={() => {
+          const modalType =
+            (friendType === FRIEND_TYPE.FRIEND && '2') ||
+            (friendType === FRIEND_TYPE.GROUP && permit === GROUP_PERMIT.OWNER && '3') ||
+            (friendType === FRIEND_TYPE.GROUP && permit !== GROUP_PERMIT.OWNER && '4');
+          setModal(modalType);
+          setValue([name, email]);
+        }}
+      >
+        {friendType === FRIEND_TYPE.FRIEND && '删除好友'}
+        {friendType === FRIEND_TYPE.GROUP && permit === GROUP_PERMIT.OWNER && '解散群聊'}
+        {friendType === FRIEND_TYPE.GROUP && permit !== GROUP_PERMIT.OWNER && '退出群聊'}
+      </Button>
+    </div>
+  );
+  const onOk = () => {
+    switch (modal) {
+      case '1':
+        console.log('TODO: 转移群主', '群成员', value[1]);
+        break;
+      case '2':
+        console.log('TODO: 删除好友', value[1]);
+        break;
+      case '3':
+        console.log('TODO: 解散群聊', value[1]);
+        break;
+      case '4':
+        console.log('TODO: 退出群聊', value[1]);
+        break;
+      default:
+        break;
+    }
+    setModal(false);
+    setValue([]);
   };
   return (
     <div
@@ -67,7 +101,12 @@ const BasicInfo = ({ info, type, socket }) => {
         }}
       />
       <Popover
-        content={content(type, info.email || info.chatKey, info.permit)}
+        content={content(
+          type,
+          info.email || info.chatKey,
+          info.permit,
+          info.remarkName || info.nickname,
+        )}
         title="设置"
         trigger="click"
         placement="leftTop"
@@ -76,6 +115,48 @@ const BasicInfo = ({ info, type, socket }) => {
       >
         设置
       </Popover>
+      <Modal
+        visible={!!modal}
+        mask={false}
+        onCancel={() => {
+          setModal(false);
+        }}
+        width={320}
+        wrapClassName="basicInfoEditModal"
+        maskClosable={false}
+        title={
+          (modal === '1' && '转移群主') ||
+          (modal === '2' && '删除好友') ||
+          (modal === '3' && '解散群聊') ||
+          (modal === '4' && '退出群聊')
+        }
+        okText="确认"
+        cancelText="取消"
+        onOk={onOk}
+      >
+        {modal === '1' && '新群主:'}
+        {modal === '1' && (
+          <Select style={{ width: '100%' }} defaultValue="1">
+            <Select.Option key="1">成员1</Select.Option>
+            <Select.Option key="2">成员2</Select.Option>
+          </Select>
+        )}
+        {modal === '2' && (
+          <>
+            确认删除好友 <br /> {`${value[0]} (${value[1]})`} ?
+          </>
+        )}
+        {modal === '3' && (
+          <>
+            确认解散群聊 <br /> {`${value[0]} (${value[1]})`} ?
+          </>
+        )}
+        {modal === '4' && (
+          <>
+            确认退出群聊 <br /> {`${value[0]} (${value[1]})`} ?
+          </>
+        )}
+      </Modal>
     </div>
   );
 };

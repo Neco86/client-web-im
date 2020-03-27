@@ -88,7 +88,7 @@ const SubMenuTitle = ({ name, number, titleKey: [friendType, groupKey], group, s
         setEditVisible(false);
       }}
     >
-      {name}
+      <span className="name">{name}</span>
       <div className="edit">
         {editVisible ? (
           <Dropdown overlay={menu} trigger={['click']}>
