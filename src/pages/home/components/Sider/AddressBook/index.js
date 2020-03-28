@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'dva';
 import { Button, Divider, Menu } from 'antd';
 import { FRIEND_TYPE } from '@/utils/const';
@@ -6,6 +6,7 @@ import SubMenuTitle from './SubMenuTitle';
 import FriendCard from './FriendCard';
 import GroupCard from './GroupCard';
 import styles from './index.less';
+import FriendApply from './FriendApply';
 
 const AddressBook = ({ friendGroups, groupGroups, activeMenu, dispatch, socket }) => {
   const { SubMenu } = Menu;
@@ -15,9 +16,24 @@ const AddressBook = ({ friendGroups, groupGroups, activeMenu, dispatch, socket }
       activeMenu: [type, group, key],
     });
   };
+  const [friendApply, setFriendApply] = useState(false);
   return (
     <div className={styles.addressBookWrapper}>
-      <Button className={styles.friendMessage}>好友通知</Button>
+      <Button
+        className={styles.friendMessage}
+        onClick={() => {
+          setFriendApply(true);
+        }}
+      >
+        好友通知
+      </Button>
+      <FriendApply
+        visible={friendApply}
+        onCancel={() => {
+          setFriendApply(false);
+        }}
+        socket={socket}
+      />
       <Divider />
       <div className={styles.groupsWrapper}>
         <div className={styles.title}>群聊</div>
