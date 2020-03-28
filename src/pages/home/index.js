@@ -6,6 +6,7 @@ import {
   DEFAULT_AVATAR,
   SUCCESS_CODE,
   EDIT_GROUP,
+  EDIT_FRIEND,
 } from '@/utils/const';
 import { message, notification, Avatar } from 'antd';
 import io from 'socket.io-client';
@@ -202,6 +203,60 @@ function useSocket(dispatch) {
             break;
         }
         socket.emit('getMyGroup', type);
+      });
+      // 删除好友/退出群聊/解散群聊
+      socket.on('editFriend', ({ type }) => {
+        switch (type) {
+          // 删除好友
+          case EDIT_FRIEND.DELETE_FRIEND:
+            message.success('删除好友成功!');
+            socket.emit('getMyGroup', FRIEND_TYPE.FRIEND);
+            break;
+          // 退出群聊
+          case EDIT_FRIEND.EXIT_GROUP:
+            message.success('退出群聊成功!');
+            socket.emit('getMyGroup', FRIEND_TYPE.GROUP);
+            break;
+          // 解散群聊
+          case EDIT_FRIEND.DELETE_GROUP:
+            message.success('解散群聊成功!');
+            socket.emit('getMyGroup', FRIEND_TYPE.GROUP);
+            break;
+          default:
+            break;
+        }
+        dispatch({
+          type: 'addressBook/setActiveMenu',
+          activeMenu: [],
+        });
+      });
+      // 删除好友消息
+      socket.on('deleteFriend', () => {
+        socket.emit('getMyGroup', FRIEND_TYPE.FRIEND);
+      });
+      // 退出群聊消息
+      socket.on('exitGroup', ({ avatar, nickname, email, groupName, groupAvatar, chatKey }) => {
+        notification.open({
+          message: (
+            <>
+              <Avatar src={avatar || DEFAULT_AVATAR} /> {nickname} ({email})
+            </>
+          ),
+          description: (
+            <>
+              退出群组: <Avatar src={groupAvatar || DEFAULT_AVATAR} size="small" /> {groupName} (
+              {chatKey})
+            </>
+          ),
+          onClick: () => {
+            console.log('TODO: 处理弹出的退群!');
+          },
+        });
+        socket.emit('getMyGroup', FRIEND_TYPE.GROUP);
+      });
+      // 解散群聊消息
+      socket.on('deleteGroup', () => {
+        socket.emit('getMyGroup', FRIEND_TYPE.GROUP);
       });
       // 断开连接
       socket.on('disconnect', () => {

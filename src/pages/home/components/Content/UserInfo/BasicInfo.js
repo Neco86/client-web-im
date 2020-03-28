@@ -44,19 +44,7 @@ const BasicInfo = ({ info, type, socket }) => {
     </div>
   );
   const onOk = () => {
-    switch (modal) {
-      case EDIT_FRIEND.DELETE_FRIEND:
-        console.log('TODO: 处理删除好友email:', value[1]);
-        break;
-      case EDIT_FRIEND.DELETE_GROUP:
-        console.log('TODO: 解散群聊chatKey:', value[1]);
-        break;
-      case EDIT_FRIEND.EXIT_GROUP:
-        console.log('TODO: 退出群聊chatKey:', value[1]);
-        break;
-      default:
-        break;
-    }
+    socket.emit('editFriend', { type: modal, value: value[1] });
     setModal(false);
     setValue([]);
   };
