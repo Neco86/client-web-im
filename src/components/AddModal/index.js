@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Modal, Input, List, Empty, Avatar } from 'antd';
+import { Modal } from 'antd';
 import { connect } from 'dva';
-import { ADD_TYPE, DEFAULT_AVATAR, SEARCH_TYPE, FRIEND_TYPE } from '@/utils/const';
-import { PlusCircleOutlined } from '@ant-design/icons';
+import { ADD_TYPE } from '@/utils/const';
 import './index.less';
 import Apply from './Apply';
+import AddFriend from './AddFriend';
+import CreateGroup from './CreateGroup';
 
 const AddModal = ({
   visible,
@@ -15,6 +16,7 @@ const AddModal = ({
   socket,
   friendGroups,
   groupGroups,
+  userInfo,
 }) => {
   const [searchValue, setSearchValue] = useState('');
   const [addModal, setAddModal] = useState(false);
@@ -26,7 +28,7 @@ const AddModal = ({
         footer={null}
         mask={false}
         onCancel={onCancel}
-        width={320}
+        width={type === ADD_TYPE.ADD_FRIEND ? 320 : 460}
         wrapClassName="addModal"
         maskClosable={false}
         title={
@@ -35,89 +37,24 @@ const AddModal = ({
         }
       >
         {type === ADD_TYPE.ADD_FRIEND && (
-          <>
-            <Input.Search
-              placeholder="Email/群账号/昵称"
-              onSearch={v => {
-                setSearchValue(v);
-                socket.emit('searchInfo', v);
-              }}
-            />
-            <div className="searchResult">
-              {friendList.length > 0 && searchValue && (
-                <>
-                  <div className="title">联系人</div>
-                  <List
-                    // split={false}
-                    dataSource={friendList}
-                    renderItem={item => (
-                      <List.Item>
-                        <div className="listItem">
-                          <Avatar src={item.avatar || DEFAULT_AVATAR} size="large" />
-                          <div className="userInfo">{`${item.nickname}(${item.account})`}</div>
-                          <div
-                            className="addBtn"
-                            onClick={() => {
-                              setAddInfo({
-                                friendType: FRIEND_TYPE.FRIEND,
-                                avatar: item.avatar,
-                                account: item.account,
-                                nickname: item.nickname,
-                              });
-                              setAddModal(true);
-                            }}
-                          >
-                            {item.type === SEARCH_TYPE.STRANGER && <PlusCircleOutlined />}
-                            {item.type === SEARCH_TYPE.FRIEND && '已添加'}
-                            {item.type === SEARCH_TYPE.SELF && '自己'}
-                            {item.type === SEARCH_TYPE.APPLYING && '已申请'}
-                          </div>
-                        </div>
-                      </List.Item>
-                    )}
-                  />
-                </>
-              )}
-              {groupList.length > 0 && searchValue && (
-                <>
-                  <div className="title" style={{ borderTop: '1px solid #aaa' }}>
-                    群组
-                  </div>
-                  <List
-                    // split={false}
-                    dataSource={groupList}
-                    renderItem={item => (
-                      <List.Item>
-                        <div className="listItem">
-                          <Avatar src={item.avatar || DEFAULT_AVATAR} size="large" />
-                          <div className="userInfo">{`${item.nickname}(${item.account})`}</div>
-                          <div
-                            className="addBtn"
-                            onClick={() => {
-                              setAddInfo({
-                                friendType: FRIEND_TYPE.GROUP,
-                                avatar: item.avatar,
-                                account: item.account,
-                                nickname: item.nickname,
-                              });
-                              setAddModal(true);
-                            }}
-                          >
-                            {item.type === SEARCH_TYPE.STRANGER && <PlusCircleOutlined />}
-                            {item.type === SEARCH_TYPE.FRIEND && '已添加'}
-                            {item.type === SEARCH_TYPE.APPLYING && '已申请'}
-                          </div>
-                        </div>
-                      </List.Item>
-                    )}
-                  />
-                </>
-              )}
-              {friendList.length === 0 && groupList.length === 0 && searchValue && (
-                <Empty description="" />
-              )}
-            </div>
-          </>
+          <AddFriend
+            setSearchValue={setSearchValue}
+            socket={socket}
+            friendList={friendList}
+            searchValue={searchValue}
+            setAddInfo={setAddInfo}
+            setAddModal={setAddModal}
+            groupList={groupList}
+          />
+        )}
+        {type === ADD_TYPE.CREATE_GROUP && (
+          <CreateGroup
+            friendGroups={friendGroups}
+            groupGroups={groupGroups}
+            userInfo={userInfo}
+            mustInclude={[userInfo.email]}
+            onCancel={onCancel}
+          />
         )}
       </Modal>
       <Apply
@@ -132,10 +69,11 @@ const AddModal = ({
   );
 };
 
-export default connect(({ global, searchInfo, userGroups }) => ({
+export default connect(({ global, searchInfo, userGroups, userInfo }) => ({
   socket: global.socket,
   friendList: searchInfo.friendList,
   groupList: searchInfo.groupList,
   friendGroups: userGroups.friendGroups,
   groupGroups: userGroups.groupGroups,
+  userInfo,
 }))(AddModal);

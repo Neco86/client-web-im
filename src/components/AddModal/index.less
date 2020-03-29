@@ -73,3 +73,29 @@
     }
   }
 }
+.createGroupWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  // height: 400px;
+  padding: 20px;
+  :global {
+    .ant-transfer-list {
+      height: 300px;
+    }
+  }
+  .group {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    :global {
+      .ant-row {
+        width: 100%;
+      }
+    }
+    .createGroupBtn {
+      width: 100%;
+    }
+  }
+}
