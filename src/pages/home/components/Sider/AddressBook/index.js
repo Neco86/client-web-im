@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'dva';
 import { Button, Divider, Menu } from 'antd';
 import { FRIEND_TYPE } from '@/utils/const';
@@ -8,7 +8,15 @@ import GroupCard from './GroupCard';
 import styles from './index.less';
 import FriendApply from './FriendApply';
 
-const AddressBook = ({ friendGroups, groupGroups, activeMenu, dispatch, socket }) => {
+const AddressBook = ({
+  friendGroups,
+  groupGroups,
+  activeMenu,
+  dispatch,
+  socket,
+  apply,
+  friendApplyModal: friendApply,
+}) => {
   const { SubMenu } = Menu;
   const setActiveMenu = (type, group, key) => {
     dispatch({
@@ -16,7 +24,12 @@ const AddressBook = ({ friendGroups, groupGroups, activeMenu, dispatch, socket }
       activeMenu: [type, group, key],
     });
   };
-  const [friendApply, setFriendApply] = useState(false);
+  const setFriendApply = flag => {
+    dispatch({
+      type: 'friendApply/setModal',
+      friendApplyModal: flag,
+    });
+  };
   return (
     <div className={styles.addressBookWrapper}>
       <Button
@@ -33,6 +46,9 @@ const AddressBook = ({ friendGroups, groupGroups, activeMenu, dispatch, socket }
           setFriendApply(false);
         }}
         socket={socket}
+        apply={apply}
+        friendGroups={friendGroups}
+        groupGroups={groupGroups}
       />
       <Divider />
       <div className={styles.groupsWrapper}>
@@ -107,9 +123,11 @@ const AddressBook = ({ friendGroups, groupGroups, activeMenu, dispatch, socket }
   );
 };
 
-export default connect(({ global, userGroups, addressBook }) => ({
+export default connect(({ global, userGroups, addressBook, friendApply }) => ({
   socket: global.socket,
   friendGroups: userGroups.friendGroups,
   groupGroups: userGroups.groupGroups,
   activeMenu: addressBook.activeMenu,
+  apply: friendApply.apply,
+  friendApplyModal: friendApply.friendApplyModal,
 }))(AddressBook);

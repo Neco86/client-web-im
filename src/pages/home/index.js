@@ -87,7 +87,10 @@ function useSocket(dispatch) {
                 </>
               ),
               onClick: () => {
-                console.log('TODO: 处理弹出的申请加好友!');
+                dispatch({
+                  type: 'friendApply/setModal',
+                  friendApplyModal: true,
+                });
               },
             });
           }
@@ -107,7 +110,10 @@ function useSocket(dispatch) {
                 </>
               ),
               onClick: () => {
-                console.log('TODO: 处理弹出的申请加群组!');
+                dispatch({
+                  type: 'friendApply/setModal',
+                  friendApplyModal: true,
+                });
               },
             });
           }
@@ -139,7 +145,7 @@ function useSocket(dispatch) {
           ),
           description: '好友上线了',
           onClick: () => {
-            console.log('TODO: 处理弹出的好友上线!');
+            console.log('TODO: 跳转好友聊天!');
           },
         });
       });
@@ -249,7 +255,7 @@ function useSocket(dispatch) {
             </>
           ),
           onClick: () => {
-            console.log('TODO: 处理弹出的退群!');
+            console.log('TODO: 跳转群组聊天!');
           },
         });
         socket.emit('getMyGroup', FRIEND_TYPE.GROUP);
@@ -257,6 +263,48 @@ function useSocket(dispatch) {
       // 解散群聊消息
       socket.on('deleteGroup', () => {
         socket.emit('getMyGroup', FRIEND_TYPE.GROUP);
+      });
+      // 查询好友通知
+      socket.on('getFriendApply', friendApply => {
+        dispatch({
+          type: 'friendApply/setApply',
+          apply: friendApply,
+        });
+      });
+      // 同意/拒绝申请
+      socket.on('handleApply', ({ agree, friend, email, chatKey }) => {
+        message.success(
+          `您${agree ? '同意' : '拒绝'}了${
+            chatKey ? ` ${email} 加入群聊 ${chatKey} ` : ` ${email} 的好友申请`
+          }`,
+        );
+        socket.emit('getFriendApply');
+        if (agree) {
+          socket.emit('getMyGroup', friend ? FRIEND_TYPE.FRIEND : FRIEND_TYPE.GROUP);
+        }
+      });
+      // 被同意/拒绝申请
+      socket.on('handledApply', ({ agree, friend, email, chatKey, nickname, avatar }) => {
+        notification.open({
+          message: (
+            <>
+              <Avatar src={avatar || DEFAULT_AVATAR} /> {nickname} ({email || chatKey})
+            </>
+          ),
+          description: (
+            <>
+              {friend ? '加好友' : '加入群聊'}
+              {agree ? '被同意' : '被拒绝'}
+            </>
+          ),
+          onClick: () => {
+            console.log('TODO: 跳转聊天');
+          },
+        });
+        socket.emit('getFriendApply');
+        if (agree) {
+          socket.emit('getMyGroup', friend ? FRIEND_TYPE.FRIEND : FRIEND_TYPE.GROUP);
+        }
       });
       // 断开连接
       socket.on('disconnect', () => {

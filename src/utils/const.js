@@ -50,8 +50,8 @@ const MSG_TYPE = {
   AGREE_FRIEND: '3',
   // 拒绝好友/群聊
   DISAGREE_FRIEND: '4',
-  // 群聊通知消息
-  GROUP_NOTICE: '5',
+  // 通知消息
+  NOTICE: '5',
 };
 
 // permit 群聊权限
