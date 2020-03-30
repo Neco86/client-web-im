@@ -4,17 +4,20 @@ import { Empty, Menu } from 'antd';
 import styles from './index.less';
 import ChatCard from './ChatCard.js';
 
-const ChatList = ({ recentChats, activeChat, dispatch }) => {
+const ChatList = ({ recentChats, activeChat, dispatch, socket }) => {
   const handleClick = ({ key }) => {
     const { peer, type } = JSON.parse(key);
     dispatch({
       type: 'chat/setActiveChat',
       activeChat: [type, peer],
     });
+    socket.emit('setRecentChat', { peer, type, unread: 0 });
+    // 1.获取右侧聊天内容
+    // 2.更新左侧recentChat里的timestamp和msg
     console.log('TODO: 获取聊天内容', type, peer);
   };
   const deleteCurrent = ({ type, peer }) => {
-    console.log('TODO: 删除最近聊天', type, peer);
+    socket.emit('setRecentChat', { peer, type });
   };
   return (
     <div className={styles.chatListWrapper}>

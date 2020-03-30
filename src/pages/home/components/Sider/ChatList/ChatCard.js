@@ -39,7 +39,15 @@ const getDateDesc = timestamp => {
 
 const ChatCard = ({ chat, deleteCurrent }) => (
   <div className={styles.chatCardWrapper}>
-    <CloseOutlined className={styles.close} onClick={() => deleteCurrent(chat)} />
+    <CloseOutlined
+      className={styles.close}
+      onClick={e => {
+        e.preventDefault();
+        e.stopPropagation();
+        deleteCurrent(chat);
+        return false;
+      }}
+    />
     <Avatar src={chat.avatar || DEFAULT_AVATAR} />
     <div className={styles.recentChatContent}>
       <div className={styles.top}>

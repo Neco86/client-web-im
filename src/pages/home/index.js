@@ -126,7 +126,6 @@ function useSocket(dispatch) {
               },
             });
           }
-          // console.log(payload);
         },
       );
       // 获取好友分组
@@ -141,6 +140,10 @@ function useSocket(dispatch) {
           type: 'chat/setRecentChats',
           recentChats,
         });
+      });
+      // 更新最近聊天
+      socket.on('updateRecentChat', () => {
+        socket.emit('getRecentChat');
       });
       // 设置分组
       socket.on('getMyGroup', ({ friendType, groups }) => {
@@ -167,7 +170,11 @@ function useSocket(dispatch) {
               type: 'global/setMenuKey',
               menuKey: MENU_KEY.CHAT_INFO,
             });
-            console.log('TODO: 跳转好友聊天!');
+            dispatch({
+              type: 'chat/setActiveChat',
+              activeChat: [FRIEND_TYPE.FRIEND, email],
+            });
+            socket.emit('setRecentChat', { peer: email, type: FRIEND_TYPE.FRIEND, unread: 0 });
           },
         });
       });
@@ -276,13 +283,7 @@ function useSocket(dispatch) {
               {chatKey})
             </>
           ),
-          onClick: () => {
-            dispatch({
-              type: 'global/setMenuKey',
-              menuKey: MENU_KEY.CHAT_INFO,
-            });
-            console.log('TODO: 跳转群组聊天!');
-          },
+          onClick: () => {},
         });
         socket.emit('getMyGroup', FRIEND_TYPE.GROUP);
       });
@@ -324,11 +325,24 @@ function useSocket(dispatch) {
             </>
           ),
           onClick: () => {
-            dispatch({
-              type: 'global/setMenuKey',
-              menuKey: MENU_KEY.CHAT_INFO,
-            });
-            console.log('TODO: 跳转聊天');
+            if (agree) {
+              dispatch({
+                type: 'global/setMenuKey',
+                menuKey: MENU_KEY.CHAT_INFO,
+              });
+              dispatch({
+                type: 'chat/setActiveChat',
+                activeChat: [
+                  friend ? FRIEND_TYPE.FRIEND : FRIEND_TYPE.GROUP,
+                  friend ? email : chatKey,
+                ],
+              });
+              socket.emit('setRecentChat', {
+                peer: friend ? email : chatKey,
+                type: friend ? FRIEND_TYPE.FRIEND : FRIEND_TYPE.GROUP,
+                unread: 0,
+              });
+            }
           },
         });
         socket.emit('getFriendApply');

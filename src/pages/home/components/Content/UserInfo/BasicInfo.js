@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Avatar, Popover, Button, message, Modal } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
-import { FRIEND_TYPE, DEFAULT_AVATAR, GROUP_PERMIT, EDIT_FRIEND } from '@/utils/const';
+import { FRIEND_TYPE, DEFAULT_AVATAR, GROUP_PERMIT, EDIT_FRIEND, MENU_KEY } from '@/utils/const';
 import UserAvatar from '@/components/UserModal/UserAvatar';
 import styles from './index.less';
 
-const BasicInfo = ({ info, type, socket }) => {
+const BasicInfo = ({ info, type, socket, dispatch }) => {
   const [modal, setModal] = useState(false);
   const [value, setValue] = useState([]);
   const changeAvatar = e => {
@@ -69,7 +69,15 @@ const BasicInfo = ({ info, type, socket }) => {
       <MessageOutlined
         className={styles.tools}
         onClick={() => {
-          console.log('TODO: 跳转群聊/私聊', type, info.email || info.chatKey);
+          dispatch({
+            type: 'global/setMenuKey',
+            menuKey: MENU_KEY.CHAT_INFO,
+          });
+          dispatch({
+            type: 'chat/setActiveChat',
+            activeChat: [type, info.email || info.chatKey],
+          });
+          socket.emit('setRecentChat', { peer: info.email || info.chatKey, type, unread: 0 });
         }}
       />
       <Popover
