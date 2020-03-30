@@ -3,7 +3,7 @@ import { Transfer, Avatar, Button, Row, Col, Select, Divider } from 'antd';
 import { DEFAULT_AVATAR } from '@/utils/const';
 import styles from './index.less';
 
-const CreateGroup = ({ friendGroups, userInfo, mustInclude, groupGroups, onCancel }) => {
+const CreateGroup = ({ friendGroups, userInfo, mustInclude, groupGroups, onCancel, socket }) => {
   const getDataSource = () => {
     const dataSource = [];
     dataSource.push({
@@ -40,7 +40,7 @@ const CreateGroup = ({ friendGroups, userInfo, mustInclude, groupGroups, onCance
   };
 
   const createGroup = () => {
-    console.log('TODO: 创建群聊', group, targetKeys);
+    socket.emit('createGroup', { group, member: targetKeys });
     onCancel();
   };
   return (

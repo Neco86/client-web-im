@@ -22,6 +22,8 @@ const SubMenuTitle = ({ name, number, titleKey: [friendType, groupKey], group, s
           ].length !== 0
         ) {
           message.error('当前分组不是空的,无法删除!');
+        } else if (group.length === 1) {
+          message.error('当前仅有一个分组,无法删除!');
         } else {
           setInputValue(group.filter(g => g.key === groupKey)[0].groupName);
           setModal(EDIT_GROUP.DELETE);

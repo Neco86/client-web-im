@@ -7,6 +7,7 @@ import {
   SUCCESS_CODE,
   EDIT_GROUP,
   EDIT_FRIEND,
+  MENU_KEY,
 } from '@/utils/const';
 import { message, notification, Avatar } from 'antd';
 import io from 'socket.io-client';
@@ -88,6 +89,10 @@ function useSocket(dispatch) {
               ),
               onClick: () => {
                 dispatch({
+                  type: 'global/setMenuKey',
+                  menuKey: MENU_KEY.USER_INFO,
+                });
+                dispatch({
                   type: 'friendApply/setModal',
                   friendApplyModal: true,
                 });
@@ -110,6 +115,10 @@ function useSocket(dispatch) {
                 </>
               ),
               onClick: () => {
+                dispatch({
+                  type: 'global/setMenuKey',
+                  menuKey: MENU_KEY.USER_INFO,
+                });
                 dispatch({
                   type: 'friendApply/setModal',
                   friendApplyModal: true,
@@ -145,6 +154,10 @@ function useSocket(dispatch) {
           ),
           description: '好友上线了',
           onClick: () => {
+            dispatch({
+              type: 'global/setMenuKey',
+              menuKey: MENU_KEY.CHAT_INFO,
+            });
             console.log('TODO: 跳转好友聊天!');
           },
         });
@@ -255,6 +268,10 @@ function useSocket(dispatch) {
             </>
           ),
           onClick: () => {
+            dispatch({
+              type: 'global/setMenuKey',
+              menuKey: MENU_KEY.CHAT_INFO,
+            });
             console.log('TODO: 跳转群组聊天!');
           },
         });
@@ -298,6 +315,10 @@ function useSocket(dispatch) {
             </>
           ),
           onClick: () => {
+            dispatch({
+              type: 'global/setMenuKey',
+              menuKey: MENU_KEY.CHAT_INFO,
+            });
             console.log('TODO: 跳转聊天');
           },
         });
@@ -305,6 +326,15 @@ function useSocket(dispatch) {
         if (agree) {
           socket.emit('getMyGroup', friend ? FRIEND_TYPE.FRIEND : FRIEND_TYPE.GROUP);
         }
+      });
+      // 创建群聊
+      socket.on('createGroup', ({ my, chatKey, nickname, groupName }) => {
+        if (my) {
+          message.success(`${groupName}: ${nickname} (${chatKey}) 创建成功!`);
+        } else {
+          message.success(`${groupName}: ${nickname} (${chatKey}) 邀请您进入群组!`);
+        }
+        socket.emit('getMyGroup', FRIEND_TYPE.GROUP);
       });
       // 断开连接
       socket.on('disconnect', () => {

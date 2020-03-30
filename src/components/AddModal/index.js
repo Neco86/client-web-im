@@ -54,6 +54,7 @@ const AddModal = ({
             userInfo={userInfo}
             mustInclude={[userInfo.email]}
             onCancel={onCancel}
+            socket={socket}
           />
         )}
       </Modal>
