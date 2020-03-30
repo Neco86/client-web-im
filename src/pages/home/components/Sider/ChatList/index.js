@@ -12,11 +12,12 @@ const ChatList = ({ recentChats, activeChat, dispatch, socket }) => {
       activeChat: [type, peer],
     });
     socket.emit('setRecentChat', { peer, type, unread: 0 });
-    // 1.获取右侧聊天内容
-    // 2.更新左侧recentChat里的timestamp和msg
-    console.log('TODO: 获取聊天内容', type, peer);
   };
   const deleteCurrent = ({ type, peer }) => {
+    dispatch({
+      type: 'chat/setActiveChat',
+      activeChat: [],
+    });
     socket.emit('setRecentChat', { peer, type });
   };
   return (

@@ -1,8 +1,14 @@
 import React from 'react';
 import { connect } from 'dva';
 
-const ChatInfo = () => <div>ChatInfo</div>;
+const ChatInfo = ({ activeChat }) => (
+  <div>
+    {/* TODO: 获取聊天信息 */}
+    {JSON.stringify(activeChat)}
+  </div>
+);
 
-export default connect(({ global }) => ({
+export default connect(({ global, chat }) => ({
   socket: global.socket,
+  activeChat: chat.activeChat,
 }))(ChatInfo);
