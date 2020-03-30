@@ -4,8 +4,7 @@ const GlobalModel = {
   namespace: 'global',
   state: {
     socket: null,
-    // TODO: test数据
-    menuKey: MENU_KEY.USER_INFO,
+    menuKey: MENU_KEY.CHAT_INFO,
   },
   reducers: {
     setSocket(state, { socket }) {

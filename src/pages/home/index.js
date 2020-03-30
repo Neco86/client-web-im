@@ -133,6 +133,15 @@ function useSocket(dispatch) {
       socket.emit('getMyGroup', FRIEND_TYPE.FRIEND);
       // 获取群聊分组
       socket.emit('getMyGroup', FRIEND_TYPE.GROUP);
+      // 获取最近聊天
+      socket.emit('getRecentChat');
+      // 设置最近聊天
+      socket.on('setRecentChat', recentChats => {
+        dispatch({
+          type: 'chat/setRecentChats',
+          recentChats,
+        });
+      });
       // 设置分组
       socket.on('getMyGroup', ({ friendType, groups }) => {
         dispatch({
