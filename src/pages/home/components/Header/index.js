@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import { Input, Menu, Badge } from 'antd';
 import { CommentOutlined, UserOutlined } from '@ant-design/icons';
@@ -7,13 +7,23 @@ import styles from './index.less';
 import User from './User';
 import Add from './Add';
 
-const Header = ({ dispatch, menuKey }) => {
+const Header = ({ dispatch, menuKey, recentChats, activeChat }) => {
   const changeMenu = ({ key }) => {
     dispatch({
       type: 'global/setMenuKey',
       menuKey: key,
     });
   };
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    let total = 0;
+    recentChats.forEach(chat => {
+      if (chat.type !== activeChat[0] || chat.peer !== activeChat[1]) {
+        total += Number(chat.unread);
+      }
+    });
+    setCount(total);
+  }, [recentChats]);
   return (
     <div className={styles.headerWrapper}>
       <div className={styles.left}>
@@ -27,7 +37,7 @@ const Header = ({ dispatch, menuKey }) => {
       <div className={styles.middle}>
         <Menu mode="horizontal" selectedKeys={[menuKey]} onClick={changeMenu}>
           <Menu.Item key={MENU_KEY.CHAT_INFO}>
-            <Badge count={99}>
+            <Badge count={count}>
               <CommentOutlined className={styles.menuBtn} />
             </Badge>
           </Menu.Item>
@@ -46,4 +56,5 @@ const Header = ({ dispatch, menuKey }) => {
 export default connect(({ global, chat }) => ({
   menuKey: global.menuKey,
   recentChats: chat.recentChats,
+  activeChat: chat.activeChat,
 }))(Header);
