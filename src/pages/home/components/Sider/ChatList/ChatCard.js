@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { CloseOutlined } from '@ant-design/icons';
 import { DEFAULT_AVATAR } from '@/utils/const';
 import { Avatar, Badge } from 'antd';
@@ -37,30 +37,43 @@ const getDateDesc = timestamp => {
   return '';
 };
 
-const ChatCard = ({ chat, deleteCurrent }) => (
-  <div className={styles.chatCardWrapper}>
-    <CloseOutlined
-      className={styles.close}
-      onClick={e => {
-        e.preventDefault();
-        e.stopPropagation();
-        deleteCurrent(chat);
-        return false;
-      }}
-    />
-    <Avatar src={chat.avatar || DEFAULT_AVATAR} />
-    <div className={styles.recentChatContent}>
-      <div className={styles.top}>
-        <div className={styles.name}>{chat.name}</div>
-        <div className={styles.time}>{getDateDesc(chat.timestamp)}</div>
-      </div>
-      <div className={styles.bottom}>
-        <div className={styles.msg}>{chat.msg}</div>
-        <div className={styles.unread}>
-          <Badge count={chat.unread} />
+const ChatCard = ({ chat, deleteCurrent, activeChat, socket }) => {
+  useEffect(() => {
+    if (JSON.stringify({ type: chat.type, peer: chat.peer }) === activeChat && chat.unread > 0) {
+      socket.emit('setRecentChat', { peer: chat.peer, type: chat.type, unread: 0 });
+    }
+  }, [chat.unread]);
+  return (
+    <div className={styles.chatCardWrapper}>
+      <CloseOutlined
+        className={styles.close}
+        onClick={e => {
+          e.preventDefault();
+          e.stopPropagation();
+          deleteCurrent(chat);
+          return false;
+        }}
+      />
+      <Avatar src={chat.avatar || DEFAULT_AVATAR} />
+      <div className={styles.recentChatContent}>
+        <div className={styles.top}>
+          <div className={styles.name}>{chat.name}</div>
+          <div className={styles.time}>{getDateDesc(chat.timestamp)}</div>
+        </div>
+        <div className={styles.bottom}>
+          <div className={styles.msg}>{chat.msg}</div>
+          <div className={styles.unread}>
+            <Badge
+              count={
+                JSON.stringify({ type: chat.type, peer: chat.peer }) === activeChat
+                  ? 0
+                  : chat.unread
+              }
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 export default ChatCard;

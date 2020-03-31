@@ -31,7 +31,12 @@ const ChatList = ({ recentChats, activeChat, dispatch, socket }) => {
         >
           {recentChats.map(chat => (
             <Menu.Item key={JSON.stringify({ type: chat.type, peer: chat.peer })}>
-              <ChatCard chat={chat} deleteCurrent={deleteCurrent} />
+              <ChatCard
+                chat={chat}
+                deleteCurrent={deleteCurrent}
+                activeChat={activeChat}
+                socket={socket}
+              />
             </Menu.Item>
           ))}
         </Menu>

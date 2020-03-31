@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Input, Menu } from 'antd';
+import { Input, Menu, Badge } from 'antd';
 import { CommentOutlined, UserOutlined } from '@ant-design/icons';
 import { MENU_KEY } from '@/utils/const';
 import styles from './index.less';
@@ -27,7 +27,9 @@ const Header = ({ dispatch, menuKey }) => {
       <div className={styles.middle}>
         <Menu mode="horizontal" selectedKeys={[menuKey]} onClick={changeMenu}>
           <Menu.Item key={MENU_KEY.CHAT_INFO}>
-            <CommentOutlined className={styles.menuBtn} />
+            <Badge count={99}>
+              <CommentOutlined className={styles.menuBtn} />
+            </Badge>
           </Menu.Item>
           <Menu.Item key={MENU_KEY.USER_INFO}>
             <UserOutlined className={styles.menuBtn} />
@@ -41,6 +43,7 @@ const Header = ({ dispatch, menuKey }) => {
   );
 };
 
-export default connect(({ global }) => ({
+export default connect(({ global, chat }) => ({
   menuKey: global.menuKey,
+  recentChats: chat.recentChats,
 }))(Header);
