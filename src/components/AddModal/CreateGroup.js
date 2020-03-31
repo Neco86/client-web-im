@@ -41,6 +41,7 @@ const CreateGroup = ({ friendGroups, userInfo, mustInclude, groupGroups, onCance
 
   const createGroup = () => {
     socket.emit('createGroup', { group, member: targetKeys });
+    setSelectKeys(mustInclude);
     onCancel();
   };
   return (
