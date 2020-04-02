@@ -17,6 +17,19 @@
         border-radius: 20px;
         box-shadow: none;
       }
+      :global {
+        .ant-popover-inner-content {
+          width: 240px;
+        }
+        .ant-list-item-meta-title,
+        .ant-list-item-meta-description {
+          width: 160px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          word-break: break-all;
+        }
+      }
     }
     .addBtn {
       display: flex;
@@ -75,5 +88,12 @@
         cursor: pointer;
       }
     }
+  }
+}
+.searchResultWrapper {
+  max-height: 400px;
+  overflow: auto;
+  .title {
+    color: #aaa;
   }
 }
