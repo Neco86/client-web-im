@@ -8,7 +8,15 @@ import User from './User';
 import Add from './Add';
 import SearchResult from './SearchResult';
 
-const Header = ({ dispatch, menuKey, recentChats, activeChat, friendGroups, groupGroups }) => {
+const Header = ({
+  dispatch,
+  menuKey,
+  recentChats,
+  activeChat,
+  friendGroups,
+  groupGroups,
+  socket,
+}) => {
   const changeMenu = ({ key }) => {
     dispatch({
       type: 'global/setMenuKey',
@@ -41,6 +49,7 @@ const Header = ({ dispatch, menuKey, recentChats, activeChat, friendGroups, grou
               remarkName: friend.remarkName,
               nickname: friend.nickname,
               groupName: group.groupName,
+              peer: friend.email,
             });
           }
         });
@@ -55,6 +64,7 @@ const Header = ({ dispatch, menuKey, recentChats, activeChat, friendGroups, grou
               remarkName: friend.remarkName,
               nickname: friend.nickname,
               groupName: group.groupName,
+              peer: friend.chatKey,
             });
           }
         });
@@ -65,6 +75,20 @@ const Header = ({ dispatch, menuKey, recentChats, activeChat, friendGroups, grou
       setGroupResult([]);
     }
   };
+  const onSearchItemClick = (type, peer) => {
+    setSearch('');
+    setFriendResult([]);
+    setGroupResult([]);
+    dispatch({
+      type: 'global/setMenuKey',
+      menuKey: MENU_KEY.CHAT_INFO,
+    });
+    dispatch({
+      type: 'chat/setActiveChat',
+      activeChat: [type, peer],
+    });
+    socket.emit('setRecentChat', { peer, type, unread: 0 });
+  };
   return (
     <div className={styles.headerWrapper}>
       <div className={styles.left}>
@@ -74,11 +98,16 @@ const Header = ({ dispatch, menuKey, recentChats, activeChat, friendGroups, grou
             placement="bottom"
             className={styles.searchResult}
             content={
-              <SearchResult friendResult={friendResult} groupResult={groupResult} search={search} />
+              <SearchResult
+                friendResult={friendResult}
+                groupResult={groupResult}
+                search={search}
+                onSearchItemClick={onSearchItemClick}
+              />
             }
             getPopupContainer={trigger => trigger.parentNode}
           >
-            <Input.Search className={styles.input} onChange={onSearch} />
+            <Input.Search className={styles.input} onChange={onSearch} value={search} />
           </Popover>
         </div>
         <div className={styles.addBtn}>
@@ -106,6 +135,7 @@ const Header = ({ dispatch, menuKey, recentChats, activeChat, friendGroups, grou
 
 export default connect(({ global, chat, userGroups }) => ({
   menuKey: global.menuKey,
+  socket: global.socket,
   recentChats: chat.recentChats,
   activeChat: chat.activeChat,
   friendGroups: userGroups.friendGroups,
