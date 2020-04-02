@@ -359,6 +359,20 @@ function useSocket(dispatch) {
         }
         socket.emit('getMyGroup', FRIEND_TYPE.GROUP);
       });
+      // 获取聊天内容
+      socket.on('setChats', ({ chats, page, hasMore }) => {
+        dispatch({
+          type: 'chat/setChats',
+          payload: { chats, page, hasMore },
+        });
+      });
+      // 收到消息
+      socket.on('receivedMsg', msg => {
+        dispatch({
+          type: 'chat/receivedMsg',
+          msg,
+        });
+      });
       // 断开连接
       socket.on('disconnect', () => {
         if (socket.successReason) {

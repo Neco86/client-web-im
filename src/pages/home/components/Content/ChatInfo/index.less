@@ -7,3 +7,66 @@
     transform: translateY(-50%);
   }
 }
+.chatHeaderWrapper {
+  width: 100%;
+  height: 40px;
+  padding: 16px 20px;
+  font-weight: bold;
+  line-height: 8px;
+}
+.chatsWrapper {
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-bottom: 1px solid #eee;
+  .loadMore {
+    color: #1890ff;
+    text-align: center;
+    cursor: pointer;
+  }
+  .chatBubbleWrapper {
+    display: flex;
+    margin: 0 12px 24px;
+    .msg {
+      position: relative;
+      top: 16px;
+      margin: 0 18px;
+      padding: 6px 10px;
+      word-break: break-all;
+      border-radius: 6px;
+      &.self {
+        background-color: #d1effe;
+        border-top-right-radius: 0;
+        &::after {
+          position: absolute;
+          top: 0;
+          right: -10px;
+          border-top: 10px solid #d1effe;
+          border-right: 10px solid transparent;
+          content: '';
+        }
+      }
+      &.peer {
+        background-color: #f1f0f0;
+        border-top-left-radius: 0;
+        &::before {
+          position: absolute;
+          top: 0;
+          left: -10px;
+          border-top: 10px solid #f1f0f0;
+          border-left: 10px solid transparent;
+          content: '';
+        }
+      }
+    }
+  }
+}
+.sendAreaWrapper {
+  height: 160px;
+}
+.friendChatWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}

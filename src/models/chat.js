@@ -3,6 +3,8 @@ const ChatModel = {
   state: {
     recentChats: [],
     activeChat: [],
+    chats: [],
+    hasMore: false,
   },
   reducers: {
     setRecentChats(state, { recentChats }) {
@@ -15,6 +17,26 @@ const ChatModel = {
       return {
         ...state,
         activeChat,
+      };
+    },
+    setChats(state, { payload: { chats, page, hasMore } }) {
+      if (page === 0) {
+        return {
+          ...state,
+          chats,
+          hasMore,
+        };
+      }
+      return {
+        ...state,
+        chats: [...chats, ...state.chats],
+        hasMore,
+      };
+    },
+    receivedMsg(state, { msg }) {
+      return {
+        ...state,
+        chats: [...state.chats, msg],
       };
     },
   },

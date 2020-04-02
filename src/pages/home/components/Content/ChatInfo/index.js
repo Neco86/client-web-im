@@ -1,26 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
-import { Button, Empty } from 'antd';
+import { Empty } from 'antd';
+import { FRIEND_TYPE, MSG_TYPE } from '@/utils/const';
 import styles from './index.less';
+import FriendChat from './FriendChat';
+import GroupChat from './GroupChat';
 
 const ChatInfo = ({ activeChat: [type, peer], socket }) => {
-  const sendMsg = msg => {
-    socket.emit('sendMsg', { msg, type, peer });
-    socket.emit('setRecentChat', { peer, type, msg });
+  const [page, setPage] = useState(0);
+  const sendMsg = (msg, msgType) => {
+    socket.emit('sendMsg', { msg, type, peer, msgType });
+    if (msgType === MSG_TYPE.COMMON_CHAT) {
+      socket.emit('setRecentChat', { msg, type, peer });
+    }
+    // TODO: 文件类型,图片类型
+  };
+  useEffect(() => {
+    setPage(0);
+    if (type && peer) {
+      socket.emit('getChats', { type, peer, page });
+    }
+  }, [type, peer]);
+  useEffect(() => {
+    if (page) {
+      socket.emit('getChats', { type, peer, page });
+    }
+  }, [page]);
+  const loadMore = () => {
+    setPage(page + 1);
   };
   return (
     <div className={styles.chatInfoWrapper}>
       {type && peer ? (
         <>
-          {/* TODO: 获取聊天信息 */}
-          <Button
-            onClick={() => {
-              sendMsg(`test${Math.random()}`);
-            }}
-          >
-            send
-          </Button>
-          {type}:{peer}
+          {type === FRIEND_TYPE.FRIEND && <FriendChat sendMsg={sendMsg} loadMore={loadMore} />}
+          {type === FRIEND_TYPE.GROUP && <GroupChat sendMsg={sendMsg} loadMore={loadMore} />}
         </>
       ) : (
         <Empty description="" className={styles.empty} />
