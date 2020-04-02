@@ -33,8 +33,12 @@ const ChatInfo = ({ activeChat: [type, peer], socket }) => {
     <div className={styles.chatInfoWrapper}>
       {type && peer ? (
         <>
-          {type === FRIEND_TYPE.FRIEND && <FriendChat sendMsg={sendMsg} loadMore={loadMore} />}
-          {type === FRIEND_TYPE.GROUP && <GroupChat sendMsg={sendMsg} loadMore={loadMore} />}
+          {type === FRIEND_TYPE.FRIEND && (
+            <FriendChat sendMsg={sendMsg} loadMore={loadMore} page={page} />
+          )}
+          {type === FRIEND_TYPE.GROUP && (
+            <GroupChat sendMsg={sendMsg} loadMore={loadMore} page={page} />
+          )}
         </>
       ) : (
         <Empty description="" className={styles.empty} />

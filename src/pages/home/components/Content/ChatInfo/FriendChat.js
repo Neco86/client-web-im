@@ -6,7 +6,16 @@ import ChatHeader from './ChatHeader';
 import Chats from './Chats';
 import SendArea from './SendArea';
 
-const FriendChat = ({ chats, recentChats, activeChat, myAvatar, sendMsg, loadMore, hasMore }) => {
+const FriendChat = ({
+  chats,
+  recentChats,
+  activeChat,
+  myAvatar,
+  sendMsg,
+  loadMore,
+  hasMore,
+  page,
+}) => {
   const peer = recentChats.filter(
     chat => chat.type === activeChat[0] && chat.peer === activeChat[1],
   )[0];
@@ -21,6 +30,7 @@ const FriendChat = ({ chats, recentChats, activeChat, myAvatar, sendMsg, loadMor
         }))}
         loadMore={loadMore}
         hasMore={hasMore}
+        page={page}
       />
       <SendArea sendMsg={msg => sendMsg(msg, MSG_TYPE.COMMON_CHAT)} />
     </div>

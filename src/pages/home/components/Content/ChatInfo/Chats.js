@@ -2,33 +2,26 @@ import React, { useEffect, useRef, useState } from 'react';
 import ChatBubble from './ChatBubble';
 import styles from './index.less';
 
-const Chats = ({ chats, loadMore, hasMore }) => {
+const Chats = ({ chats, loadMore, hasMore, page }) => {
   const chatContent = useRef(null);
-  const [isLoadMore, setIsLoadMore] = useState(false);
+  const [height, setHeight] = useState(0);
   useEffect(() => {
     if (
       chatContent.current &&
       chatContent.current.scrollHeight > chatContent.current.clientHeight
     ) {
-      if (isLoadMore) {
-        setTimeout(() => {
-          setIsLoadMore(false);
-        }, 100);
-      } else {
+      if (page === 0) {
         chatContent.current.scrollTop = chatContent.current.scrollHeight;
+      } else {
+        chatContent.current.scrollTop += chatContent.current.scrollHeight - height;
       }
+      setHeight(chatContent.current.scrollHeight);
     }
-  }, [chats]);
+  }, [chats, page]);
   return (
     <div className={styles.chatsWrapper} ref={chatContent}>
       {hasMore && (
-        <div
-          className={styles.loadMore}
-          onClick={() => {
-            setIsLoadMore(true);
-            loadMore();
-          }}
-        >
+        <div className={styles.loadMore} onClick={loadMore}>
           加载更多
         </div>
       )}
