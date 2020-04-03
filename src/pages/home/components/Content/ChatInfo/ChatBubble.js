@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Avatar } from 'antd';
 import { DEFAULT_AVATAR } from '@/utils/const';
+import emoji from 'node-emoji';
 import styles from './index.less';
 
 const ChatBubble = ({ chat }) => (
@@ -11,7 +12,18 @@ const ChatBubble = ({ chat }) => (
     <div>
       <Avatar src={chat.avatar || DEFAULT_AVATAR} size="small" />
     </div>
-    <div className={`${styles.msg} ${chat.self ? styles.self : styles.peer}`}>{chat.msg}</div>
+    <div className={`${styles.msg} ${chat.self ? styles.self : styles.peer}`}>
+      {chat.msg.split('\n').map((msg, index) =>
+        index === 0 ? (
+          emoji.emojify(msg)
+        ) : (
+          <Fragment key={+index}>
+            <br />
+            {emoji.emojify(msg)}
+          </Fragment>
+        ),
+      )}
+    </div>
   </div>
 );
 

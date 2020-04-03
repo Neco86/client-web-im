@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { CloseOutlined } from '@ant-design/icons';
 import { DEFAULT_AVATAR } from '@/utils/const';
 import { Avatar, Badge } from 'antd';
+import emoji from 'node-emoji';
 import styles from './index.less';
 
 const getDateDesc = timestamp => {
@@ -61,7 +62,7 @@ const ChatCard = ({ chat, deleteCurrent, activeChat, socket }) => {
           <div className={styles.time}>{getDateDesc(chat.timestamp)}</div>
         </div>
         <div className={styles.bottom}>
-          <div className={styles.msg}>{chat.msg}</div>
+          <div className={styles.msg}>{emoji.emojify(chat.msg)}</div>
           <div className={styles.unread}>
             <Badge
               count={
