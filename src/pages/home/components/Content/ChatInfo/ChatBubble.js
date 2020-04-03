@@ -23,6 +23,7 @@ const ChatBubble = ({ chat }) => (
           </Fragment>
         ),
       )}
+      <div className={styles.name}>{chat.name}</div>
     </div>
   </div>
 );

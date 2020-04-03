@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Input, Popover } from 'antd';
 import {
   SmileOutlined,
@@ -11,10 +11,16 @@ import emoji from 'node-emoji';
 import Emoji from './Emoji';
 import styles from './index.less';
 
-const SendArea = ({ sendMsg }) => {
+const SendArea = ({ sendMsg, disabled, activeChat }) => {
   const inputEl = useRef(null);
   const [input, setInput] = useState('');
   const [emojiBox, setEmojiBox] = useState(false);
+  useEffect(() => {
+    if (activeChat) {
+      setInput('');
+      inputEl.current.focus();
+    }
+  }, [activeChat]);
   const onKeyDown = e => {
     const keyCode = e.keyCode || e.which || e.charCode;
     const ctrlKey = e.ctrlKey || e.metaKey;
@@ -45,7 +51,7 @@ const SendArea = ({ sendMsg }) => {
       <div className={styles.tools}>
         <Popover
           trigger="click"
-          visible={emojiBox}
+          visible={emojiBox && !disabled}
           content={<Emoji handleEmojiClick={handleEmojiClick} />}
           getPopupContainer={trigger => trigger.parentNode}
           autoFocus
@@ -73,8 +79,10 @@ const SendArea = ({ sendMsg }) => {
           onChange={e => {
             setInput(e.target.value);
           }}
+          placeholder={disabled ? '被禁言,无法发送消息!' : ''}
           onKeyDown={onKeyDown}
           ref={inputEl}
+          disabled={disabled}
         />
       </div>
     </div>

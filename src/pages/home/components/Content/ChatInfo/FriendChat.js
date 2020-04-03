@@ -32,7 +32,7 @@ const FriendChat = ({
         hasMore={hasMore}
         page={page}
       />
-      <SendArea sendMsg={msg => sendMsg(msg, MSG_TYPE.COMMON_CHAT)} />
+      <SendArea sendMsg={msg => sendMsg(msg, MSG_TYPE.COMMON_CHAT)} activeChat={activeChat} />
     </div>
   ) : (
     <></>

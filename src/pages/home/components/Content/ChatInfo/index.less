@@ -16,6 +16,7 @@
 }
 .chatsWrapper {
   flex: 1;
+  padding-top: 2px;
   overflow-x: hidden;
   overflow-y: auto;
   border-bottom: 1px solid #eee;
@@ -25,6 +26,7 @@
     cursor: pointer;
   }
   .chatBubbleWrapper {
+    position: relative;
     display: flex;
     margin: 0 12px 24px;
     color: #171616;
@@ -35,9 +37,19 @@
       padding: 6px 10px;
       word-break: break-all;
       border-radius: 6px;
+      .name {
+        position: absolute;
+        top: -22px;
+        color: #9fa6c7;
+        font-size: 13px;
+        word-break: keep-all;
+      }
       &.self {
         background-color: #d1effe;
         border-top-right-radius: 0;
+        .name {
+          right: -4px;
+        }
         &::after {
           position: absolute;
           top: 0;
@@ -50,6 +62,9 @@
       &.peer {
         background-color: #f1f0f0;
         border-top-left-radius: 0;
+        .name {
+          left: -4px;
+        }
         &::before {
           position: absolute;
           top: 0;
@@ -119,6 +134,14 @@
       border: none;
       box-shadow: none;
       resize: none;
+      &::-ms-input-placeholder {
+        line-height: 100px;
+        text-align: center;
+      }
+      &::-webkit-input-placeholder {
+        line-height: 100px;
+        text-align: center;
+      }
     }
   }
 }
@@ -127,4 +150,86 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
+}
+.groupChatWrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  .chatWrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+  .infoWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 180px;
+    background-color: #f5f5f8;
+    border-left: 1px solid #eee;
+    .note {
+      display: flex;
+      flex-direction: column;
+      height: 130px;
+      padding: 4px 12px;
+      border-bottom: 1px solid #eee;
+      .noteContent {
+        flex: 1;
+        overflow-y: auto;
+        word-break: break-all;
+        .empty {
+          :global {
+            .ant-empty-image {
+              height: 40px;
+              font-size: 40px;
+            }
+            .ant-empty-description {
+              font-size: 12px;
+            }
+          }
+        }
+      }
+    }
+    .member {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      .title {
+        margin: 6px 0;
+        padding: 4px 12px;
+      }
+      .members {
+        flex: 1;
+        overflow-y: auto;
+        .memberWrapper {
+          display: flex;
+          flex-direction: row;
+          width: 100%;
+          height: 30px;
+          padding: 2px 12px;
+          line-height: 26px;
+          cursor: pointer;
+          .avatar {
+            margin-right: 4px;
+          }
+          .name {
+            flex: 1;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            word-break: break-all;
+            &:hover {
+              color: #1890ff;
+            }
+          }
+          .permit {
+            width: 20px;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
 }

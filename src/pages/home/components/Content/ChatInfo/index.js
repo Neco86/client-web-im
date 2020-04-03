@@ -18,15 +18,11 @@ const ChatInfo = ({ activeChat: [type, peer], socket }) => {
   useEffect(() => {
     setPage(0);
     if (type && peer) {
-      socket.emit('getChats', { type, peer, page });
+      socket.emit('getChats', { type, peer, page: 0 });
     }
   }, [type, peer]);
-  useEffect(() => {
-    if (page) {
-      socket.emit('getChats', { type, peer, page });
-    }
-  }, [page]);
   const loadMore = () => {
+    socket.emit('getChats', { type, peer, page: page + 1 });
     setPage(page + 1);
   };
   return (

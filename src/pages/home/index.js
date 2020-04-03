@@ -373,6 +373,13 @@ function useSocket(dispatch) {
           msg,
         });
       });
+      // 获取群聊信息
+      socket.on('setGroupMemberInfo', info => {
+        dispatch({
+          type: 'chat/setGroupMemberInfo',
+          info,
+        });
+      });
       // 断开连接
       socket.on('disconnect', () => {
         if (socket.successReason) {

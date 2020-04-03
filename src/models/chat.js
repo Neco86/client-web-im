@@ -5,6 +5,7 @@ const ChatModel = {
     activeChat: [],
     chats: [],
     hasMore: false,
+    memberInfo: [],
   },
   reducers: {
     setRecentChats(state, { recentChats }) {
@@ -37,6 +38,12 @@ const ChatModel = {
       return {
         ...state,
         chats: [...state.chats, msg],
+      };
+    },
+    setGroupMemberInfo(state, { info }) {
+      return {
+        ...state,
+        memberInfo: info,
       };
     },
   },
