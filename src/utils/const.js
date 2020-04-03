@@ -81,6 +81,14 @@ const EDIT_FRIEND = {
   EXIT_GROUP: 'exitGroup',
 };
 
+const GROUP_MEMBER_EDIT = {
+  SET_MANAGER: 'setManager',
+  WITHDRAW_MANAGER: 'withdrawManager',
+  BANNED: 'banned',
+  WITHDRAW_BANNED: 'withdrawBanned',
+  TICK_OUT: 'tickOut',
+};
+
 module.exports = {
   SUCCESS_CODE,
   ERROR_CODE,
@@ -98,4 +106,5 @@ module.exports = {
   MENU_KEY,
   EDIT_GROUP,
   EDIT_FRIEND,
+  GROUP_MEMBER_EDIT,
 };

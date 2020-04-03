@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
 import { MSG_TYPE, FRIEND_TYPE, DEFAULT_AVATAR, GROUP_PERMIT } from '@/utils/const';
 import { BellOutlined, StarFilled, StopOutlined } from '@ant-design/icons';
-import { Empty, Avatar } from 'antd';
+import { Empty, Avatar, Dropdown } from 'antd';
 import styles from './index.less';
 import ChatHeader from './ChatHeader';
 import Chats from './Chats';
 import SendArea from './SendArea';
+import GroupMemberMenu from './GroupMemberHandler';
 
 const GroupChat = ({
   chats,
@@ -36,19 +37,20 @@ const GroupChat = ({
       socket.emit('getGroupMemberInfo', { chatKey: activeChat[1] });
     }
   }, [activeChat]);
-  return peer ? (
+  const [fullChats, setFullChats] = useState();
+  useEffect(() => {
+    setFullChats(
+      chats.map(chat => ({
+        ...chat,
+        ...memberInfo.filter(member => member.email === chat.peer)[0],
+      })),
+    );
+  }, [chats]);
+  return peer && fullChats ? (
     <div className={styles.groupChatWrapper}>
       <div className={styles.chatWrapper}>
         <ChatHeader name={peer.name} />
-        <Chats
-          chats={chats.map(chat => ({
-            ...chat,
-            ...memberInfo.filter(member => member.email === chat.peer)[0],
-          }))}
-          loadMore={loadMore}
-          hasMore={hasMore}
-          page={page}
-        />
+        <Chats chats={fullChats} loadMore={loadMore} hasMore={hasMore} page={page} />
         <SendArea
           sendMsg={msg => sendMsg(msg, MSG_TYPE.COMMON_CHAT)}
           disabled={groupBasicInfo.permit === GROUP_PERMIT.BANNED}
@@ -68,23 +70,30 @@ const GroupChat = ({
           <div className={styles.title}>成员 {groupBasicInfo.count}</div>
           <div className={styles.members}>
             {memberInfo.map(member => (
-              <div className={styles.memberWrapper} key={member.email}>
-                <Avatar
-                  src={member.avatar || DEFAULT_AVATAR}
-                  size="small"
-                  className={styles.avatar}
-                />
-                <div className={styles.name}>{member.name}</div>
-                <div className={styles.permit}>
-                  {member.permit === GROUP_PERMIT.OWNER && (
-                    <StarFilled style={{ color: '#F8AA1E' }} />
-                  )}
-                  {member.permit === GROUP_PERMIT.MANAGER && (
-                    <StarFilled style={{ color: '#66D046' }} />
-                  )}
-                  {member.permit === GROUP_PERMIT.BANNED && <StopOutlined />}
+              <Dropdown
+                overlay={<GroupMemberMenu peer={member} myPermit={groupBasicInfo.permit} />}
+                trigger={['click']}
+                getPopupContainer={trigger => trigger.parentNode}
+                key={member.email}
+              >
+                <div className={styles.memberWrapper}>
+                  <Avatar
+                    src={member.avatar || DEFAULT_AVATAR}
+                    size="small"
+                    className={styles.avatar}
+                  />
+                  <div className={styles.name}>{member.name}</div>
+                  <div className={styles.permit}>
+                    {member.permit === GROUP_PERMIT.OWNER && (
+                      <StarFilled style={{ color: '#F8AA1E' }} />
+                    )}
+                    {member.permit === GROUP_PERMIT.MANAGER && (
+                      <StarFilled style={{ color: '#66D046' }} />
+                    )}
+                    {member.permit === GROUP_PERMIT.BANNED && <StopOutlined />}
+                  </div>
                 </div>
-              </div>
+              </Dropdown>
             ))}
           </div>
         </div>
