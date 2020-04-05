@@ -19,6 +19,9 @@ const ChatInfo = ({ activeChat: [type, peer], socket }) => {
     if (msgType === MSG_TYPE.FILE) {
       socket.emit('setRecentChat', { msg: `[文件]${msg.name}`, type, peer });
     }
+    if (msgType === MSG_TYPE.FOLDER) {
+      socket.emit('setRecentChat', { msg: `[文件夹]${msg.folderName}`, type, peer });
+    }
   };
   useEffect(() => {
     setPage(0);

@@ -68,12 +68,21 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
   // 发送离线文件/文件夹
   const sendFileMsg = () => {
     if (selectedFile) {
-      sendMsg({ file: selectedFile, name: selectedFile.name }, MSG_TYPE.FILE);
+      sendMsg({ file: selectedFile[0], name: selectedFile[0].name }, MSG_TYPE.FILE);
       setSelectedFile('');
     }
     if (selectedFolder) {
-      sendMsg(selectedFolder, MSG_TYPE.FOLDER);
-      // console.log(selectedFolder);
+      const fileList = [];
+      Array.prototype.forEach.call(selectedFolder, file => {
+        if (file.name !== '.DS_Store') {
+          fileList.push({
+            file,
+            path: file.webkitRelativePath,
+          });
+        }
+      });
+      const name = selectedFolder[0].webkitRelativePath.split('/')[0];
+      sendMsg({ fileList, folderName: name }, MSG_TYPE.FOLDER);
       setSelectedFolder('');
     }
   };
@@ -167,7 +176,7 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
           setSelectedFile('');
         }}
         onChange={e => {
-          setSelectedFile(e.target.files[0]);
+          setSelectedFile(e.target.files);
         }}
       />
       <input
@@ -181,7 +190,7 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
           setSelectedFolder('');
         }}
         onChange={e => {
-          setSelectedFolder(e.target.files[0]);
+          setSelectedFolder(e.target.files);
         }}
       />
     </div>
