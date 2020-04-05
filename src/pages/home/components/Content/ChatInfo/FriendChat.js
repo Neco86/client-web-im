@@ -22,7 +22,7 @@ const FriendChat = ({
 
   return peer ? (
     <div className={styles.friendChatWrapper}>
-      <ChatHeader name={peer.name} />
+      <ChatHeader name={`${peer.name} (${peer.peer})`} />
       <Chats
         chats={chats.map(chat => ({
           ...chat,
