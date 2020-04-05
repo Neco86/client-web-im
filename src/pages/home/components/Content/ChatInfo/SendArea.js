@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Input, Popover, Dropdown, Menu } from 'antd';
+import { Input, Popover, Dropdown, Menu, Modal, Spin } from 'antd';
 import {
   SmileOutlined,
   PictureOutlined,
@@ -19,12 +19,16 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
   const uploadFolderInput = useRef({ current: { files: [] } });
   const [input, setInput] = useState('');
   const [emojiBox, setEmojiBox] = useState(false);
+  const [selectedFile, setSelectedFile] = useState();
+  const [selectedFolder, setSelectedFolder] = useState();
+
   useEffect(() => {
     if (activeChat) {
       setInput('');
       inputEl.current.focus();
     }
   }, [activeChat]);
+  // 输入框文字操作(换行/发送文字消息)
   const onKeyDown = e => {
     const keyCode = e.keyCode || e.which || e.charCode;
     const ctrlKey = e.ctrlKey || e.metaKey;
@@ -45,11 +49,13 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
     }
     return true;
   };
+  // 处理点击表情
   const handleEmojiClick = name => {
     setEmojiBox(false);
     setInput(`${input}${emoji.get(name)}`);
     inputEl.current.focus();
   };
+  // 发送图片消息
   const sendImgMsg = e => {
     const file = e.target.files[0];
     if (file) {
@@ -59,17 +65,16 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
       }
     }
   };
-  const sendFileMsg = e => {
-    const file = e.target.files[0];
-    if (file) {
-      sendMsg({ file, name: file.name }, MSG_TYPE.FILE);
+  // 发送离线文件/文件夹
+  const sendFileMsg = () => {
+    if (selectedFile) {
+      sendMsg({ file: selectedFile, name: selectedFile.name }, MSG_TYPE.FILE);
+      setSelectedFile('');
     }
-  };
-  const sendFolderMsg = e => {
-    const file = e.target.files[0];
-    if (file) {
-      // sendMsg({ file, name: file.name }, MSG_TYPE.FILE);
-      console.log(file);
+    if (selectedFolder) {
+      sendMsg(selectedFolder, MSG_TYPE.FOLDER);
+      // console.log(selectedFolder);
+      setSelectedFolder('');
     }
   };
   const onFileUploadMenuClick = ({ key }) => {
@@ -89,6 +94,19 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
   );
   return (
     <div className={styles.sendAreaWrapper}>
+      <Modal
+        visible={!!(selectedFile || selectedFolder)}
+        onCancel={() => {
+          setSelectedFile('');
+          setSelectedFolder('');
+        }}
+        onOk={sendFileMsg}
+        title={selectedFile ? '发送文件' : '发送文件夹'}
+        okText="离线发送"
+        cancelText="取消"
+      >
+        <Spin /> 等待对方接收{selectedFile ? '文件' : '文件夹'}
+      </Modal>
       <div className={styles.tools}>
         <Popover
           trigger="click"
@@ -140,14 +158,31 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
         style={{ display: 'none' }}
         onChange={sendImgMsg}
       />
-      <input ref={uploadFileInput} type="file" style={{ display: 'none' }} onChange={sendFileMsg} />
+      <input
+        ref={uploadFileInput}
+        type="file"
+        style={{ display: 'none' }}
+        onClick={e => {
+          e.target.value = '';
+          setSelectedFile('');
+        }}
+        onChange={e => {
+          setSelectedFile(e.target.files[0]);
+        }}
+      />
       <input
         ref={uploadFolderInput}
         type="file"
         multiple
         webkitdirectory=""
         style={{ display: 'none' }}
-        onChange={sendFolderMsg}
+        onClick={e => {
+          e.target.value = '';
+          setSelectedFolder('');
+        }}
+        onChange={e => {
+          setSelectedFolder(e.target.files[0]);
+        }}
       />
     </div>
   );
