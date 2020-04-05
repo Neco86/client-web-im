@@ -7,12 +7,14 @@ import {
   PhoneOutlined,
   CameraOutlined,
 } from '@ant-design/icons';
+import { MSG_TYPE } from '@/utils/const';
 import emoji from 'node-emoji';
 import Emoji from './Emoji';
 import styles from './index.less';
 
 const SendArea = ({ sendMsg, disabled, activeChat }) => {
   const inputEl = useRef(null);
+  const uploadImgInput = useRef({ current: { files: [] } });
   const [input, setInput] = useState('');
   const [emojiBox, setEmojiBox] = useState(false);
   useEffect(() => {
@@ -33,7 +35,7 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
     // 发送信息
     if (keyCode === 13) {
       if (input) {
-        sendMsg(emoji.unemojify(input));
+        sendMsg(emoji.unemojify(input), MSG_TYPE.COMMON_CHAT);
         setInput('');
       }
       e.preventDefault();
@@ -45,6 +47,15 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
     setEmojiBox(false);
     setInput(`${input}${emoji.get(name)}`);
     inputEl.current.focus();
+  };
+  const sendImgMsg = e => {
+    const file = e.target.files[0];
+    if (file) {
+      const type = file.type.split('/')[1];
+      if (['jpg', 'png', 'jpeg'].includes(type)) {
+        sendMsg({ file, type }, MSG_TYPE.PICTURE);
+      }
+    }
   };
   return (
     <div className={styles.sendAreaWrapper}>
@@ -66,7 +77,12 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
             }}
           />
         </Popover>
-        <PictureOutlined className={styles.tool} />
+        <PictureOutlined
+          className={styles.tool}
+          onClick={() => {
+            uploadImgInput.current.click();
+          }}
+        />
         <FolderOutlined className={styles.tool} />
         <PhoneOutlined className={styles.tool} />
         <CameraOutlined className={styles.tool} />
@@ -85,6 +101,13 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
           disabled={disabled}
         />
       </div>
+      <input
+        ref={uploadImgInput}
+        type="file"
+        accept="image/jpg, image/png"
+        style={{ display: 'none' }}
+        onChange={sendImgMsg}
+      />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
-import { MSG_TYPE, FRIEND_TYPE, GROUP_PERMIT } from '@/utils/const';
+import { FRIEND_TYPE, GROUP_PERMIT } from '@/utils/const';
 import styles from './index.less';
 import ChatHeader from './ChatHeader';
 import Chats from './Chats';
@@ -49,7 +49,7 @@ const GroupChat = ({
           page={page}
         />
         <SendArea
-          sendMsg={msg => sendMsg(msg, MSG_TYPE.COMMON_CHAT)}
+          sendMsg={sendMsg}
           disabled={groupBasicInfo.permit === GROUP_PERMIT.BANNED}
           activeChat={activeChat}
         />

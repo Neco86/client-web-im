@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'dva';
-import { MSG_TYPE } from '@/utils/const';
 import styles from './index.less';
 import ChatHeader from './ChatHeader';
 import Chats from './Chats';
@@ -32,7 +31,7 @@ const FriendChat = ({
         hasMore={hasMore}
         page={page}
       />
-      <SendArea sendMsg={msg => sendMsg(msg, MSG_TYPE.COMMON_CHAT)} activeChat={activeChat} />
+      <SendArea sendMsg={sendMsg} activeChat={activeChat} />
     </div>
   ) : (
     <></>

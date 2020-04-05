@@ -13,7 +13,12 @@ const ChatInfo = ({ activeChat: [type, peer], socket }) => {
     if (msgType === MSG_TYPE.COMMON_CHAT) {
       socket.emit('setRecentChat', { msg, type, peer });
     }
-    // TODO: 文件类型,图片类型
+    if (msgType === MSG_TYPE.PICTURE) {
+      socket.emit('setRecentChat', { msg: '[图片]', type, peer });
+    }
+    if (msgType === MSG_TYPE.FILE) {
+      socket.emit('setRecentChat', { msg: '[文件]', type, peer });
+    }
   };
   useEffect(() => {
     setPage(0);

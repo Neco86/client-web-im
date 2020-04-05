@@ -18,7 +18,7 @@ const UserModal = ({ visible, onCancel, socket, userInfo }) => {
     const file = e.target.files[0];
     if (file) {
       const type = file.type.split('/')[1];
-      if (['jpg', 'png'].includes(type)) {
+      if (['jpg', 'png', 'jpeg'].includes(type)) {
         socket.emit('setAvatar', { file, type });
       } else {
         message.error('文件类型不支持!');

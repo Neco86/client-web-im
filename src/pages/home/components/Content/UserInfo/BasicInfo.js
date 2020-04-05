@@ -12,7 +12,7 @@ const BasicInfo = ({ info, type, socket, dispatch }) => {
     const file = e.target.files[0];
     if (file) {
       const fileType = file.type.split('/')[1];
-      if (['jpg', 'png'].includes(fileType)) {
+      if (['jpg', 'png', 'jpeg'].includes(fileType)) {
         socket.emit('setGroupAvatar', { file, type: fileType, chatKey: info.chatKey });
       } else {
         message.error('文件类型不支持!');
