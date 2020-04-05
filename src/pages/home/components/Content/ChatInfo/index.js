@@ -17,7 +17,7 @@ const ChatInfo = ({ activeChat: [type, peer], socket }) => {
       socket.emit('setRecentChat', { msg: '[图片]', type, peer });
     }
     if (msgType === MSG_TYPE.FILE) {
-      socket.emit('setRecentChat', { msg: '[文件]', type, peer });
+      socket.emit('setRecentChat', { msg: `[文件]${msg.name}`, type, peer });
     }
   };
   useEffect(() => {

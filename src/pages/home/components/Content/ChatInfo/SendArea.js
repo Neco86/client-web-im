@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Input, Popover } from 'antd';
+import { Input, Popover, Dropdown, Menu } from 'antd';
 import {
   SmileOutlined,
   PictureOutlined,
@@ -15,6 +15,8 @@ import styles from './index.less';
 const SendArea = ({ sendMsg, disabled, activeChat }) => {
   const inputEl = useRef(null);
   const uploadImgInput = useRef({ current: { files: [] } });
+  const uploadFileInput = useRef({ current: { files: [] } });
+  const uploadFolderInput = useRef({ current: { files: [] } });
   const [input, setInput] = useState('');
   const [emojiBox, setEmojiBox] = useState(false);
   useEffect(() => {
@@ -57,6 +59,34 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
       }
     }
   };
+  const sendFileMsg = e => {
+    const file = e.target.files[0];
+    if (file) {
+      sendMsg({ file, name: file.name }, MSG_TYPE.FILE);
+    }
+  };
+  const sendFolderMsg = e => {
+    const file = e.target.files[0];
+    if (file) {
+      // sendMsg({ file, name: file.name }, MSG_TYPE.FILE);
+      console.log(file);
+    }
+  };
+  const onFileUploadMenuClick = ({ key }) => {
+    if (key === MSG_TYPE.FILE) {
+      uploadFileInput.current.click();
+    }
+    if (key === MSG_TYPE.FOLDER) {
+      uploadFolderInput.current.click();
+    }
+  };
+
+  const fileUploadMenu = (
+    <Menu onClick={onFileUploadMenuClick}>
+      <Menu.Item key={MSG_TYPE.FILE}>发送文件</Menu.Item>
+      <Menu.Item key={MSG_TYPE.FOLDER}>发送文件夹</Menu.Item>
+    </Menu>
+  );
   return (
     <div className={styles.sendAreaWrapper}>
       <div className={styles.tools}>
@@ -83,7 +113,9 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
             uploadImgInput.current.click();
           }}
         />
-        <FolderOutlined className={styles.tool} />
+        <Dropdown overlay={fileUploadMenu} trigger={['click']}>
+          <FolderOutlined className={styles.tool} />
+        </Dropdown>
         <PhoneOutlined className={styles.tool} />
         <CameraOutlined className={styles.tool} />
       </div>
@@ -107,6 +139,15 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
         accept="image/jpg, image/png"
         style={{ display: 'none' }}
         onChange={sendImgMsg}
+      />
+      <input ref={uploadFileInput} type="file" style={{ display: 'none' }} onChange={sendFileMsg} />
+      <input
+        ref={uploadFolderInput}
+        type="file"
+        multiple
+        webkitdirectory=""
+        style={{ display: 'none' }}
+        onChange={sendFolderMsg}
       />
     </div>
   );

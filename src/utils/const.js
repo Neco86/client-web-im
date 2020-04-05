@@ -56,6 +56,8 @@ const MSG_TYPE = {
   PICTURE: '6',
   // 文件
   FILE: '7',
+  // 文件夹
+  FOLDER: '8',
 };
 
 // permit 群聊权限

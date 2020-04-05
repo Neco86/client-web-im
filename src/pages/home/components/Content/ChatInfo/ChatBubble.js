@@ -1,7 +1,9 @@
 import React, { Fragment } from 'react';
 import { Avatar } from 'antd';
+import { FileTextOutlined, DownloadOutlined } from '@ant-design/icons';
 import { DEFAULT_AVATAR, MSG_TYPE } from '@/utils/const';
 import emoji from 'node-emoji';
+import FileSaver from 'file-saver';
 import styles from './index.less';
 
 const ChatBubble = ({ chat }) => (
@@ -27,7 +29,20 @@ const ChatBubble = ({ chat }) => (
       {chat.msgType === MSG_TYPE.PICTURE && (
         <img alt="" src={chat.msg} style={{ height: '200px' }} />
       )}
-      {chat.msgType === MSG_TYPE.FILE && <div>TODO: 文件</div>}
+      {chat.msgType === MSG_TYPE.FILE && (
+        <div>
+          <FileTextOutlined />
+          {JSON.parse(chat.msg).name}
+          <a
+            onClick={() => {
+              const { src, name } = JSON.parse(chat.msg);
+              FileSaver.saveAs(src, name);
+            }}
+          >
+            <DownloadOutlined />
+          </a>
+        </div>
+      )}
       <div className={styles.name}>{chat.name}</div>
     </div>
   </div>
