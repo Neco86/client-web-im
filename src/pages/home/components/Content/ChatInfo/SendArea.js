@@ -88,8 +88,13 @@ const SendArea = ({
   };
   // 发送 离线/在线 文件/文件夹
   const sendFileMsg = (key, save) => {
+    // noSetRecentChat: key && !save 同意接收文件后的接收文件,此时不用更新侧边数据,因为之前agree的时候已经更新了
     if (selectedFile) {
-      sendMsg({ file: selectedFile[0], name: selectedFile[0].name, key, save }, MSG_TYPE.FILE);
+      sendMsg(
+        { file: selectedFile[0], name: selectedFile[0].name, key, save },
+        MSG_TYPE.FILE,
+        key && !save,
+      );
       setSelectedFile('');
     }
     if (selectedFolder) {
@@ -103,7 +108,7 @@ const SendArea = ({
         }
       });
       const name = selectedFolder[0].webkitRelativePath.split('/')[0];
-      sendMsg({ fileList, folderName: name, key, save }, MSG_TYPE.FOLDER);
+      sendMsg({ fileList, folderName: name, key, save }, MSG_TYPE.FOLDER, key && !save);
       setSelectedFolder('');
     }
   };

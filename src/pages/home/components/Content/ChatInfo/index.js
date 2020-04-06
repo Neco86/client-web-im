@@ -8,35 +8,39 @@ import GroupChat from './GroupChat';
 
 const ChatInfo = ({ activeChat: [type, peer], socket }) => {
   const [page, setPage] = useState(0);
-  const sendMsg = (msg, msgType) => {
+  const sendMsg = (msg, msgType, noSetRecentChat) => {
     socket.emit('sendMsg', { msg, type, peer, msgType });
-    const pre = PREFIX_MSG_TYPE[msgType];
-    let endName = '';
-    switch (msgType) {
-      case MSG_TYPE.COMMON_CHAT:
-        endName = msg;
-        break;
-      case MSG_TYPE.PICTURE:
-        endName = '';
-        break;
-      case MSG_TYPE.FILE:
-        endName = msg.name;
-        break;
-      case MSG_TYPE.FOLDER:
-        endName = msg.folderName;
-        break;
-      case MSG_TYPE.ONLINE_FILE:
-        endName = msg;
-        break;
-      case MSG_TYPE.ONLINE_FOLDER:
-        endName = msg;
-        break;
-      default:
-        endName = msg.msg;
-        break;
+    // noSetRecentChat默认不传为undefined,修改侧边数据
+    // 同意文件传输后传输文件的时候传true
+    if (!noSetRecentChat) {
+      const pre = PREFIX_MSG_TYPE[msgType];
+      let endName = '';
+      switch (msgType) {
+        case MSG_TYPE.COMMON_CHAT:
+          endName = msg;
+          break;
+        case MSG_TYPE.PICTURE:
+          endName = '';
+          break;
+        case MSG_TYPE.FILE:
+          endName = msg.name;
+          break;
+        case MSG_TYPE.FOLDER:
+          endName = msg.folderName;
+          break;
+        case MSG_TYPE.ONLINE_FILE:
+          endName = msg;
+          break;
+        case MSG_TYPE.ONLINE_FOLDER:
+          endName = msg;
+          break;
+        default:
+          endName = msg.msg;
+          break;
+      }
+      endName = `${pre}${endName}`;
+      socket.emit('setRecentChat', { msg: endName, type, peer, msgType });
     }
-    endName = `${pre}${endName}`;
-    socket.emit('setRecentChat', { msg: endName, type, peer, msgType });
   };
   useEffect(() => {
     setPage(0);

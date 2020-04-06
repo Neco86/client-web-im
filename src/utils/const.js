@@ -87,11 +87,8 @@ const PREFIX_MSG_TYPE = {
   [MSG_TYPE.ONLINE_FOLDER]: '[发送在线文件夹]',
   [MSG_TYPE.CANCEL_ONLINE_FOLDER]: '[取消发送在线文件夹]',
   [MSG_TYPE.DISAGREE_ONLINE_FOLDER]: '[拒绝接收在线文件夹]',
-  // 以下两个会被替换
-  // [MSG_TYPE.AGREE_ONLINE_FILE]: '[同意接收在线文件]',
-  // [MSG_TYPE.AGREE_ONLINE_FOLDER]: '[同意接收在线文件夹]',
-  [MSG_TYPE.AGREE_ONLINE_FILE]: '[文件]',
-  [MSG_TYPE.AGREE_ONLINE_FOLDER]: '[文件夹]',
+  [MSG_TYPE.AGREE_ONLINE_FILE]: '[同意接收在线文件]',
+  [MSG_TYPE.AGREE_ONLINE_FOLDER]: '[同意接收在线文件夹]',
 };
 
 // permit 群聊权限
