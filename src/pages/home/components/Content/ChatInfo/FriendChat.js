@@ -5,16 +5,7 @@ import ChatHeader from './ChatHeader';
 import Chats from './Chats';
 import SendArea from './SendArea';
 
-const FriendChat = ({
-  chats,
-  recentChats,
-  activeChat,
-  myAvatar,
-  sendMsg,
-  loadMore,
-  hasMore,
-  page,
-}) => {
+const FriendChat = ({ chats, recentChats, activeChat, myAvatar, sendMsg, loadMore, page }) => {
   const peer = recentChats.filter(
     chat => chat.type === activeChat[0] && chat.peer === activeChat[1],
   )[0];
@@ -28,10 +19,10 @@ const FriendChat = ({
           avatar: chat.self ? myAvatar : peer.avatar,
         }))}
         loadMore={loadMore}
-        hasMore={hasMore}
         page={page}
+        sendMsg={sendMsg}
       />
-      <SendArea sendMsg={sendMsg} activeChat={activeChat} />
+      <SendArea sendMsg={sendMsg} />
     </div>
   ) : (
     <></>
@@ -44,5 +35,4 @@ export default connect(({ global, chat, userInfo }) => ({
   recentChats: chat.recentChats,
   chats: chat.chats,
   myAvatar: userInfo.avatar,
-  hasMore: chat.hasMore,
 }))(FriendChat);

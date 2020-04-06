@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
 import { Empty } from 'antd';
-import { FRIEND_TYPE, MSG_TYPE } from '@/utils/const';
+import { FRIEND_TYPE, MSG_TYPE, PREFIX_MSG_TYPE } from '@/utils/const';
 import styles from './index.less';
 import FriendChat from './FriendChat';
 import GroupChat from './GroupChat';
@@ -10,18 +10,33 @@ const ChatInfo = ({ activeChat: [type, peer], socket }) => {
   const [page, setPage] = useState(0);
   const sendMsg = (msg, msgType) => {
     socket.emit('sendMsg', { msg, type, peer, msgType });
-    if (msgType === MSG_TYPE.COMMON_CHAT) {
-      socket.emit('setRecentChat', { msg, type, peer });
+    const pre = PREFIX_MSG_TYPE[msgType];
+    let endName = '';
+    switch (msgType) {
+      case MSG_TYPE.COMMON_CHAT:
+        endName = msg;
+        break;
+      case MSG_TYPE.PICTURE:
+        endName = '';
+        break;
+      case MSG_TYPE.FILE:
+        endName = msg.name;
+        break;
+      case MSG_TYPE.FOLDER:
+        endName = msg.folderName;
+        break;
+      case MSG_TYPE.ONLINE_FILE:
+        endName = msg;
+        break;
+      case MSG_TYPE.ONLINE_FOLDER:
+        endName = msg;
+        break;
+      default:
+        endName = msg.msg;
+        break;
     }
-    if (msgType === MSG_TYPE.PICTURE) {
-      socket.emit('setRecentChat', { msg: '[图片]', type, peer });
-    }
-    if (msgType === MSG_TYPE.FILE) {
-      socket.emit('setRecentChat', { msg: `[文件]${msg.name}`, type, peer });
-    }
-    if (msgType === MSG_TYPE.FOLDER) {
-      socket.emit('setRecentChat', { msg: `[文件夹]${msg.folderName}`, type, peer });
-    }
+    endName = `${pre}${endName}`;
+    socket.emit('setRecentChat', { msg: endName, type, peer, msgType });
   };
   useEffect(() => {
     setPage(0);

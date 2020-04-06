@@ -8,10 +8,13 @@ import {
   EDIT_GROUP,
   EDIT_FRIEND,
   MENU_KEY,
+  MSG_TYPE,
 } from '@/utils/const';
 import { message, notification, Avatar } from 'antd';
 import io from 'socket.io-client';
 import { connect } from 'dva';
+import FileSaver from 'file-saver';
+import { ZIP } from '@/utils/zip';
 import router from 'umi/router';
 import Header from './components/Header';
 import Sider from './components/Sider';
@@ -372,6 +375,65 @@ function useSocket(dispatch) {
           type: 'chat/receivedMsg',
           msg,
         });
+        if (msg.msgType === MSG_TYPE.DISAGREE_ONLINE_FILE) {
+          dispatch({
+            type: 'chat/setSelectedFile',
+            selectedFile: '',
+          });
+        }
+        if (msg.msgType === MSG_TYPE.DISAGREE_ONLINE_FOLDER) {
+          dispatch({
+            type: 'chat/setSelectedFolder',
+            selectedFolder: '',
+          });
+        }
+        // 对方同意了接收文件,设置key,请求文件数据
+        if (
+          msg.msgType === MSG_TYPE.AGREE_ONLINE_FILE ||
+          msg.msgType === MSG_TYPE.AGREE_ONLINE_FOLDER
+        ) {
+          dispatch({
+            type: 'chat/setAgree',
+            agree: msg.key,
+          });
+        }
+        // 自己请求发送文件,保存key,以便后续更改为离线
+        if (
+          (msg.msgType === MSG_TYPE.ONLINE_FILE || msg.msgType === MSG_TYPE.ONLINE_FOLDER) &&
+          msg.self
+        ) {
+          dispatch({
+            type: 'chat/setFileKey',
+            fileKey: msg.key,
+          });
+        }
+      });
+      // 同意接收文件后收到的文件
+      socket.on('receivedFile', params => {
+        const { msgType } = params;
+        if (msgType === MSG_TYPE.FILE) {
+          const {
+            msg: { file, name },
+          } = params;
+          FileSaver.saveAs(new Blob([file]), name);
+        }
+        if (msgType === MSG_TYPE.FOLDER) {
+          const {
+            msg: { fileList, folderName },
+          } = params;
+          const readableStream = new ZIP({
+            start(ctrl) {
+              for (let i = 0; i < fileList.length; i += 1) {
+                const { file, path } = fileList[i];
+                ctrl.enqueue(new File([new Blob([file])], path));
+              }
+              ctrl.close();
+            },
+          });
+          new Response(readableStream).blob().then(blob => {
+            FileSaver.saveAs(blob, `${folderName}.zip`);
+          });
+        }
       });
       // 获取群聊信息
       socket.on('setGroupMemberInfo', info => {

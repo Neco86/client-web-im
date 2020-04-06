@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { connect } from 'dva';
 import ChatBubble from './ChatBubble';
 import styles from './index.less';
 
-const Chats = ({ chats, loadMore, hasMore, page }) => {
+const Chats = ({ chats, loadMore, hasMore, page, sendMsg }) => {
   const chatContent = useRef(null);
   const [height, setHeight] = useState(0);
   useEffect(() => {
@@ -26,10 +27,12 @@ const Chats = ({ chats, loadMore, hasMore, page }) => {
         </div>
       )}
       {chats.map(chat => (
-        <ChatBubble key={chat.key} chat={chat} />
+        <ChatBubble key={chat.key} chat={chat} sendMsg={sendMsg} />
       ))}
     </div>
   );
 };
 
-export default Chats;
+export default connect(({ chat }) => ({
+  hasMore: chat.hasMore,
+}))(Chats);

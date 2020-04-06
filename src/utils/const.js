@@ -58,10 +58,40 @@ const MSG_TYPE = {
   FILE: '7',
   // 离线文件夹
   FOLDER: '8',
-  // 在线文件
+  // 请求发送在线文件
   ONLINE_FILE: '9',
-  // 在线文件夹
-  ONLINE_FOLDER: '10',
+  // 同意在线文件
+  AGREE_ONLINE_FILE: '10',
+  // 拒绝在线文件
+  DISAGREE_ONLINE_FILE: '11',
+  // 取消发送在线文件
+  CANCEL_ONLINE_FILE: '12',
+  // 请求发送在线文件夹
+  ONLINE_FOLDER: '13',
+  // 同意在线文件夹
+  AGREE_ONLINE_FOLDER: '14',
+  // 拒绝在线文件夹
+  DISAGREE_ONLINE_FOLDER: '15',
+  // 取消发送在线文件夹
+  CANCEL_ONLINE_FOLDER: '16',
+};
+
+const PREFIX_MSG_TYPE = {
+  [MSG_TYPE.COMMON_CHAT]: '',
+  [MSG_TYPE.PICTURE]: '[图片]',
+  [MSG_TYPE.FILE]: '[文件]',
+  [MSG_TYPE.FOLDER]: '[文件夹]',
+  [MSG_TYPE.ONLINE_FILE]: '[发送在线文件]',
+  [MSG_TYPE.CANCEL_ONLINE_FILE]: '[取消发送在线文件]',
+  [MSG_TYPE.DISAGREE_ONLINE_FILE]: '[拒绝接收在线文件]',
+  [MSG_TYPE.ONLINE_FOLDER]: '[发送在线文件夹]',
+  [MSG_TYPE.CANCEL_ONLINE_FOLDER]: '[取消发送在线文件夹]',
+  [MSG_TYPE.DISAGREE_ONLINE_FOLDER]: '[拒绝接收在线文件夹]',
+  // 以下两个会被替换
+  // [MSG_TYPE.AGREE_ONLINE_FILE]: '[同意接收在线文件]',
+  // [MSG_TYPE.AGREE_ONLINE_FOLDER]: '[同意接收在线文件夹]',
+  [MSG_TYPE.AGREE_ONLINE_FILE]: '[文件]',
+  [MSG_TYPE.AGREE_ONLINE_FOLDER]: '[文件夹]',
 };
 
 // permit 群聊权限
@@ -117,4 +147,5 @@ module.exports = {
   EDIT_GROUP,
   EDIT_FRIEND,
   GROUP_MEMBER_EDIT,
+  PREFIX_MSG_TYPE,
 };

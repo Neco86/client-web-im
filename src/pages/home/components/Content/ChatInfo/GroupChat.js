@@ -13,7 +13,6 @@ const GroupChat = ({
   activeChat,
   sendMsg,
   loadMore,
-  hasMore,
   page,
   socket,
   memberInfo,
@@ -45,14 +44,10 @@ const GroupChat = ({
             ...memberInfo.filter(member => member.email === chat.peer)[0],
           }))}
           loadMore={loadMore}
-          hasMore={hasMore}
           page={page}
-        />
-        <SendArea
           sendMsg={sendMsg}
-          disabled={groupBasicInfo.permit === GROUP_PERMIT.BANNED}
-          activeChat={activeChat}
         />
+        <SendArea sendMsg={sendMsg} disabled={groupBasicInfo.permit === GROUP_PERMIT.BANNED} />
       </div>
       <GroupChatInfo groupBasicInfo={groupBasicInfo} memberInfo={memberInfo} />
     </div>
@@ -67,6 +62,5 @@ export default connect(({ global, chat, userGroups }) => ({
   recentChats: chat.recentChats,
   chats: chat.chats,
   memberInfo: chat.memberInfo,
-  hasMore: chat.hasMore,
   groupGroups: userGroups.groupGroups,
 }))(GroupChat);

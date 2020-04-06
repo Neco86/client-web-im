@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Input, Popover, Dropdown, Menu, Modal, Spin } from 'antd';
+import { connect } from 'dva';
 import {
   SmileOutlined,
   PictureOutlined,
@@ -7,20 +8,40 @@ import {
   PhoneOutlined,
   CameraOutlined,
 } from '@ant-design/icons';
-import { MSG_TYPE } from '@/utils/const';
+import { MSG_TYPE, FRIEND_TYPE } from '@/utils/const';
 import emoji from 'node-emoji';
 import Emoji from './Emoji';
 import styles from './index.less';
 
-const SendArea = ({ sendMsg, disabled, activeChat }) => {
+const SendArea = ({
+  sendMsg,
+  disabled,
+  activeChat,
+  chats,
+  selectedFolder,
+  selectedFile,
+  dispatch,
+  agree,
+  fileKey,
+}) => {
   const inputEl = useRef(null);
   const uploadImgInput = useRef({ current: { files: [] } });
   const uploadFileInput = useRef({ current: { files: [] } });
   const uploadFolderInput = useRef({ current: { files: [] } });
   const [input, setInput] = useState('');
   const [emojiBox, setEmojiBox] = useState(false);
-  const [selectedFile, setSelectedFile] = useState();
-  const [selectedFolder, setSelectedFolder] = useState();
+  const setSelectedFile = s1 => {
+    dispatch({
+      type: 'chat/setSelectedFile',
+      selectedFile: s1,
+    });
+  };
+  const setSelectedFolder = s2 => {
+    dispatch({
+      type: 'chat/setSelectedFolder',
+      selectedFolder: s2,
+    });
+  };
 
   useEffect(() => {
     if (activeChat) {
@@ -65,10 +86,10 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
       }
     }
   };
-  // 发送离线文件/文件夹
-  const sendFileMsg = () => {
+  // 发送 离线/在线 文件/文件夹
+  const sendFileMsg = (key, save) => {
     if (selectedFile) {
-      sendMsg({ file: selectedFile[0], name: selectedFile[0].name }, MSG_TYPE.FILE);
+      sendMsg({ file: selectedFile[0], name: selectedFile[0].name, key, save }, MSG_TYPE.FILE);
       setSelectedFile('');
     }
     if (selectedFolder) {
@@ -82,7 +103,7 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
         }
       });
       const name = selectedFolder[0].webkitRelativePath.split('/')[0];
-      sendMsg({ fileList, folderName: name }, MSG_TYPE.FOLDER);
+      sendMsg({ fileList, folderName: name, key, save }, MSG_TYPE.FOLDER);
       setSelectedFolder('');
     }
   };
@@ -101,15 +122,49 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
       <Menu.Item key={MSG_TYPE.FOLDER}>发送文件夹</Menu.Item>
     </Menu>
   );
+  useEffect(() => {
+    if (activeChat[0] === FRIEND_TYPE.GROUP) {
+      sendFileMsg(false, true);
+    }
+    if (activeChat[0] === FRIEND_TYPE.FRIEND) {
+      if (selectedFile) {
+        sendMsg(selectedFile[0].name, MSG_TYPE.ONLINE_FILE);
+      }
+      if (selectedFolder) {
+        sendMsg(selectedFolder[0].webkitRelativePath.split('/')[0], MSG_TYPE.ONLINE_FOLDER);
+      }
+    }
+  }, [selectedFile, selectedFolder]);
+  useEffect(() => {
+    if (agree) {
+      sendFileMsg(agree, false);
+      dispatch({
+        type: 'chat/setAgree',
+        agree: '',
+      });
+    }
+  }, [agree]);
   return (
     <div className={styles.sendAreaWrapper}>
       <Modal
-        visible={!!(selectedFile || selectedFolder)}
+        visible={!!((selectedFile || selectedFolder) && activeChat[0] === FRIEND_TYPE.FRIEND)}
         onCancel={() => {
-          setSelectedFile('');
-          setSelectedFolder('');
+          if (selectedFile) {
+            sendMsg(
+              chats.filter(chat => chat.msgType === MSG_TYPE.ONLINE_FILE && chat.self)[0],
+              MSG_TYPE.CANCEL_ONLINE_FILE,
+            );
+            setSelectedFile('');
+          }
+          if (selectedFolder) {
+            sendMsg(
+              chats.filter(chat => chat.msgType === MSG_TYPE.ONLINE_FOLDER && chat.self)[0],
+              MSG_TYPE.CANCEL_ONLINE_FOLDER,
+            );
+            setSelectedFolder('');
+          }
         }}
-        onOk={sendFileMsg}
+        onOk={() => sendFileMsg(fileKey, true)}
         title={selectedFile ? '发送文件' : '发送文件夹'}
         okText="离线发送"
         cancelText="取消"
@@ -197,4 +252,11 @@ const SendArea = ({ sendMsg, disabled, activeChat }) => {
   );
 };
 
-export default SendArea;
+export default connect(({ chat }) => ({
+  activeChat: chat.activeChat,
+  chats: chat.chats,
+  selectedFile: chat.selectedFile,
+  selectedFolder: chat.selectedFolder,
+  agree: chat.agree,
+  fileKey: chat.fileKey,
+}))(SendArea);

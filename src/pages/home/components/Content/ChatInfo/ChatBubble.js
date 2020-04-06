@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Avatar } from 'antd';
+import { Avatar, Button } from 'antd';
 import { FileTextOutlined, DownloadOutlined, FolderOpenOutlined } from '@ant-design/icons';
 import { DEFAULT_AVATAR, MSG_TYPE } from '@/utils/const';
 import emoji from 'node-emoji';
@@ -7,7 +7,7 @@ import FileSaver from 'file-saver';
 import { ZIP } from '@/utils/zip';
 import styles from './index.less';
 
-const ChatBubble = ({ chat }) => (
+const ChatBubble = ({ chat, sendMsg }) => (
   <div
     className={styles.chatBubbleWrapper}
     style={{ flexDirection: `${chat.self ? 'row-reverse' : 'row'}` }}
@@ -72,6 +72,174 @@ const ChatBubble = ({ chat }) => (
           >
             <DownloadOutlined />
           </a>
+        </div>
+      )}
+      {chat.msgType === MSG_TYPE.ONLINE_FILE && (
+        <div>
+          {chat.self ? (
+            <>
+              等待对方接收文件
+              <FileTextOutlined />
+              {chat.msg}
+            </>
+          ) : (
+            <>
+              对方请求发送文件
+              <FileTextOutlined />
+              {chat.msg}
+              <Button
+                type="primary"
+                onClick={() => {
+                  sendMsg(chat, MSG_TYPE.AGREE_ONLINE_FILE);
+                }}
+              >
+                接收
+              </Button>
+              <Button
+                type="danger"
+                onClick={() => {
+                  sendMsg(chat, MSG_TYPE.DISAGREE_ONLINE_FILE);
+                }}
+              >
+                拒绝
+              </Button>
+            </>
+          )}
+        </div>
+      )}
+      {chat.msgType === MSG_TYPE.ONLINE_FOLDER && (
+        <div>
+          {chat.self ? (
+            <>
+              等待对方接收文件夹
+              <FolderOpenOutlined />
+              {chat.msg}
+            </>
+          ) : (
+            <>
+              对方请求发送文件夹
+              <FolderOpenOutlined />
+              {chat.msg}
+              <Button
+                type="primary"
+                onClick={() => {
+                  sendMsg(chat, MSG_TYPE.AGREE_ONLINE_FOLDER);
+                }}
+              >
+                接收
+              </Button>
+              <Button
+                type="danger"
+                onClick={() => {
+                  sendMsg(chat, MSG_TYPE.DISAGREE_ONLINE_FOLDER);
+                }}
+              >
+                拒绝
+              </Button>
+            </>
+          )}
+        </div>
+      )}
+      {chat.msgType === MSG_TYPE.CANCEL_ONLINE_FILE && (
+        <div>
+          {chat.self ? (
+            <>
+              取消发送在线文件
+              <FileTextOutlined />
+              {chat.msg}
+            </>
+          ) : (
+            <>
+              对方已取消发送在线文件
+              <FileTextOutlined />
+              {chat.msg}
+            </>
+          )}
+        </div>
+      )}
+      {chat.msgType === MSG_TYPE.CANCEL_ONLINE_FOLDER && (
+        <div>
+          {chat.self ? (
+            <>
+              取消发送在线文件夹
+              <FolderOpenOutlined />
+              {chat.msg}
+            </>
+          ) : (
+            <>
+              对方已取消发送在线文件夹
+              <FolderOpenOutlined />
+              {chat.msg}
+            </>
+          )}
+        </div>
+      )}
+      {chat.msgType === MSG_TYPE.AGREE_ONLINE_FILE && (
+        <div>
+          {chat.self ? (
+            <>
+              已同意接收在线文件
+              <FileTextOutlined />
+              {chat.msg}
+            </>
+          ) : (
+            <>
+              对方同意接收在线文件
+              <FileTextOutlined />
+              {chat.msg}
+            </>
+          )}
+        </div>
+      )}
+      {chat.msgType === MSG_TYPE.AGREE_ONLINE_FOLDER && (
+        <div>
+          {chat.self ? (
+            <>
+              已同意接收在线文件夹
+              <FolderOpenOutlined />
+              {chat.msg}
+            </>
+          ) : (
+            <>
+              对方同意接收在线文件夹
+              <FolderOpenOutlined />
+              {chat.msg}
+            </>
+          )}
+        </div>
+      )}
+      {chat.msgType === MSG_TYPE.DISAGREE_ONLINE_FILE && (
+        <div>
+          {chat.self ? (
+            <>
+              已拒绝接收在线文件
+              <FileTextOutlined />
+              {chat.msg}
+            </>
+          ) : (
+            <>
+              对方拒绝接收在线文件
+              <FileTextOutlined />
+              {chat.msg}
+            </>
+          )}
+        </div>
+      )}
+      {chat.msgType === MSG_TYPE.DISAGREE_ONLINE_FOLDER && (
+        <div>
+          {chat.self ? (
+            <>
+              已拒绝接收在线文件夹
+              <FolderOpenOutlined />
+              {chat.msg}
+            </>
+          ) : (
+            <>
+              对方拒绝接收在线文件夹
+              <FolderOpenOutlined />
+              {chat.msg}
+            </>
+          )}
         </div>
       )}
       <div className={styles.name}>{chat.name}</div>
