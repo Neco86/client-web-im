@@ -263,6 +263,7 @@ function useSocket(dispatch) {
           default:
             break;
         }
+        socket.emit('getRecentChat');
         dispatch({
           type: 'addressBook/setActiveMenu',
           activeMenu: [],
@@ -436,11 +437,18 @@ function useSocket(dispatch) {
         }
       });
       // 获取群聊信息
-      socket.on('setGroupMemberInfo', info => {
+      socket.on('setGroupMemberInfo', ({ info, chatKey }) => {
         dispatch({
           type: 'chat/setGroupMemberInfo',
-          info,
+          payload: { info, chatKey },
         });
+      });
+      // 设置群聊成员权限
+      socket.on('setPermit', info => {
+        socket.emit('getGroupMemberInfo', { chatKey: info.chatKey });
+        if (info.tickOut) {
+          socket.emit('getRecentChat');
+        }
       });
       // 断开连接
       socket.on('disconnect', () => {

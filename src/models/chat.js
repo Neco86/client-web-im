@@ -1,3 +1,5 @@
+import { FRIEND_TYPE } from '@/utils/const';
+
 const ChatModel = {
   namespace: 'chat',
   state: {
@@ -50,10 +52,15 @@ const ChatModel = {
         chats: [...state.chats, msg],
       };
     },
-    setGroupMemberInfo(state, { info }) {
+    setGroupMemberInfo(state, { payload: { info, chatKey } }) {
+      if (state.activeChat[0] === FRIEND_TYPE.GROUP && state.activeChat[1] === chatKey) {
+        return {
+          ...state,
+          memberInfo: info,
+        };
+      }
       return {
         ...state,
-        memberInfo: info,
       };
     },
     setSelectedFile(state, { selectedFile }) {
