@@ -11,6 +11,7 @@ import {
 import { MSG_TYPE, FRIEND_TYPE } from '@/utils/const';
 import emoji from 'node-emoji';
 import Emoji from './Emoji';
+import MediaChat from './MediaChat';
 import styles from './index.less';
 
 const SendArea = ({
@@ -176,6 +177,7 @@ const SendArea = ({
       >
         <Spin /> 等待对方接收{selectedFile ? '文件' : '文件夹'}
       </Modal>
+      <MediaChat />
       <div className={styles.tools}>
         <Popover
           trigger="click"
@@ -203,8 +205,24 @@ const SendArea = ({
         <Dropdown overlay={fileUploadMenu} trigger={['click']}>
           <FolderOutlined className={styles.tool} />
         </Dropdown>
-        <PhoneOutlined className={styles.tool} />
-        <CameraOutlined className={styles.tool} />
+        <PhoneOutlined
+          className={styles.tool}
+          onClick={() => {
+            dispatch({
+              type: 'mediaChat/setMediaChat',
+              mediaChat: [true, false],
+            });
+          }}
+        />
+        <CameraOutlined
+          className={styles.tool}
+          onClick={() => {
+            dispatch({
+              type: 'mediaChat/setMediaChat',
+              mediaChat: [true, true],
+            });
+          }}
+        />
       </div>
       <div className={styles.textarea}>
         <Input.TextArea

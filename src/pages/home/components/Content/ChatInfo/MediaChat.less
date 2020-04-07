@@ -1,0 +1,70 @@
+.mediaChatModal {
+  :global {
+    .ant-modal-content {
+      position: absolute;
+      top: -6vh;
+      left: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 80vw;
+      max-width: 1280px;
+      height: 80vh;
+      transform: translate(-50%, 0);
+    }
+    .ant-modal-body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+    }
+    .ant-spin-spinning {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+  .mediaChatWrapper {
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+    .video {
+      width: 100%;
+      height: 100%;
+      background-color: #eee;
+      border: 1px solid red;
+    }
+    .friendMediaWrapper {
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      .videoWrapper {
+        position: relative;
+        float: left;
+        width: 50%;
+        height: 100%;
+        padding: 0 10px 10px;
+      }
+    }
+    .groupMediaWrapper {
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      .videoWrapper {
+        position: relative;
+        float: left;
+        padding: 0 10px 10px;
+        .desc {
+          position: absolute;
+          bottom: 20px;
+          left: 20px;
+        }
+      }
+    }
+  }
+  .hangUpBtn {
+    width: 100%;
+  }
+}
