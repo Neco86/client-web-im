@@ -1,14 +1,13 @@
 const MediaChatModel = {
   namespace: 'mediaChat',
   state: {
-    // [audio,video]
-    mediaChat: [false, false],
+    visible: false,
   },
   reducers: {
-    setMediaChat(state, { mediaChat }) {
+    setMediaChatVisible(state, { visible }) {
       return {
         ...state,
-        mediaChat,
+        visible,
       };
     },
   },

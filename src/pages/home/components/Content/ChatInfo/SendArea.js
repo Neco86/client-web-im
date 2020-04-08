@@ -1,13 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Input, Popover, Dropdown, Menu, Modal, Spin } from 'antd';
 import { connect } from 'dva';
-import {
-  SmileOutlined,
-  PictureOutlined,
-  FolderOutlined,
-  PhoneOutlined,
-  CameraOutlined,
-} from '@ant-design/icons';
+import { SmileOutlined, PictureOutlined, FolderOutlined } from '@ant-design/icons';
 import { MSG_TYPE, FRIEND_TYPE } from '@/utils/const';
 import emoji from 'node-emoji';
 import Emoji from './Emoji';
@@ -177,7 +171,6 @@ const SendArea = ({
       >
         <Spin /> 等待对方接收{selectedFile ? '文件' : '文件夹'}
       </Modal>
-      <MediaChat />
       <div className={styles.tools}>
         <Popover
           trigger="click"
@@ -205,24 +198,7 @@ const SendArea = ({
         <Dropdown overlay={fileUploadMenu} trigger={['click']}>
           <FolderOutlined className={styles.tool} />
         </Dropdown>
-        <PhoneOutlined
-          className={styles.tool}
-          onClick={() => {
-            dispatch({
-              type: 'mediaChat/setMediaChat',
-              mediaChat: [true, false],
-            });
-          }}
-        />
-        <CameraOutlined
-          className={styles.tool}
-          onClick={() => {
-            dispatch({
-              type: 'mediaChat/setMediaChat',
-              mediaChat: [true, true],
-            });
-          }}
-        />
+        <MediaChat />
       </div>
       <div className={styles.textarea}>
         <Input.TextArea
