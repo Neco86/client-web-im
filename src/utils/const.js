@@ -136,9 +136,6 @@ const EDIT_FRIEND = {
   EXIT_GROUP: 'exitGroup',
 };
 
-const SERVER_HOST = 'https://192.168.0.104:8443';
-const CLIENT_HOST = 'https://192.168.0.104:8000';
-
 module.exports = {
   SUCCESS_CODE,
   ERROR_CODE,
@@ -157,6 +154,4 @@ module.exports = {
   EDIT_GROUP,
   EDIT_FRIEND,
   PREFIX_MSG_TYPE,
-  SERVER_HOST,
-  CLIENT_HOST,
 };

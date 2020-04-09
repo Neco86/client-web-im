@@ -9,7 +9,6 @@ import {
   EDIT_FRIEND,
   MENU_KEY,
   MSG_TYPE,
-  CLIENT_HOST,
 } from '@/utils/const';
 import { message, notification, Avatar } from 'antd';
 import io from 'socket.io-client';
@@ -25,7 +24,7 @@ import styles from './index.less';
 // 连接socket
 function useSocket(dispatch) {
   const token = sessionStorage.getItem(TOKEN_NAME) || localStorage.getItem(TOKEN_NAME);
-  const [socket] = useState(io(`${CLIENT_HOST}?token=${token}`));
+  const [socket] = useState(io(`https://192.168.0.104:8000?token=${token}`));
   useEffect(() => {
     if (socket) {
       // 请求初始化

@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import slash from 'slash2';
-import { SERVER_HOST } from '../src/utils/const';
 import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 import themePluginConfig from './themePluginConfig';
 import webpackPlugin from './plugin.config';
@@ -154,22 +153,22 @@ export default {
     basePath: '/',
   },
   proxy: {
-    // '/api': {
-    //   target: SERVER_HOST,
-    //   pathRewrite: { '^/api': '' },
-    //   changeOrigin: true,
-    //   secure: false,
-    // },
-    // '/socket.io': {
-    //   target: SERVER_HOST,
-    //   changeOrigin: true,
-    //   secure: false,
-    // },
-    // '/public': {
-    //   target: SERVER_HOST,
-    //   changeOrigin: true,
-    //   secure: false,
-    // },
+    // api
+    '/api': {
+      target: 'https://192.168.0.104:443',
+      secure: false,
+    },
+    // socket.io
+    '/socket.io': {
+      target: 'https://192.168.0.104:443',
+      secure: false,
+    },
+    // 文件
+    '/public': {
+      target: 'https://192.168.0.104:443',
+      pathRewrite: { '^/public': '/api/public' },
+      secure: false,
+    },
   },
   chainWebpack: webpackPlugin,
   devServer: {
