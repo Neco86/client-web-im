@@ -19,9 +19,6 @@ const ChatInfo = ({ activeChat: [type, peer], socket }) => {
         case MSG_TYPE.COMMON_CHAT:
           endName = msg;
           break;
-        case MSG_TYPE.PICTURE:
-          endName = '';
-          break;
         case MSG_TYPE.FILE:
           endName = msg.name;
           break;
@@ -37,6 +34,19 @@ const ChatInfo = ({ activeChat: [type, peer], socket }) => {
         default:
           endName = msg.msg;
           break;
+      }
+      if (
+        [
+          MSG_TYPE.PICTURE,
+          MSG_TYPE.START_AUDIO_CHAT,
+          MSG_TYPE.START_VIDEO_CHAT,
+          MSG_TYPE.JOIN_AUDIO_CHAT,
+          MSG_TYPE.JOIN_VIDEO_CHAT,
+          MSG_TYPE.REJECT_AUDIO_CHAT,
+          MSG_TYPE.REJECT_VIDEO_CHAT,
+        ].includes(msgType)
+      ) {
+        endName = '';
       }
       endName = `${pre}${endName}`;
       socket.emit('setRecentChat', { msg: endName, type, peer, msgType });

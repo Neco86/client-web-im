@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import ChatBubble from './ChatBubble';
 import styles from './index.less';
 
-const Chats = ({ chats, loadMore, hasMore, page, sendMsg }) => {
+const Chats = ({ chats, loadMore, hasMore, page, sendMsg, type, email }) => {
   const chatContent = useRef(null);
   const [height, setHeight] = useState(0);
   useEffect(() => {
@@ -27,12 +27,14 @@ const Chats = ({ chats, loadMore, hasMore, page, sendMsg }) => {
         </div>
       )}
       {chats.map(chat => (
-        <ChatBubble key={chat.key} chat={chat} sendMsg={sendMsg} />
+        <ChatBubble key={chat.key} chat={chat} sendMsg={sendMsg} type={type} email={email} />
       ))}
     </div>
   );
 };
 
-export default connect(({ chat }) => ({
+export default connect(({ chat, userInfo }) => ({
   hasMore: chat.hasMore,
+  type: chat.activeChat[0],
+  email: userInfo.email,
 }))(Chats);

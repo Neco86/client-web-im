@@ -1,7 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Input, Popover, Dropdown, Menu, Modal, Spin } from 'antd';
 import { connect } from 'dva';
-import { SmileOutlined, PictureOutlined, FolderOutlined } from '@ant-design/icons';
+import {
+  SmileOutlined,
+  PictureOutlined,
+  FolderOutlined,
+  PhoneOutlined,
+  CameraOutlined,
+} from '@ant-design/icons';
 import { MSG_TYPE, FRIEND_TYPE } from '@/utils/const';
 import emoji from 'node-emoji';
 import Emoji from './Emoji';
@@ -144,6 +150,18 @@ const SendArea = ({
       });
     }
   }, [agree]);
+
+  // 发起语音/视频聊天
+  const startMediaChat = video => {
+    dispatch({
+      type: 'mediaChat/setMediaChatConfig',
+      payload: {
+        visible: true,
+        video,
+      },
+    });
+    sendMsg('{}', video ? MSG_TYPE.START_VIDEO_CHAT : MSG_TYPE.START_AUDIO_CHAT);
+  };
   return (
     <div className={styles.sendAreaWrapper}>
       <Modal
@@ -198,6 +216,18 @@ const SendArea = ({
         <Dropdown overlay={fileUploadMenu} trigger={['click']}>
           <FolderOutlined className={styles.tool} />
         </Dropdown>
+        <PhoneOutlined
+          className={styles.tool}
+          onClick={() => {
+            startMediaChat(false);
+          }}
+        />
+        <CameraOutlined
+          className={styles.tool}
+          onClick={() => {
+            startMediaChat(true);
+          }}
+        />
         <MediaChat />
       </div>
       <div className={styles.textarea}>
