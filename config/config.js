@@ -166,7 +166,6 @@ export default {
     // 文件
     '/public': {
       target: 'https://192.168.0.104:443',
-      pathRewrite: { '^/public': '/api/public' },
       secure: false,
     },
   },
