@@ -3,7 +3,6 @@ const MediaChatModel = {
   state: {
     visible: false,
     video: false,
-    caller: false,
   },
   reducers: {
     setMediaChatConfig(state, { payload }) {

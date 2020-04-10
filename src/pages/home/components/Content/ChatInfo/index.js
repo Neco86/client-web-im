@@ -15,7 +15,6 @@ const ChatInfo = ({ activeChat: [type, peer], socket, dispatch }) => {
         payload: {
           visible: true,
           video: false,
-          caller: false,
         },
       });
     }
@@ -25,7 +24,6 @@ const ChatInfo = ({ activeChat: [type, peer], socket, dispatch }) => {
         payload: {
           visible: true,
           video: true,
-          caller: false,
         },
       });
     }

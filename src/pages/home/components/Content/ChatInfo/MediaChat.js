@@ -13,7 +13,6 @@ const MediaChat = ({
   dispatch,
   visible,
   video,
-  caller,
   socket,
 }) => {
   const peerInfo = recentChats.filter(chat => chat.type === type && chat.peer === peer)[0];
@@ -23,57 +22,113 @@ const MediaChat = ({
       payload: {
         visible: false,
         video: false,
-        caller: false,
       },
+    });
+  };
+  let localStream;
+  const peerList = {};
+  const getIndex = (email1, email2) => [email1, email2].sort().join('-');
+  const getUserMedia = () =>
+    new Promise((resolve, reject) => {
+      navigator.mediaDevices
+        .getUserMedia({
+          audio: true,
+          video,
+        })
+        .then(stream => {
+          document.getElementById(getIndex(email, email)).srcObject = stream;
+          localStream = stream;
+          resolve();
+        })
+        .catch(reject);
+    });
+  const getPeerConnection = index => {
+    const peerConnection = new RTCPeerConnection();
+    peerConnection.addStream(localStream);
+    peerConnection.onaddstream = event => {
+      document.getElementById(index).srcObject = event.stream;
+    };
+    peerConnection.onicecandidate = event => {
+      if (event.candidate) {
+        socket.emit('newIceCandidate', {
+          candidate: event.candidate,
+          index,
+          type,
+          peer,
+        });
+      }
+    };
+    peerList[index] = peerConnection;
+  };
+  const createOffer = (index, peerConnection) => {
+    peerConnection.createOffer().then(offer => {
+      peerConnection.setLocalDescription(offer, () => {
+        socket.emit('videoOffer', {
+          offer,
+          index,
+          type,
+          peer,
+        });
+      });
+    });
+  };
+  const socketInit = () => {
+    socket.on('videoOffer', ({ index, offer }) => {
+      if (peerList[index]) {
+        peerList[index].setRemoteDescription(offer, () => {
+          peerList[index].createAnswer().then(answer => {
+            peerList[index].setLocalDescription(answer, () => {
+              socket.emit('videoAnswer', {
+                answer,
+                index,
+                type,
+                peer,
+              });
+            });
+          });
+        });
+      }
+    });
+    socket.on('videoAnswer', ({ answer, index }) => {
+      if (peerList[index]) {
+        peerList[index].setRemoteDescription(answer);
+      }
+    });
+    socket.on('newIceCandidate', ({ candidate, index }) => {
+      if (candidate && peerList[index]) {
+        peerList[index].addIceCandidate(candidate);
+      }
     });
   };
   useEffect(() => {
     if (visible) {
-      // 创建PeerConnection实例
-      // TODO: 配置iceServer,未配置仅可局域网使用
-      const peerConnection = new RTCPeerConnection();
-      peerConnection.onicecandidate = event => {
-        if (event.candidate !== null) {
-          // 提供candidate
-          socket.emit('newIceCandidate', {
-            candidate: event.candidate,
-            type,
-            peer,
+      getUserMedia().then(() => {
+        socket.emit('getUserMediaFinish', {
+          account: email,
+          type,
+          peer,
+        });
+      });
+      socketInit();
+      const memberInfos = type === FRIEND_TYPE.FRIEND ? [{ email }, { email: peer }] : memberInfo;
+      socket.on('getUserMediaFinish', ({ account }) => {
+        if (memberInfos.length > 1) {
+          memberInfos.forEach(info => {
+            if (!peerList[getIndex(info.email, email)] && info.email !== email) {
+              getPeerConnection(getIndex(info.email, email));
+            }
           });
-        }
-      };
-      peerConnection.onaddstream = event => {
-        document.getElementById(peer).srcObject = event.stream;
-      };
-      // 创建自己的视频
-      navigator.mediaDevices.getUserMedia({ audio: true, video }).then(stream => {
-        document.getElementById(email).srcObject = stream;
-        peerConnection.addStream(stream);
-        // 如果被叫,给所有人发offer
-        if (!caller) {
-          peerConnection.createOffer().then(offer => {
-            socket.emit('videoOffer', { offer, type, peer });
-            return peerConnection.setLocalDescription(offer);
-          });
+          if (account === email) {
+            Object.keys(peerList).forEach(index => {
+              createOffer(index, peerList[index]);
+            });
+          }
         }
       });
-      // 收到offer
-      socket.on('videoOffer', ({ offer }) => {
-        peerConnection
-          .setRemoteDescription(offer)
-          .then(() => peerConnection.createAnswer())
-          .then(answer => {
-            socket.emit('videoAnswer', { answer, type, peer });
-            return peerConnection.setLocalDescription(answer);
-          });
-      });
-      // 收到answer
-      socket.on('videoAnswer', ({ answer }) => {
-        peerConnection.setRemoteDescription(answer);
-      });
-      // 收到ice
-      socket.on('newIceCandidate', ({ candidate }) => {
-        peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+    } else {
+      Object.keys(peerList).forEach(index => {
+        peerList[index].close();
+        peerList[index] = null;
       });
     }
   }, [visible]);
@@ -95,12 +150,12 @@ const MediaChat = ({
         {type === FRIEND_TYPE.FRIEND && (
           <div className={styles.friendMediaWrapper}>
             <div className={styles.videoWrapper}>
-              <video className={styles.video} autoPlay id={email} />
-              <Spin tip="等待应答..." />
+              <video className={styles.video} autoPlay id={getIndex(email, email)} />
+              {!peerList[getIndex(email, email)] && <Spin tip="等待应答..." />}
             </div>
             <div className={styles.videoWrapper}>
-              <video className={styles.video} autoPlay id={peer} />
-              <Spin tip="等待应答..." />
+              <video className={styles.video} autoPlay id={getIndex(peer, email)} />
+              {!peerList[getIndex(email, peer)] && <Spin tip="等待应答..." />}
             </div>
           </div>
         )}
@@ -115,11 +170,11 @@ const MediaChat = ({
                 key={m.email}
                 style={{ width: memberInfo.length > 4 ? '25%' : '50%' }}
               >
-                <video className={styles.video} autoPlay id={m.email} />
+                <video className={styles.video} autoPlay id={getIndex(email, m.email)} />
                 <div className={styles.desc}>
                   <Avatar src={m.avatar || DEFAULT_AVATAR} /> {m.name}
                 </div>
-                <Spin tip="等待应答..." />
+                {!peerList[getIndex(email, m.email)] && <Spin tip="等待应答..." />}
               </div>
             ))}
           </div>
@@ -140,5 +195,4 @@ export default connect(({ global, chat, userInfo, mediaChat }) => ({
   recentChats: chat.recentChats,
   visible: mediaChat.visible,
   video: mediaChat.video,
-  caller: mediaChat.caller,
 }))(MediaChat);

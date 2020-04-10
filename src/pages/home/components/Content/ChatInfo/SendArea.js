@@ -158,7 +158,6 @@ const SendArea = ({
       payload: {
         visible: true,
         video,
-        caller: true,
       },
     });
     sendMsg('{}', video ? MSG_TYPE.START_VIDEO_CHAT : MSG_TYPE.START_AUDIO_CHAT);
