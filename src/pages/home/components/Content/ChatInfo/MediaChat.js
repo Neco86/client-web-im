@@ -37,6 +37,7 @@ const MediaChat = ({
         })
         .then(stream => {
           document.getElementById(getIndex(email, email)).srcObject = stream;
+          document.getElementById(`loading_${getIndex(email, email)}`).style.display = 'none';
           localStream = stream;
           resolve();
         })
@@ -47,6 +48,7 @@ const MediaChat = ({
     peerConnection.addStream(localStream);
     peerConnection.onaddstream = event => {
       document.getElementById(index).srcObject = event.stream;
+      document.getElementById(`loading_${index}`).style.display = 'none';
     };
     peerConnection.onicecandidate = event => {
       if (event.candidate) {
@@ -151,11 +153,11 @@ const MediaChat = ({
           <div className={styles.friendMediaWrapper}>
             <div className={styles.videoWrapper}>
               <video className={styles.video} autoPlay id={getIndex(email, email)} />
-              {!peerList[getIndex(email, email)] && <Spin tip="等待应答..." />}
+              <Spin tip="等待应答..." id={`loading_${getIndex(email, email)}`} />
             </div>
             <div className={styles.videoWrapper}>
               <video className={styles.video} autoPlay id={getIndex(peer, email)} />
-              {!peerList[getIndex(email, peer)] && <Spin tip="等待应答..." />}
+              <Spin tip="等待应答..." id={`loading_${getIndex(peer, email)}`} />
             </div>
           </div>
         )}
@@ -174,7 +176,7 @@ const MediaChat = ({
                 <div className={styles.desc}>
                   <Avatar src={m.avatar || DEFAULT_AVATAR} /> {m.name}
                 </div>
-                {!peerList[getIndex(email, m.email)] && <Spin tip="等待应答..." />}
+                <Spin tip="等待应答..." id={`loading_${getIndex(email, m.email)}`} />
               </div>
             ))}
           </div>
