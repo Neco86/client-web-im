@@ -6,9 +6,29 @@ import styles from './index.less';
 import FriendChat from './FriendChat';
 import GroupChat from './GroupChat';
 
-const ChatInfo = ({ activeChat: [type, peer], socket }) => {
+const ChatInfo = ({ activeChat: [type, peer], socket, dispatch }) => {
   const [page, setPage] = useState(0);
   const sendMsg = (msg, msgType, noSetRecentChat) => {
+    if (msgType === MSG_TYPE.JOIN_AUDIO_CHAT) {
+      dispatch({
+        type: 'mediaChat/setMediaChatConfig',
+        payload: {
+          visible: true,
+          video: false,
+          caller: false,
+        },
+      });
+    }
+    if (msgType === MSG_TYPE.JOIN_VIDEO_CHAT) {
+      dispatch({
+        type: 'mediaChat/setMediaChatConfig',
+        payload: {
+          visible: true,
+          video: true,
+          caller: false,
+        },
+      });
+    }
     socket.emit('sendMsg', { msg, type, peer, msgType });
     // noSetRecentChat默认不传为undefined,修改侧边数据
     // 同意文件传输后传输文件的时候传true

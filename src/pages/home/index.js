@@ -15,7 +15,7 @@ import io from 'socket.io-client';
 import { connect } from 'dva';
 import FileSaver from 'file-saver';
 import { ZIP } from '@/utils/zip';
-import router from 'umi/router';
+// import router from 'umi/router';
 import Header from './components/Header';
 import Sider from './components/Sider';
 import Content from './components/Content';
@@ -457,7 +457,8 @@ function useSocket(dispatch) {
           socket.successReason = '';
         } else {
           message.error('用户令牌失效,请重新登录!');
-          router.push('/login');
+          // TODO: test
+          // router.push('/login');
         }
       });
     }
