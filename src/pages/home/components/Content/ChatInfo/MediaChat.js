@@ -1,9 +1,11 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import React, { useEffect } from 'react';
-import { Modal, Button, Avatar, Spin } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Modal, Button, Avatar, Spin, Popconfirm } from 'antd';
+import { VideoCameraOutlined, LoadingOutlined } from '@ant-design/icons';
 import { connect } from 'dva';
 import { FRIEND_TYPE, DEFAULT_AVATAR } from '@/utils/const';
 import styles from './MediaChat.less';
+import RecordModal from './RecordModal';
 
 const MediaChat = ({
   activeChat: [type, peer],
@@ -14,7 +16,13 @@ const MediaChat = ({
   visible,
   video,
   socket,
+  myAvatar,
+  myName,
 }) => {
+  // 显示/隐藏录像界面
+  const [recordModal, setRecordModal] = useState(false);
+  // 开始/未开始录制
+  const [staredRecord, setStaredRecord] = useState(false);
   const peerInfo = recentChats.filter(chat => chat.type === type && chat.peer === peer)[0];
   let localStream;
   const peerList = {};
@@ -22,7 +30,9 @@ const MediaChat = ({
   const hangUp = () => {
     socket.emit('hangUp', { account: email, type, peer });
     const localVideo = document.getElementById(getIndex(email, email));
-    localVideo.srcObject.getTracks().forEach(track => track.stop());
+    if (localVideo.srcObject) {
+      localVideo.srcObject.getTracks().forEach(track => track.stop());
+    }
     Object.keys(peerList).forEach(index => {
       peerList[index].close();
       peerList[index] = null;
@@ -39,8 +49,7 @@ const MediaChat = ({
     new Promise((resolve, reject) => {
       navigator.mediaDevices
         .getUserMedia({
-          // TODO: test
-          audio: false,
+          audio: true,
           video,
         })
         .then(stream => {
@@ -140,6 +149,15 @@ const MediaChat = ({
       });
     }
   }, [visible]);
+  const stopRecord = () => {
+    setStaredRecord(false);
+    console.log('停止录制');
+  };
+  const startRecord = config => {
+    setRecordModal(false);
+    setStaredRecord(true);
+    console.log('开始录制', config);
+  };
   return (
     <Modal
       visible={visible}
@@ -150,7 +168,19 @@ const MediaChat = ({
       title={
         <>
           <Avatar src={peerInfo.avatar || DEFAULT_AVATAR} /> {peerInfo.name}{' '}
-          {video ? '视频' : '语音'}聊天
+          {video ? '视频' : '语音'}聊天{' '}
+          {staredRecord ? (
+            <Popconfirm title="停止录制?" onConfirm={stopRecord}>
+              <LoadingOutlined className="record" />
+            </Popconfirm>
+          ) : (
+            <VideoCameraOutlined
+              className="record"
+              onClick={() => {
+                setRecordModal(true);
+              }}
+            />
+          )}
         </>
       }
       destroyOnClose
@@ -204,6 +234,23 @@ const MediaChat = ({
       <Button type="danger" onClick={hangUp} className={styles.hangUpBtn}>
         挂断
       </Button>
+      <RecordModal
+        visible={recordModal}
+        video={video}
+        type={type}
+        memberInfo={
+          type === FRIEND_TYPE.FRIEND
+            ? [
+                { email, avatar: myAvatar, name: myName },
+                { email: peer, avatar: peerInfo.avatar, name: peerInfo.name },
+              ]
+            : [
+                memberInfo.find(member => member.email === email),
+                ...memberInfo.filter(member => member.email !== email),
+              ]
+        }
+        startRecord={startRecord}
+      />
     </Modal>
   );
 };
@@ -213,6 +260,8 @@ export default connect(({ global, chat, userInfo, mediaChat }) => ({
   activeChat: chat.activeChat,
   memberInfo: chat.memberInfo,
   email: userInfo.email,
+  myAvatar: userInfo.avatar,
+  myName: userInfo.nickname,
   recentChats: chat.recentChats,
   visible: mediaChat.visible,
   video: mediaChat.video,
