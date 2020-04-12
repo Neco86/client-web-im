@@ -39,12 +39,13 @@ const MediaChat = ({
     new Promise((resolve, reject) => {
       navigator.mediaDevices
         .getUserMedia({
-          audio: true,
+          // TODO: test
+          audio: false,
           video,
         })
         .then(stream => {
           document.getElementById(getIndex(email, email)).srcObject = stream;
-          document.getElementById(`loading_${getIndex(email, email)}`).style.display = 'none';
+          document.getElementById(`loading_${getIndex(email, email)}`).style.opacity = 0;
           localStream = stream;
           resolve();
         })
@@ -55,7 +56,7 @@ const MediaChat = ({
     peerConnection.addStream(localStream);
     peerConnection.onaddstream = event => {
       document.getElementById(index).srcObject = event.stream;
-      document.getElementById(`loading_${index}`).style.display = 'none';
+      document.getElementById(`loading_${index}`).style.opacity = 0;
     };
     peerConnection.onicecandidate = event => {
       if (event.candidate) {
@@ -135,7 +136,7 @@ const MediaChat = ({
         }
       });
       socket.on('hangUp', ({ account }) => {
-        document.getElementById(`loading_${getIndex(email, account)}`).style.display = 'inherit';
+        document.getElementById(`loading_${getIndex(email, account)}`).style.opacity = 1;
       });
     }
   }, [visible]);
