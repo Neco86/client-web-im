@@ -16,7 +16,17 @@ const MediaChat = ({
   socket,
 }) => {
   const peerInfo = recentChats.filter(chat => chat.type === type && chat.peer === peer)[0];
+  let localStream;
+  const peerList = {};
+  const getIndex = (email1, email2) => [email1, email2].sort().join('-');
   const hangUp = () => {
+    socket.emit('hangUp', { account: email, type, peer });
+    const localVideo = document.getElementById(getIndex(email, email));
+    localVideo.srcObject.getTracks().forEach(track => track.stop());
+    Object.keys(peerList).forEach(index => {
+      peerList[index].close();
+      peerList[index] = null;
+    });
     dispatch({
       type: 'mediaChat/setMediaChatConfig',
       payload: {
@@ -25,9 +35,6 @@ const MediaChat = ({
       },
     });
   };
-  let localStream;
-  const peerList = {};
-  const getIndex = (email1, email2) => [email1, email2].sort().join('-');
   const getUserMedia = () =>
     new Promise((resolve, reject) => {
       navigator.mediaDevices
@@ -127,10 +134,8 @@ const MediaChat = ({
           }
         }
       });
-    } else {
-      Object.keys(peerList).forEach(index => {
-        peerList[index].close();
-        peerList[index] = null;
+      socket.on('hangUp', ({ account }) => {
+        document.getElementById(`loading_${getIndex(email, account)}`).style.display = 'inherit';
       });
     }
   }, [visible]);
@@ -147,13 +152,14 @@ const MediaChat = ({
           {video ? '视频' : '语音'}聊天
         </>
       }
+      destroyOnClose
     >
       <div className={styles.mediaChatWrapper}>
         {type === FRIEND_TYPE.FRIEND && (
           <div className={styles.friendMediaWrapper}>
             <div className={styles.videoWrapper}>
               <video className={styles.video} autoPlay id={getIndex(email, email)} />
-              <Spin tip="等待应答..." id={`loading_${getIndex(email, email)}`} />
+              <Spin tip="载入中..." id={`loading_${getIndex(email, email)}`} />
             </div>
             <div className={styles.videoWrapper}>
               <video className={styles.video} autoPlay id={getIndex(peer, email)} />
@@ -163,22 +169,34 @@ const MediaChat = ({
         )}
         {type === FRIEND_TYPE.GROUP && memberInfo.length > 0 && (
           <div className={styles.groupMediaWrapper}>
-            {[
-              memberInfo.find(member => member.email === email),
-              ...memberInfo.filter(member => member.email !== email),
-            ].map(m => (
-              <div
-                className={styles.videoWrapper}
-                key={m.email}
-                style={{ width: memberInfo.length > 4 ? '25%' : '50%' }}
-              >
-                <video className={styles.video} autoPlay id={getIndex(email, m.email)} />
-                <div className={styles.desc}>
-                  <Avatar src={m.avatar || DEFAULT_AVATAR} /> {m.name}
+            <div className={styles.chosenMediaChat} />
+            <div className={styles.otherMediaChat}>
+              {[
+                memberInfo.find(member => member.email === email),
+                ...memberInfo.filter(member => member.email !== email),
+              ].map(m => (
+                <div
+                  className={`${styles.videoWrapper} ${m.email === email ? styles.big : ''}`}
+                  key={m.email}
+                  onClick={() => {
+                    const clickedWrapper = document.getElementById(getIndex(email, m.email))
+                      .parentElement;
+                    const allWrappers = document.getElementsByClassName(styles.videoWrapper);
+                    for (let i = 0; i < allWrappers.length; i += 1) {
+                      const videoWrapper = allWrappers[i];
+                      videoWrapper.classList.remove(styles.big);
+                    }
+                    clickedWrapper.classList.add(styles.big);
+                  }}
+                >
+                  <video className={styles.video} autoPlay id={getIndex(email, m.email)} />
+                  <div className={styles.desc}>
+                    <Avatar src={m.avatar || DEFAULT_AVATAR} /> {m.name}
+                  </div>
+                  <Spin id={`loading_${getIndex(email, m.email)}`} />
                 </div>
-                <Spin tip="等待应答..." id={`loading_${getIndex(email, m.email)}`} />
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
       </div>
