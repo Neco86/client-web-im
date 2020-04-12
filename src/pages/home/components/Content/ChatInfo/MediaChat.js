@@ -163,7 +163,7 @@ const MediaChat = ({
       // invokeSaveAsDialog(blob);
     });
   };
-  const startRecord = async configs => {
+  const startRecord = async (configs, bps) => {
     setRecordModal(false);
     setStaredRecord(true);
     const streams = [];
@@ -175,6 +175,8 @@ const MediaChat = ({
     });
     const newRecorder = RecordRTC(streams, {
       type: video ? 'video' : 'audio',
+      disableLogs: true,
+      bitsPerSecond: Number(bps),
     });
     setRecorder(newRecorder);
     newRecorder.startRecording();

@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Checkbox, Row, Col, Button, Avatar, Table, Select, Input } from 'antd';
+import {
+  Modal,
+  Checkbox,
+  Row,
+  Col,
+  Button,
+  Avatar,
+  Table,
+  Select,
+  Input,
+  AutoComplete,
+} from 'antd';
 import { DEFAULT_AVATAR, FRIEND_TYPE } from '@/utils/const';
 
 const RecordModal = ({
@@ -12,6 +23,8 @@ const RecordModal = ({
   stopRecord,
 }) => {
   const [values, setValues] = useState({});
+  const bitPerSecond = [{ value: '128000' }, { value: '64000' }, { value: '32000' }];
+  const [bps, setBps] = useState(bitPerSecond[0].value);
   const [filename, setFileName] = useState(
     `录制文件${
       Math.random()
@@ -97,7 +110,28 @@ const RecordModal = ({
           </Col>
         </Row>
       ) : (
-        <Table dataSource={memberInfo} columns={columns} rowKey={record => record.email} />
+        <>
+          <Table dataSource={memberInfo} columns={columns} rowKey={record => record.email} />
+          <Row>
+            <Col span={24} style={{ textAlign: 'center', marginTop: '16px' }}>
+              码率:{' '}
+              <AutoComplete
+                options={bitPerSecond}
+                value={bps}
+                style={{
+                  width: 100,
+                }}
+                onSelect={v => {
+                  setBps(v);
+                }}
+                onSearch={v => {
+                  setBps(v);
+                }}
+              />{' '}
+              bps
+            </Col>
+          </Row>
+        </>
       )}
       <Row>
         <Col span={24} style={{ textAlign: 'center', marginTop: '16px' }}>
@@ -106,7 +140,7 @@ const RecordModal = ({
               结束录制
             </Button>
           ) : (
-            <Button type="primary" onClick={() => startRecord(values)}>
+            <Button type="primary" onClick={() => startRecord(values, bps)}>
               开始录制
             </Button>
           )}
