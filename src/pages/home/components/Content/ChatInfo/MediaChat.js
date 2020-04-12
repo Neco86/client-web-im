@@ -1,9 +1,11 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Avatar, Spin, Popconfirm } from 'antd';
+import { Modal, Button, Avatar, Spin } from 'antd';
 import { VideoCameraOutlined, LoadingOutlined } from '@ant-design/icons';
 import { connect } from 'dva';
 import { FRIEND_TYPE, DEFAULT_AVATAR } from '@/utils/const';
+import RecordRTC from 'recordrtc';
+import FileSaver from 'file-saver';
 import styles from './MediaChat.less';
 import RecordModal from './RecordModal';
 
@@ -23,8 +25,8 @@ const MediaChat = ({
   const [recordModal, setRecordModal] = useState(false);
   // 开始/未开始录制
   const [staredRecord, setStaredRecord] = useState(false);
+  const [recorder, setRecorder] = useState();
   const peerInfo = recentChats.filter(chat => chat.type === type && chat.peer === peer)[0];
-  let localStream;
   const peerList = {};
   const getIndex = (email1, email2) => [email1, email2].sort().join('-');
   const hangUp = () => {
@@ -55,14 +57,13 @@ const MediaChat = ({
         .then(stream => {
           document.getElementById(getIndex(email, email)).srcObject = stream;
           document.getElementById(`loading_${getIndex(email, email)}`).style.opacity = 0;
-          localStream = stream;
           resolve();
         })
         .catch(reject);
     });
   const getPeerConnection = index => {
     const peerConnection = new RTCPeerConnection();
-    peerConnection.addStream(localStream);
+    peerConnection.addStream(document.getElementById(getIndex(email, email)).srcObject);
     peerConnection.onaddstream = event => {
       document.getElementById(index).srcObject = event.stream;
       document.getElementById(`loading_${index}`).style.opacity = 0;
@@ -93,7 +94,7 @@ const MediaChat = ({
   };
   const socketInit = () => {
     socket.on('videoOffer', ({ index, offer }) => {
-      if (peerList[index]) {
+      if (visible && peerList[index]) {
         peerList[index].setRemoteDescription(offer, () => {
           peerList[index].createAnswer().then(answer => {
             peerList[index].setLocalDescription(answer, () => {
@@ -109,13 +110,35 @@ const MediaChat = ({
       }
     });
     socket.on('videoAnswer', ({ answer, index }) => {
-      if (peerList[index]) {
+      if (visible && peerList[index]) {
         peerList[index].setRemoteDescription(answer);
       }
     });
     socket.on('newIceCandidate', ({ candidate, index }) => {
-      if (candidate && peerList[index]) {
+      if (visible && candidate && peerList[index]) {
         peerList[index].addIceCandidate(candidate);
+      }
+    });
+    socket.on('getUserMediaFinish', ({ account }) => {
+      if (visible) {
+        const memberInfos = type === FRIEND_TYPE.FRIEND ? [{ email }, { email: peer }] : memberInfo;
+        if (memberInfos.length > 1) {
+          memberInfos.forEach(info => {
+            if (!peerList[getIndex(info.email, email)] && info.email !== email) {
+              getPeerConnection(getIndex(info.email, email));
+            }
+          });
+          if (account === email) {
+            Object.keys(peerList).forEach(index => {
+              createOffer(index, peerList[index]);
+            });
+          }
+        }
+      }
+    });
+    socket.on('hangUp', ({ account }) => {
+      if (visible) {
+        document.getElementById(`loading_${getIndex(email, account)}`).style.opacity = 1;
       }
     });
   };
@@ -129,34 +152,32 @@ const MediaChat = ({
         });
       });
       socketInit();
-      const memberInfos = type === FRIEND_TYPE.FRIEND ? [{ email }, { email: peer }] : memberInfo;
-      socket.on('getUserMediaFinish', ({ account }) => {
-        if (memberInfos.length > 1) {
-          memberInfos.forEach(info => {
-            if (!peerList[getIndex(info.email, email)] && info.email !== email) {
-              getPeerConnection(getIndex(info.email, email));
-            }
-          });
-          if (account === email) {
-            Object.keys(peerList).forEach(index => {
-              createOffer(index, peerList[index]);
-            });
-          }
-        }
-      });
-      socket.on('hangUp', ({ account }) => {
-        document.getElementById(`loading_${getIndex(email, account)}`).style.opacity = 1;
-      });
     }
   }, [visible]);
-  const stopRecord = () => {
+  const stopRecord = (filename, extend) => {
+    setRecordModal(false);
     setStaredRecord(false);
-    console.log('停止录制');
+    recorder.stopRecording(() => {
+      const blob = recorder.getBlob();
+      FileSaver.saveAs(blob, `${filename}.${extend}`);
+      // invokeSaveAsDialog(blob);
+    });
   };
-  const startRecord = config => {
+  const startRecord = async configs => {
     setRecordModal(false);
     setStaredRecord(true);
-    console.log('开始录制', config);
+    const streams = [];
+    Object.keys(configs).forEach(account => {
+      const videoDom = document.getElementById(getIndex(email, account));
+      if (configs[account] && videoDom && videoDom.srcObject) {
+        streams.push(videoDom.srcObject);
+      }
+    });
+    const newRecorder = RecordRTC(streams, {
+      type: video ? 'video' : 'audio',
+    });
+    setRecorder(newRecorder);
+    newRecorder.startRecording();
   };
   return (
     <Modal
@@ -170,9 +191,12 @@ const MediaChat = ({
           <Avatar src={peerInfo.avatar || DEFAULT_AVATAR} /> {peerInfo.name}{' '}
           {video ? '视频' : '语音'}聊天{' '}
           {staredRecord ? (
-            <Popconfirm title="停止录制?" onConfirm={stopRecord}>
-              <LoadingOutlined className="record" />
-            </Popconfirm>
+            <LoadingOutlined
+              className="record"
+              onClick={() => {
+                setRecordModal(true);
+              }}
+            />
           ) : (
             <VideoCameraOutlined
               className="record"
@@ -236,7 +260,6 @@ const MediaChat = ({
       </Button>
       <RecordModal
         visible={recordModal}
-        video={video}
         type={type}
         memberInfo={
           type === FRIEND_TYPE.FRIEND
@@ -250,6 +273,9 @@ const MediaChat = ({
               ]
         }
         startRecord={startRecord}
+        onCancel={() => setRecordModal(false)}
+        staredRecord={staredRecord}
+        stopRecord={stopRecord}
       />
     </Modal>
   );
