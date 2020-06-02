@@ -197,7 +197,8 @@ const SendArea = ({
           getPopupContainer={trigger => trigger.parentNode}
           autoFocus
           onBlur={() => {
-            setEmojiBox(false);
+            // TODO: 点击轮播图翻页错误触发
+            // setEmojiBox(false);
           }}
         >
           <SmileOutlined
