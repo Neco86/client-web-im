@@ -9,14 +9,16 @@ import FriendInfo from './FriendInfo';
 
 const getInfo = (type, group, key, friendGroups, groupGroups) => {
   if (type === FRIEND_TYPE.FRIEND) {
-    return friendGroups
-      .filter(friendGroup => friendGroup.key === group)[0]
-      .friends.filter(friend => friend.email === key)[0];
+    const friendFilter = friendGroups.filter(friendGroup => friendGroup.key === group)[0];
+    if (friendFilter) {
+      return friendFilter.friends.filter(friend => friend.email === key)[0];
+    }
   }
   if (type === FRIEND_TYPE.GROUP) {
-    return groupGroups
-      .filter(groupGroup => groupGroup.key === group)[0]
-      .groups.filter(groupInfo => groupInfo.chatKey === key)[0];
+    const groupFilter = groupGroups.filter(groupGroup => groupGroup.key === group)[0];
+    if (groupFilter) {
+      return groupFilter.groups.filter(groupInfo => groupInfo.chatKey === key)[0];
+    }
   }
   return false;
 };
@@ -38,7 +40,7 @@ const UserInfo = ({ activeMenu, friendGroups, groupGroups, socket, dispatch }) =
           </div>
         </div>
       ) : (
-        <Empty description="" />
+        <Empty description="" className={styles.empty} />
       )}
     </div>
   );
