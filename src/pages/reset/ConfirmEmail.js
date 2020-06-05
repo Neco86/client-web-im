@@ -42,7 +42,7 @@ const ConfirmEmail = ({ onNextBtnClick, setEmail }) => {
       if (code === SUCCESS_CODE) {
         // message.success(msg);
         clearTimeout(timer);
-        setEmail(values.emails);
+        setEmail(values.email);
         onNextBtnClick();
       } else {
         message.error(msg);
