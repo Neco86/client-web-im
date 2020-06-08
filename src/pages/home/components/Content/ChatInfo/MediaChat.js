@@ -6,6 +6,8 @@ import { connect } from 'dva';
 import { FRIEND_TYPE, DEFAULT_AVATAR } from '@/utils/const';
 import RecordRTC from 'recordrtc';
 import FileSaver from 'file-saver';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import adapter from 'webrtc-adapter';
 import styles from './MediaChat.less';
 import RecordModal from './RecordModal';
 
