@@ -122,8 +122,8 @@ const SendArea = ({
     }
   };
 
-  const fileUploadMenu = (
-    <Menu onClick={onFileUploadMenuClick}>
+  const fileUploadMenu = d => (
+    <Menu onClick={d ? () => {} : onFileUploadMenuClick}>
       <Menu.Item key={MSG_TYPE.FILE}>发送文件</Menu.Item>
       <Menu.Item key={MSG_TYPE.FOLDER}>发送文件夹</Menu.Item>
     </Menu>
@@ -211,22 +211,28 @@ const SendArea = ({
         <PictureOutlined
           className={styles.tool}
           onClick={() => {
-            uploadImgInput.current.click();
+            if (!disabled) {
+              uploadImgInput.current.click();
+            }
           }}
         />
-        <Dropdown overlay={fileUploadMenu} trigger={['click']}>
+        <Dropdown overlay={fileUploadMenu(disabled)} trigger={['click']}>
           <FolderOutlined className={styles.tool} />
         </Dropdown>
         <PhoneOutlined
           className={styles.tool}
           onClick={() => {
-            startMediaChat(false);
+            if (!disabled) {
+              startMediaChat(false);
+            }
           }}
         />
         <CameraOutlined
           className={styles.tool}
           onClick={() => {
-            startMediaChat(true);
+            if (!disabled) {
+              startMediaChat(true);
+            }
           }}
         />
         <MediaChat />
