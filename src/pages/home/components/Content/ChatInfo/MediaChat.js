@@ -31,7 +31,15 @@ const MediaChat = ({
   const peerInfo = recentChats.filter(chat => chat.type === type && chat.peer === peer)[0];
   const peerList = {};
   const getIndex = (email1, email2) => [email1, email2].sort().join('-');
+  const removeListener = () => {
+    socket.removeAllListeners('videoOffer');
+    socket.removeAllListeners('videoAnswer');
+    socket.removeAllListeners('newIceCandidate');
+    socket.removeAllListeners('getUserMediaFinish');
+    socket.removeAllListeners('hangUp');
+  };
   const hangUp = () => {
+    removeListener();
     socket.emit('hangUp', { account: email, type, peer });
     const localVideo = document.getElementById(getIndex(email, email));
     if (localVideo.srcObject) {
