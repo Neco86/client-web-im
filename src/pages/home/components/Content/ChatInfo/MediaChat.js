@@ -215,7 +215,7 @@ const MediaChat = ({
         {type === FRIEND_TYPE.FRIEND && (
           <div className={styles.friendMediaWrapper}>
             <div className={styles.videoWrapper}>
-              <video className={styles.video} autoPlay id={getIndex(email, email)} />
+              <video className={styles.video} autoPlay id={getIndex(email, email)} muted />
               <Spin tip="载入中..." id={`loading_${getIndex(email, email)}`} />
             </div>
             <div className={styles.videoWrapper}>
@@ -246,7 +246,12 @@ const MediaChat = ({
                     clickedWrapper.classList.add(styles.big);
                   }}
                 >
-                  <video className={styles.video} autoPlay id={getIndex(email, m.email)} />
+                  <video
+                    className={styles.video}
+                    autoPlay
+                    id={getIndex(email, m.email)}
+                    muted={m.email === email}
+                  />
                   <div className={styles.desc}>
                     <Avatar src={m.avatar || DEFAULT_AVATAR} /> {m.name}
                   </div>
